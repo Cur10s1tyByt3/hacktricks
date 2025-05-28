@@ -4,18 +4,18 @@
 
 **Esta página es principalmente un resumen de las técnicas de** [**https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/abusing-active-directory-acls-aces**](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/abusing-active-directory-acls-aces) **y** [**https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/privileged-accounts-and-token-privileges**](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/privileged-accounts-and-token-privileges)**. Para más detalles, consulta los artículos originales.**
 
-## BadSuccesor
+## BadSuccessor
 
 {{#ref}}
-BadSuccesor.md
+BadSuccessor.md
 {{#endref}}
 
-## **Derechos GenericAll en Usuario**
+## **Derechos GenericAll en el Usuario**
 
 Este privilegio otorga a un atacante control total sobre una cuenta de usuario objetivo. Una vez que se confirman los derechos `GenericAll` utilizando el comando `Get-ObjectAcl`, un atacante puede:
 
 - **Cambiar la Contraseña del Objetivo**: Usando `net user <username> <password> /domain`, el atacante puede restablecer la contraseña del usuario.
-- **Kerberoasting Dirigido**: Asignar un SPN a la cuenta del usuario para hacerla susceptible a kerberoasting, luego usar Rubeus y targetedKerberoast.py para extraer e intentar romper los hashes del ticket-granting ticket (TGT).
+- **Kerberoasting Dirigido**: Asignar un SPN a la cuenta del usuario para hacerla susceptible a kerberoasting, luego usar Rubeus y targetedKerberoast.py para extraer e intentar descifrar los hashes del ticket-granting ticket (TGT).
 ```bash
 Set-DomainObject -Credential $creds -Identity <username> -Set @{serviceprincipalname="fake/NOTHING"}
 .\Rubeus.exe kerberoast /user:<username> /nowrap
@@ -46,7 +46,7 @@ Tener estos privilegios en un objeto de computadora o una cuenta de usuario perm
 
 Si un usuario tiene derechos de `WriteProperty` en todos los objetos para un grupo específico (por ejemplo, `Domain Admins`), puede:
 
-- **Add Themselves to the Domain Admins Group**: Alcanzable mediante la combinación de los comandos `net user` y `Add-NetGroupUser`, este método permite la escalación de privilegios dentro del dominio.
+- **Add Themselves to the Domain Admins Group**: Alcanzable mediante la combinación de los comandos `net user` y `Add-NetGroupUser`, este método permite la escalada de privilegios dentro del dominio.
 ```bash
 net user spotless /domain; Add-NetGroupUser -UserName spotless -GroupName "domain admins" -Domain "offense.local"; net user spotless /domain
 ```
@@ -112,7 +112,7 @@ $ADSI.psbase.commitchanges()
 ```
 ## **Replicación en el Dominio (DCSync)**
 
-El ataque DCSync aprovecha permisos específicos de replicación en el dominio para imitar un Controlador de Dominio y sincronizar datos, incluyendo credenciales de usuario. Esta poderosa técnica requiere permisos como `DS-Replication-Get-Changes`, permitiendo a los atacantes extraer información sensible del entorno de AD sin acceso directo a un Controlador de Dominio. [**Aprende más sobre el ataque DCSync aquí.**](../dcsync.md)
+El ataque DCSync aprovecha permisos de replicación específicos en el dominio para imitar un Controlador de Dominio y sincronizar datos, incluyendo credenciales de usuario. Esta poderosa técnica requiere permisos como `DS-Replication-Get-Changes`, permitiendo a los atacantes extraer información sensible del entorno de AD sin acceso directo a un Controlador de Dominio. [**Aprende más sobre el ataque DCSync aquí.**](../dcsync.md)
 
 ## Delegación de GPO <a href="#gpo-delegation" id="gpo-delegation"></a>
 
@@ -157,13 +157,13 @@ Las actualizaciones de GPO suelen ocurrir aproximadamente cada 90 minutos. Para 
 
 ### Bajo el Capó
 
-Al inspeccionar las Tareas Programadas para un GPO dado, como la `Política Mal Configurada`, se puede confirmar la adición de tareas como `evilTask`. Estas tareas se crean a través de scripts o herramientas de línea de comandos con el objetivo de modificar el comportamiento del sistema o escalar privilegios.
+Al inspeccionar las Tareas Programadas para un GPO dado, como la `Misconfigured Policy`, se puede confirmar la adición de tareas como `evilTask`. Estas tareas se crean a través de scripts o herramientas de línea de comandos con el objetivo de modificar el comportamiento del sistema o escalar privilegios.
 
 La estructura de la tarea, como se muestra en el archivo de configuración XML generado por `New-GPOImmediateTask`, detalla las especificaciones de la tarea programada, incluyendo el comando a ejecutar y sus desencadenadores. Este archivo representa cómo se definen y gestionan las tareas programadas dentro de los GPO, proporcionando un método para ejecutar comandos o scripts arbitrarios como parte de la aplicación de políticas.
 
 ### Usuarios y Grupos
 
-Los GPO también permiten la manipulación de membresías de usuarios y grupos en sistemas objetivo. Al editar directamente los archivos de políticas de Usuarios y Grupos, los atacantes pueden agregar usuarios a grupos privilegiados, como el grupo local de `administradores`. Esto es posible a través de la delegación de permisos de gestión de GPO, que permite la modificación de archivos de políticas para incluir nuevos usuarios o cambiar las membresías de grupos.
+Los GPO también permiten la manipulación de membresías de usuarios y grupos en sistemas objetivo. Al editar directamente los archivos de políticas de Usuarios y Grupos, los atacantes pueden agregar usuarios a grupos privilegiados, como el grupo local `administrators`. Esto es posible a través de la delegación de permisos de gestión de GPO, que permite la modificación de archivos de políticas para incluir nuevos usuarios o cambiar las membresías de grupos.
 
 El archivo de configuración XML para Usuarios y Grupos detalla cómo se implementan estos cambios. Al agregar entradas a este archivo, se pueden otorgar privilegios elevados a usuarios específicos en los sistemas afectados. Este método ofrece un enfoque directo para la escalada de privilegios a través de la manipulación de GPO.
 
