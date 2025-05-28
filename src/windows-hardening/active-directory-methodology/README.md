@@ -16,13 +16,13 @@ Los conceptos clave dentro de **Active Directory** incluyen:
 4. **Árbol** – Un agrupamiento de dominios que comparten un dominio raíz común.
 5. **Bosque** – La cúspide de la estructura organizativa en Active Directory, compuesto por varios árboles con **relaciones de confianza** entre ellos.
 
-**Active Directory Domain Services (AD DS)** abarca una gama de servicios críticos para la gestión y comunicación centralizadas dentro de una red. Estos servicios comprenden:
+**Active Directory Domain Services (AD DS)** abarca una gama de servicios críticos para la gestión y comunicación centralizada dentro de una red. Estos servicios comprenden:
 
 1. **Servicios de Dominio** – Centraliza el almacenamiento de datos y gestiona las interacciones entre **usuarios** y **dominios**, incluyendo funcionalidades de **autenticación** y **búsqueda**.
 2. **Servicios de Certificado** – Supervisa la creación, distribución y gestión de **certificados digitales** seguros.
 3. **Servicios de Directorio Ligero** – Soporta aplicaciones habilitadas para directorios a través del **protocolo LDAP**.
-4. **Servicios de Federación de Directorios** – Proporciona capacidades de **inicio de sesión único** para autenticar usuarios a través de múltiples aplicaciones web en una sola sesión.
-5. **Gestión de Derechos** – Ayuda a proteger material con derechos de autor regulando su distribución y uso no autorizados.
+4. **Servicios de Federación de Directorio** – Proporciona capacidades de **inicio de sesión único** para autenticar usuarios a través de múltiples aplicaciones web en una sola sesión.
+5. **Gestión de Derechos** – Ayuda a proteger material con derechos de autor regulando su distribución y uso no autorizado.
 6. **Servicio DNS** – Crucial para la resolución de **nombres de dominio**.
 
 Para una explicación más detallada, consulta: [**TechTerms - Definición de Active Directory**](https://techterms.com/definition/active_directory)
@@ -67,12 +67,12 @@ Si solo tienes acceso a un entorno AD pero no tienes credenciales/sesiones, podr
 {{#endref}}
 
 - **Envenenar la red**
-- Recolectar credenciales [**suplantando servicios con Responder**](../../generic-methodologies-and-resources/pentesting-network/spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md)
+- Reunir credenciales [**suplantando servicios con Responder**](../../generic-methodologies-and-resources/pentesting-network/spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md)
 - Acceder al host [**abusando del ataque de retransmisión**](../../generic-methodologies-and-resources/pentesting-network/spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md#relay-attack)
-- Recolectar credenciales **exponiendo** [**servicios UPnP falsos con evil-S**](../../generic-methodologies-and-resources/pentesting-network/spoofing-ssdp-and-upnp-devices.md)[**SDP**](https://medium.com/@nickvangilder/exploiting-multifunction-printers-during-a-penetration-test-engagement-28d3840d8856)
+- Reunir credenciales **exponiendo** [**servicios UPnP falsos con evil-S**](../../generic-methodologies-and-resources/pentesting-network/spoofing-ssdp-and-upnp-devices.md)[**SDP**](https://medium.com/@nickvangilder/exploiting-multifunction-printers-during-a-penetration-test-engagement-28d3840d8856)
 - [**OSINT**](https://book.hacktricks.wiki/en/generic-methodologies-and-resources/external-recon-methodology/index.html):
 - Extraer nombres de usuario/nombres de documentos internos, redes sociales, servicios (principalmente web) dentro de los entornos de dominio y también de los disponibles públicamente.
-- Si encuentras los nombres completos de los trabajadores de la empresa, podrías intentar diferentes **convenciones de nombres de usuario de AD** (**[lee esto](https://activedirectorypro.com/active-directory-user-naming-convention/)**). Las convenciones más comunes son: _NombreApellido_, _Nombre.Apellido_, _NamSur_ (3 letras de cada uno), _Nam.Sur_, _NSurname_, _N.Surname_, _ApellidoNombre_, _Apellido.Nombre_, _ApellidoN_, _Apellido.N_, 3 _letras aleatorias y 3 números aleatorios_ (abc123).
+- Si encuentras los nombres completos de los trabajadores de la empresa, podrías intentar diferentes convenciones de **nombres de usuario de AD** (**[lee esto](https://activedirectorypro.com/active-directory-user-naming-convention/)**). Las convenciones más comunes son: _NombreApellido_, _Nombre.Apellido_, _NamSur_ (3 letras de cada uno), _Nam.Sur_, _NSurname_, _N.Surname_, _ApellidoNombre_, _Apellido.Nombre_, _ApellidoN_, _Apellido.N_, 3 _letras aleatorias y 3 números aleatorios_ (abc123).
 - Herramientas:
 - [w0Tx/generate-ad-username](https://github.com/w0Tx/generate-ad-username)
 - [urbanadventurer/username-anarchy](https://github.com/urbanadventurer/username-anarchy)
@@ -80,7 +80,7 @@ Si solo tienes acceso a un entorno AD pero no tienes credenciales/sesiones, podr
 ### Enumeración de usuarios
 
 - **Enumeración anónima de SMB/LDAP:** Consulta las páginas de [**pentesting SMB**](../../network-services-pentesting/pentesting-smb/index.html) y [**pentesting LDAP**](../../network-services-pentesting/pentesting-ldap.md).
-- **Enumeración Kerbrute**: Cuando se solicita un **nombre de usuario inválido**, el servidor responderá utilizando el código de error de **Kerberos** _KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN_, lo que nos permite determinar que el nombre de usuario era inválido. **Los nombres de usuario válidos** provocarán ya sea el **TGT en una respuesta AS-REP** o el error _KRB5KDC_ERR_PREAUTH_REQUIRED_, indicando que se requiere que el usuario realice una pre-autenticación.
+- **Enumeración Kerbrute**: Cuando se solicita un **nombre de usuario inválido**, el servidor responderá utilizando el código de error **Kerberos** _KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN_, lo que nos permite determinar que el nombre de usuario era inválido. Los **nombres de usuario válidos** provocarán ya sea el **TGT en una respuesta AS-REP** o el error _KRB5KDC_ERR_PREAUTH_REQUIRED_, indicando que se requiere que el usuario realice una pre-autenticación.
 - **Sin autenticación contra MS-NRPC**: Usando auth-level = 1 (Sin autenticación) contra la interfaz MS-NRPC (Netlogon) en controladores de dominio. El método llama a la función `DsrGetDcNameEx2` después de enlazar la interfaz MS-NRPC para verificar si el usuario o computadora existe sin ninguna credencial. La herramienta [NauthNRPC](https://github.com/sud0Ru/NauthNRPC) implementa este tipo de enumeración. La investigación se puede encontrar [aquí](https://media.kasperskycontenthub.com/wp-content/uploads/sites/43/2024/05/22190247/A-journey-into-forgotten-Null-Session-and-MS-RPC-interfaces.pdf)
 ```bash
 ./kerbrute_linux_amd64 userenum -d lab.ropnop.com --dc 10.10.10.10 usernames.txt #From https://github.com/ropnop/kerbrute/releases
@@ -114,7 +114,7 @@ Get-GlobalAddressList -ExchHostname [ip] -UserName [domain]\[username] -Password
 
 ### Conociendo uno o varios nombres de usuario
 
-Ok, así que ya sabes que tienes un nombre de usuario válido pero no contraseñas... Entonces intenta:
+Bien, así que ya sabes que tienes un nombre de usuario válido pero no contraseñas... Entonces intenta:
 
 - [**ASREPRoast**](asreproast.md): Si un usuario **no tiene** el atributo _DONT_REQ_PREAUTH_, puedes **solicitar un mensaje AS_REP** para ese usuario que contendrá algunos datos encriptados por una derivación de la contraseña del usuario.
 - [**Password Spraying**](password-spraying.md): Intentemos las contraseñas más **comunes** con cada uno de los usuarios descubiertos, tal vez algún usuario esté usando una mala contraseña (¡ten en cuenta la política de contraseñas!).
@@ -146,7 +146,7 @@ Si puedes **acceder a otras PC o recursos compartidos** con el **usuario nulo o 
 
 ## Enumerando Active Directory CON credenciales/sesión
 
-Para esta fase necesitas haber **comprometido las credenciales o una sesión de una cuenta de dominio válida.** Si tienes algunas credenciales válidas o una shell como usuario de dominio, **debes recordar que las opciones dadas antes siguen siendo opciones para comprometer a otros usuarios**.
+Para esta fase necesitas haber **comprometido las credenciales o una sesión de una cuenta de dominio válida.** Si tienes algunas credenciales válidas o una shell como usuario de dominio, **deberías recordar que las opciones dadas antes siguen siendo opciones para comprometer a otros usuarios**.
 
 Antes de comenzar la enumeración autenticada, deberías saber cuál es el **problema del doble salto de Kerberos.**
 
@@ -156,7 +156,7 @@ kerberos-double-hop-problem.md
 
 ### Enumeración
 
-Haber comprometido una cuenta es un **gran paso para comenzar a comprometer todo el dominio**, porque podrás iniciar la **Enumeración de Active Directory:**
+Haber comprometido una cuenta es un **gran paso para comenzar a comprometer todo el dominio**, porque podrás comenzar la **Enumeración de Active Directory:**
 
 Respecto a [**ASREPRoast**](asreproast.md), ahora puedes encontrar cada posible usuario vulnerable, y respecto a [**Password Spraying**](password-spraying.md), puedes obtener una **lista de todos los nombres de usuario** y probar la contraseña de la cuenta comprometida, contraseñas vacías y nuevas contraseñas prometedoras.
 
@@ -176,7 +176,7 @@ Respecto a [**ASREPRoast**](asreproast.md), ahora puedes encontrar cada posible 
 
 Es muy fácil obtener todos los nombres de usuario del dominio desde Windows (`net user /domain`, `Get-DomainUser` o `wmic useraccount get name,sid`). En Linux, puedes usar: `GetADUsers.py -all -dc-ip 10.10.10.110 domain.com/username` o `enum4linux -a -u "user" -p "password" <DC IP>`
 
-> Incluso si esta sección de Enumeración parece pequeña, esta es la parte más importante de todas. Accede a los enlaces (principalmente el de cmd, powershell, powerview y BloodHound), aprende cómo enumerar un dominio y practica hasta que te sientas cómodo. Durante una evaluación, este será el momento clave para encontrar tu camino hacia DA o decidir que no se puede hacer nada.
+> Aunque esta sección de Enumeración parezca pequeña, esta es la parte más importante de todas. Accede a los enlaces (principalmente el de cmd, powershell, powerview y BloodHound), aprende cómo enumerar un dominio y practica hasta que te sientas cómodo. Durante una evaluación, este será el momento clave para encontrar tu camino hacia DA o decidir que no se puede hacer nada.
 
 ### Kerberoast
 
@@ -228,7 +228,7 @@ Si puedes **acceder a otras PC o comparticiones**, podrías **colocar archivos**
 
 ### CVE-2021-1675/CVE-2021-34527 PrintNightmare
 
-Esta vulnerabilidad permitió a cualquier usuario autenticado **comprometer el controlador de dominio**.
+Esta vulnerabilidad permitió que cualquier usuario autenticado **comprometiera el controlador de dominio**.
 
 {{#ref}}
 printnightmare.md
@@ -244,21 +244,21 @@ Con suerte, has logrado **comprometer alguna cuenta de administrador local** usa
 Luego, es hora de volcar todos los hashes en memoria y localmente.\
 [**Lee esta página sobre diferentes formas de obtener los hashes.**](https://github.com/carlospolop/hacktricks/blob/master/windows-hardening/active-directory-methodology/broken-reference/README.md)
 
-### Pass the Hash
+### Pasar el Hash
 
 **Una vez que tengas el hash de un usuario**, puedes usarlo para **suplantarlo**.\
 Necesitas usar alguna **herramienta** que **realice** la **autenticación NTLM usando** ese **hash**, **o** podrías crear un nuevo **sessionlogon** e **inyectar** ese **hash** dentro de **LSASS**, para que cuando se realice cualquier **autenticación NTLM**, ese **hash será utilizado.** La última opción es lo que hace mimikatz.\
 [**Lee esta página para más información.**](../ntlm/index.html#pass-the-hash)
 
-### Over Pass the Hash/Pass the Key
+### Over Pass the Hash/Pasar la Clave
 
-Este ataque tiene como objetivo **usar el hash NTLM del usuario para solicitar tickets Kerberos**, como una alternativa al común Pass The Hash sobre el protocolo NTLM. Por lo tanto, esto podría ser especialmente **útil en redes donde el protocolo NTLM está deshabilitado** y solo se **permite Kerberos** como protocolo de autenticación.
+Este ataque tiene como objetivo **usar el hash NTLM del usuario para solicitar tickets Kerberos**, como una alternativa al común Pass The Hash sobre el protocolo NTLM. Por lo tanto, esto podría ser especialmente **útil en redes donde el protocolo NTLM está deshabilitado** y solo **Kerberos está permitido** como protocolo de autenticación.
 
 {{#ref}}
 over-pass-the-hash-pass-the-key.md
 {{#endref}}
 
-### Pass the Ticket
+### Pasar el Ticket
 
 En el método de ataque **Pass The Ticket (PTT)**, los atacantes **roban el ticket de autenticación de un usuario** en lugar de su contraseña o valores hash. Este ticket robado se utiliza para **suplantar al usuario**, obteniendo acceso no autorizado a recursos y servicios dentro de una red.
 
@@ -268,7 +268,7 @@ pass-the-ticket.md
 
 ### Reutilización de Credenciales
 
-Si tienes el **hash** o **contraseña** de un **administrador local**, deberías intentar **iniciar sesión localmente** en otras **PCs** con él.
+Si tienes el **hash** o **contraseña** de un **administrador local**, deberías intentar **iniciar sesión localmente** en otras **PCs** con ello.
 ```bash
 # Local Auth Spray (once you found some local admin pass or hash)
 ## --local-auth flag indicate to only try 1 time per machine
@@ -279,7 +279,7 @@ crackmapexec smb --local-auth 10.10.10.10/23 -u administrator -H 10298e182387f9c
 
 ### Abuso de MSSQL y enlaces de confianza
 
-Si un usuario tiene privilegios para **acceder a instancias de MSSQL**, podría ser capaz de usarlo para **ejecutar comandos** en el host de MSSQL (si se ejecuta como SA), **robar** el **hash** de NetNTLM o incluso realizar un **ataque** de **reenvío**.\
+Si un usuario tiene privilegios para **acceder a instancias de MSSQL**, podría ser capaz de usarlo para **ejecutar comandos** en el host de MSSQL (si se ejecuta como SA), **robar** el **hash** de NetNTLM o incluso realizar un **ataque** de **retransmisión**.\
 Además, si una instancia de MSSQL es confiable (enlace de base de datos) por otra instancia de MSSQL. Si el usuario tiene privilegios sobre la base de datos confiable, podrá **usar la relación de confianza para ejecutar consultas también en la otra instancia**. Estas confianzas pueden encadenarse y en algún momento el usuario podría encontrar una base de datos mal configurada donde puede ejecutar comandos.\
 **Los enlaces entre bases de datos funcionan incluso a través de confianzas de bosque.**
 
@@ -314,9 +314,9 @@ Tener privilegio de **ESCRITURA** en un objeto de Active Directory de una comput
 resource-based-constrained-delegation.md
 {{#endref}}
 
-### Abuso de ACLs
+### Abuso de permisos/ACLs
 
-El usuario comprometido podría tener algunos **privilegios interesantes sobre algunos objetos de dominio** que podrían permitirle **moverse** lateralmente/**escalar** privilegios.
+El usuario comprometido podría tener algunos **privilegios interesantes sobre algunos objetos de dominio** que podrían permitirte **moverte** lateralmente/**escalar** privilegios.
 
 {{#ref}}
 acl-persistence-abuse/
@@ -324,7 +324,7 @@ acl-persistence-abuse/
 
 ### Abuso del servicio de cola de impresión
 
-Descubrir un **servicio de cola escuchando** dentro del dominio puede ser **abusado** para **adquirir nuevas credenciales** y **escalar privilegios**.
+Descubrir un **servicio de cola** escuchando dentro del dominio puede ser **abusado** para **adquirir nuevas credenciales** y **escalar privilegios**.
 
 {{#ref}}
 printers-spooler-service-abuse.md
@@ -357,7 +357,7 @@ ad-certificates/certificate-theft.md
 
 ### Abuso de plantillas de certificados
 
-Si se configuran **plantillas vulnerables**, es posible abusar de ellas para escalar privilegios:
+Si hay **plantillas vulnerables** configuradas, es posible abusar de ellas para escalar privilegios:
 
 {{#ref}}
 ad-certificates/domain-escalation.md
@@ -446,7 +446,7 @@ El objeto **AdminSDHolder** en Active Directory asegura la seguridad de los **gr
 
 ### Credenciales DSRM
 
-Dentro de cada **Controlador de Dominio (DC)**, existe una cuenta de **administrador local**. Al obtener derechos de administrador en tal máquina, se puede extraer el hash del Administrador local usando **mimikatz**. Después de esto, es necesaria una modificación del registro para **habilitar el uso de esta contraseña**, permitiendo el acceso remoto a la cuenta del Administrador local.
+Dentro de cada **Controlador de Dominio (DC)**, existe una cuenta de **administrador local**. Al obtener derechos de administrador en tal máquina, se puede extraer el hash del Administrador local utilizando **mimikatz**. Después de esto, es necesaria una modificación del registro para **habilitar el uso de esta contraseña**, permitiendo el acceso remoto a la cuenta del Administrador local.
 
 {{#ref}}
 dsrm-credentials.md
@@ -511,7 +511,7 @@ Microsoft ve el **Bosque** como el límite de seguridad. Esto implica que **comp
 
 Una [**confianza de dominio**](<http://technet.microsoft.com/en-us/library/cc759554(v=ws.10).aspx>) es un mecanismo de seguridad que permite a un usuario de un **dominio** acceder a recursos en otro **dominio**. Esencialmente, crea un vínculo entre los sistemas de autenticación de los dos dominios, permitiendo que las verificaciones de autenticación fluyan sin problemas. Cuando los dominios establecen una confianza, intercambian y retienen claves específicas dentro de sus **Controladores de Dominio (DCs)**, que son cruciales para la integridad de la confianza.
 
-En un escenario típico, si un usuario pretende acceder a un servicio en un **dominio de confianza**, primero debe solicitar un ticket especial conocido como un **TGT inter-realm** de su propio DC de dominio. Este TGT está cifrado con una **clave** compartida que ambos dominios han acordado. Luego, el usuario presenta este TGT al **DC del dominio de confianza** para obtener un ticket de servicio (**TGS**). Tras la validación exitosa del TGT inter-realm por parte del DC del dominio de confianza, emite un TGS, otorgando al usuario acceso al servicio.
+En un escenario típico, si un usuario pretende acceder a un servicio en un **dominio confiable**, primero debe solicitar un ticket especial conocido como un **TGT inter-realm** de su DC del dominio. Este TGT está cifrado con una **clave** compartida que ambos dominios han acordado. Luego, el usuario presenta este TGT al **DC del dominio confiable** para obtener un ticket de servicio (**TGS**). Tras la validación exitosa del TGT inter-realm por parte del DC del dominio confiable, emite un TGS, otorgando al usuario acceso al servicio.
 
 **Pasos**:
 
@@ -519,15 +519,15 @@ En un escenario típico, si un usuario pretende acceder a un servicio en un **do
 2. DC1 emite un nuevo TGT si el cliente se autentica con éxito.
 3. El cliente luego solicita un **TGT inter-realm** de DC1, que es necesario para acceder a recursos en **Dominio 2**.
 4. El TGT inter-realm está cifrado con una **clave de confianza** compartida entre DC1 y DC2 como parte de la confianza de dominio bidireccional.
-5. El cliente lleva el TGT inter-realm al **Controlador de Dominio (DC2) de Dominio 2**.
+5. El cliente lleva el TGT inter-realm al **Controlador de Dominio (DC2)** de **Dominio 2**.
 6. DC2 verifica el TGT inter-realm utilizando su clave de confianza compartida y, si es válido, emite un **Ticket Granting Service (TGS)** para el servidor en Dominio 2 al que el cliente desea acceder.
 7. Finalmente, el cliente presenta este TGS al servidor, que está cifrado con el hash de la cuenta del servidor, para obtener acceso al servicio en Dominio 2.
 
 ### Diferentes confianzas
 
-Es importante notar que **una confianza puede ser unidireccional o bidireccional**. En la opción bidireccional, ambos dominios se confiarán mutuamente, pero en la relación de confianza **unidireccional**, uno de los dominios será el **confiado** y el otro el **confiador**. En este último caso, **solo podrás acceder a recursos dentro del dominio confiador desde el confiado**.
+Es importante notar que **una confianza puede ser unidireccional o bidireccional**. En la opción bidireccional, ambos dominios se confiarán mutuamente, pero en la relación de confianza **unidireccional**, uno de los dominios será el **confiable** y el otro el **que confía**. En este último caso, **solo podrás acceder a recursos dentro del dominio que confía desde el dominio confiable**.
 
-Si el Dominio A confía en el Dominio B, A es el dominio confiador y B es el confiado. Además, en **Dominio A**, esto sería una **confianza saliente**; y en **Dominio B**, esto sería una **confianza entrante**.
+Si el Dominio A confía en el Dominio B, A es el dominio que confía y B es el confiable. Además, en **Dominio A**, esto sería una **confianza saliente**; y en **Dominio B**, esto sería una **confianza entrante**.
 
 **Diferentes relaciones de confianza**
 
@@ -552,9 +552,9 @@ Si el Dominio A confía en el Dominio B, A es el dominio confiador y B es el con
 
 Los atacantes podrían acceder a recursos en otro dominio a través de tres mecanismos principales:
 
-- **Membresía en grupos locales**: Los principales podrían ser añadidos a grupos locales en máquinas, como el grupo “Administradores” en un servidor, otorgándoles un control significativo sobre esa máquina.
+- **Membresía en grupos locales**: Los principales pueden ser añadidos a grupos locales en máquinas, como el grupo “Administradores” en un servidor, otorgándoles un control significativo sobre esa máquina.
 - **Membresía en grupos de dominio extranjero**: Los principales también pueden ser miembros de grupos dentro del dominio extranjero. Sin embargo, la efectividad de este método depende de la naturaleza de la confianza y el alcance del grupo.
-- **Listas de Control de Acceso (ACLs)**: Los principales podrían estar especificados en una **ACL**, particularmente como entidades en **ACEs** dentro de un **DACL**, proporcionándoles acceso a recursos específicos. Para aquellos que buscan profundizar en la mecánica de ACLs, DACLs y ACEs, el documento titulado “[An ACE Up The Sleeve](https://specterops.io/assets/resources/an_ace_up_the_sleeve.pdf)” es un recurso invaluable.
+- **Listas de Control de Acceso (ACLs)**: Los principales pueden estar especificados en una **ACL**, particularmente como entidades en **ACEs** dentro de un **DACL**, proporcionándoles acceso a recursos específicos. Para aquellos que buscan profundizar en la mecánica de ACLs, DACLs y ACEs, el documento titulado “[An ACE Up The Sleeve](https://specterops.io/assets/resources/an_ace_up_the_sleeve.pdf)” es un recurso invaluable.
 
 ### Encontrar usuarios/grupos externos con permisos
 
@@ -595,7 +595,7 @@ nltest /server:dc.sub.domain.local /domain_trusts /all_trusts
 ```
 > [!WARNING]
 > Hay **2 claves de confianza**, una para _Child --> Parent_ y otra para _Parent_ --> _Child_.\
-> Puedes usar la que se utiliza en el dominio actual con:
+> Puedes ver la que se usa en el dominio actual con:
 >
 > ```bash
 > Invoke-Mimikatz -Command '"lsadump::trust /patch"' -ComputerName dc.my.domain.local
@@ -630,7 +630,7 @@ Un análisis detallado se puede encontrar en la discusión sobre [Golden gMSA Tr
 
 Este método requiere paciencia, esperando la creación de nuevos objetos AD privilegiados. Con privilegios de SYSTEM, un atacante puede modificar el Esquema de AD para otorgar a cualquier usuario control total sobre todas las clases. Esto podría llevar a acceso no autorizado y control sobre objetos AD recién creados.
 
-Más lecturas están disponibles sobre [Schema Change Trust Attacks](https://improsec.com/tech-blog/sid-filter-as-security-boundary-between-domains-part-6-schema-change-trust-attack-from-child-to-parent).
+Más lectura está disponible sobre [Schema Change Trust Attacks](https://improsec.com/tech-blog/sid-filter-as-security-boundary-between-domains-part-6-schema-change-trust-attack-from-child-to-parent).
 
 **De DA a EA con ADCS ESC5**
 
@@ -678,7 +678,7 @@ external-forest-domain-one-way-outbound.md
 Otra forma de comprometer el dominio confiado es encontrar un [**enlace SQL confiado**](abusing-ad-mssql.md#mssql-trusted-links) creado en la **dirección opuesta** de la confianza del dominio (lo cual no es muy común).
 
 Otra forma de comprometer el dominio confiado es esperar en una máquina donde un **usuario del dominio confiado pueda acceder** para iniciar sesión a través de **RDP**. Luego, el atacante podría inyectar código en el proceso de sesión RDP y **acceder al dominio de origen de la víctima** desde allí.\
-Además, si la **víctima montó su disco duro**, desde el proceso de **sesión RDP** el atacante podría almacenar **backdoors** en la **carpeta de inicio del disco duro**. Esta técnica se llama **RDPInception.**
+Además, si la **víctima montó su disco duro**, desde el proceso de sesión **RDP** el atacante podría almacenar **backdoors** en la **carpeta de inicio del disco duro**. Esta técnica se llama **RDPInception.**
 
 {{#ref}}
 rdp-sessions-abuse.md
