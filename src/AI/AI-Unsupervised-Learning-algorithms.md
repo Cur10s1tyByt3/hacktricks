@@ -2,17 +2,15 @@
 
 {{#include ../banners/hacktricks-training.md}}
 
-
 ## Aprendizaje No Supervisado
 
 El aprendizaje no supervisado es un tipo de aprendizaje automático donde el modelo se entrena con datos sin respuestas etiquetadas. El objetivo es encontrar patrones, estructuras o relaciones dentro de los datos. A diferencia del aprendizaje supervisado, donde el modelo aprende de ejemplos etiquetados, los algoritmos de aprendizaje no supervisado trabajan con datos no etiquetados. 
 El aprendizaje no supervisado se utiliza a menudo para tareas como agrupamiento, reducción de dimensionalidad y detección de anomalías. Puede ayudar a descubrir patrones ocultos en los datos, agrupar elementos similares o reducir la complejidad de los datos mientras se preservan sus características esenciales.
 
-
 ### Agrupamiento K-Means
 
 K-Means es un algoritmo de agrupamiento basado en centroides que particiona los datos en K grupos asignando cada punto al centroide del grupo más cercano. El algoritmo funciona de la siguiente manera:
-1. **Inicialización**: Elegir K centros de grupo iniciales (centroides), a menudo aleatoriamente o mediante métodos más inteligentes como k-means++
+1. **Inicialización**: Elegir K centros de grupo iniciales (centroides), a menudo aleatoriamente o mediante métodos más inteligentes como k-means++.
 2. **Asignación**: Asignar cada punto de datos al centroide más cercano basado en una métrica de distancia (por ejemplo, distancia euclidiana).
 3. **Actualización**: Recalcular los centroides tomando la media de todos los puntos de datos asignados a cada grupo.
 4. **Repetir**: Los pasos 2–3 se repiten hasta que las asignaciones de grupos se estabilizan (los centroides ya no se mueven significativamente).
@@ -23,7 +21,7 @@ K-Means es un algoritmo de agrupamiento basado en centroides que particiona los 
 #### Selección de K
 El número de grupos (K) es un hiperparámetro que debe definirse antes de ejecutar el algoritmo. Técnicas como el Método del Codo o la Puntuación de Silueta pueden ayudar a determinar un valor apropiado para K evaluando el rendimiento del agrupamiento:
 
-- **Método del Codo**: Graficar la suma de las distancias al cuadrado desde cada punto hasta su centroide de grupo asignado como una función de K. Buscar un punto de "codo" donde la tasa de disminución cambia drásticamente, indicando un número adecuado de grupos.
+- **Método del Codo**: Graficar la suma de las distancias al cuadrado desde cada punto hasta su centroide de grupo asignado como una función de K. Buscar un punto de "codo" donde la tasa de disminución cambia bruscamente, indicando un número adecuado de grupos.
 - **Puntuación de Silueta**: Calcular la puntuación de silueta para diferentes valores de K. Una puntuación de silueta más alta indica grupos mejor definidos.
 
 #### Suposiciones y Limitaciones
@@ -74,7 +72,7 @@ El agrupamiento aglomerativo requiere una definición de distancia entre clúste
 El agrupamiento jerárquico produce un dendrograma, una estructura en forma de árbol que muestra las relaciones entre clústeres en diferentes niveles de granularidad. El dendrograma se puede cortar en un nivel deseado para obtener un número específico de clústeres.
 
 > [!TIP]
-> *Casos de uso en ciberseguridad:* El agrupamiento jerárquico puede organizar eventos o entidades en un árbol para detectar relaciones. Por ejemplo, en el análisis de malware, el agrupamiento aglomerativo podría agrupar muestras por similitud de comportamiento, revelando una jerarquía de familias y variantes de malware. En seguridad de red, uno podría agrupar flujos de tráfico IP y usar el dendrograma para ver subagrupaciones de tráfico (por ejemplo, por protocolo, luego por comportamiento). Dado que no es necesario elegir K por adelantado, es útil al explorar nuevos datos para los cuales se desconoce el número de categorías de ataque.
+> *Casos de uso en ciberseguridad:* El agrupamiento jerárquico puede organizar eventos o entidades en un árbol para detectar relaciones. Por ejemplo, en el análisis de malware, el agrupamiento aglomerativo podría agrupar muestras por similitud de comportamiento, revelando una jerarquía de familias y variantes de malware. En seguridad de red, uno podría agrupar flujos de tráfico IP y usar el dendrograma para ver subagrupaciones de tráfico (por ejemplo, por protocolo, luego por comportamiento). Dado que no es necesario elegir K de antemano, es útil al explorar nuevos datos para los cuales se desconoce el número de categorías de ataque.
 
 #### Suposiciones y Limitaciones
 
@@ -196,7 +194,7 @@ Vamos a explicar esto con un ejemplo. Imagina que tienes un conjunto de datos co
 4. **Seleccionar Componentes Principales**: Ordenar los eigenvalores en orden descendente y seleccionar los K eigenvectores superiores correspondientes a los eigenvalores más grandes. Estos eigenvectores representan las direcciones de máxima varianza en los datos.
 
 > [!TIP]
-> *Casos de uso en ciberseguridad:* Un uso común de PCA en seguridad es la reducción de características para la detección de anomalías. Por ejemplo, un sistema de detección de intrusiones con más de 40 métricas de red (como características de NSL-KDD) puede usar PCA para reducir a un puñado de componentes, resumiendo los datos para visualización o alimentando algoritmos de agrupamiento. Los analistas podrían trazar el tráfico de red en el espacio de los dos primeros componentes principales para ver si los ataques se separan del tráfico normal. PCA también puede ayudar a eliminar características redundantes (como bytes enviados vs. bytes recibidos si están correlacionados) para hacer que los algoritmos de detección sean más robustos y rápidos.
+> *Casos de uso en ciberseguridad:* Un uso común de PCA en seguridad es la reducción de características para la detección de anomalías. Por ejemplo, un sistema de detección de intrusiones con más de 40 métricas de red (como características de NSL-KDD) puede usar PCA para reducir a un puñado de componentes, resumiendo los datos para visualización o alimentando algoritmos de agrupamiento. Los analistas podrían trazar el tráfico de red en el espacio de los dos primeros componentes principales para ver si los ataques se separan del tráfico normal. PCA también puede ayudar a eliminar características redundantes (como bytes enviados frente a bytes recibidos si están correlacionados) para hacer que los algoritmos de detección sean más robustos y rápidos.
 
 #### Suposiciones y Limitaciones
 
@@ -287,13 +285,13 @@ log_likelihood = gmm.score_samples(sample_attack)
 print("Cluster membership probabilities for sample attack:", probs)
 print("Log-likelihood of sample attack under GMM:", log_likelihood)
 ```
-En este código, entrenamos un GMM con 3 Gaussianas sobre el tráfico normal (suponiendo que conocemos 3 perfiles de tráfico legítimo). Las medias y covarianzas impresas describen estos clústeres (por ejemplo, una media podría estar alrededor de [50,500] correspondiente al centro de un clúster, etc.). Luego probamos una conexión sospechosa [duration=200, bytes=800]. El predict_proba da la probabilidad de que este punto pertenezca a cada uno de los 3 clústeres; esperaríamos que estas probabilidades sean muy bajas o altamente sesgadas ya que [200,800] está lejos de los clústeres normales. La puntuación general score_samples (log-verosimilitud) se imprime; un valor muy bajo indica que el punto no se ajusta bien al modelo, marcándolo como una anomalía. En la práctica, se podría establecer un umbral en la log-verosimilitud (o en la probabilidad máxima) para decidir si un punto es lo suficientemente improbable como para considerarse malicioso. GMM, por lo tanto, proporciona una forma fundamentada de hacer detección de anomalías y también genera clústeres suaves que reconocen la incertidumbre.
+En este código, entrenamos un GMM con 3 Gaussianos sobre el tráfico normal (suponiendo que conocemos 3 perfiles de tráfico legítimo). Las medias y covarianzas impresas describen estos clústeres (por ejemplo, una media podría estar alrededor de [50,500] correspondiente al centro de un clúster, etc.). Luego probamos una conexión sospechosa [duration=200, bytes=800]. El predict_proba da la probabilidad de que este punto pertenezca a cada uno de los 3 clústeres; esperaríamos que estas probabilidades sean muy bajas o altamente sesgadas ya que [200,800] está lejos de los clústeres normales. La puntuación general score_samples (log-verosimilitud) se imprime; un valor muy bajo indica que el punto no se ajusta bien al modelo, marcándolo como una anomalía. En la práctica, se podría establecer un umbral en la log-verosimilitud (o en la probabilidad máxima) para decidir si un punto es lo suficientemente improbable como para considerarse malicioso. GMM, por lo tanto, proporciona una forma fundamentada de hacer detección de anomalías y también genera clústeres suaves que reconocen la incertidumbre.
 
 ### Isolation Forest
 
 **Isolation Forest** es un algoritmo de detección de anomalías en conjunto basado en la idea de aislar puntos aleatoriamente. El principio es que las anomalías son pocas y diferentes, por lo que son más fáciles de aislar que los puntos normales. Un Isolation Forest construye muchos árboles de aislamiento binarios (árboles de decisión aleatorios) que particionan los datos aleatoriamente. En cada nodo de un árbol, se selecciona una característica aleatoria y se elige un valor de división aleatorio entre el mínimo y el máximo de esa característica para los datos en ese nodo. Esta división divide los datos en dos ramas. El árbol crece hasta que cada punto está aislado en su propia hoja o se alcanza una altura máxima del árbol.
 
-La detección de anomalías se realiza observando la longitud del camino de cada punto en estos árboles aleatorios: el número de divisiones requeridas para aislar el punto. Intuitivamente, las anomalías (valores atípicos) tienden a ser aisladas más rápido porque una división aleatoria es más probable que separe un valor atípico (que se encuentra en una región escasa) que un punto normal en un clúster denso. El Isolation Forest calcula una puntuación de anomalía a partir de la longitud promedio del camino en todos los árboles: camino promedio más corto → más anómalo. Las puntuaciones suelen estar normalizadas entre [0,1] donde 1 significa muy probable que sea una anomalía.
+La detección de anomalías se realiza observando la longitud del camino de cada punto en estos árboles aleatorios: el número de divisiones requeridas para aislar el punto. Intuitivamente, las anomalías (valores atípicos) tienden a ser aisladas más rápido porque una división aleatoria es más probable que separe un valor atípico (que se encuentra en una región escasa) que un punto normal en un clúster denso. El Isolation Forest calcula una puntuación de anomalía a partir de la longitud promedio del camino en todos los árboles: longitud promedio más corta → más anómalo. Las puntuaciones suelen estar normalizadas a [0,1] donde 1 significa muy probable que sea una anomalía.
 
 > [!TIP]
 > *Casos de uso en ciberseguridad:* Los Isolation Forests se han utilizado con éxito en detección de intrusiones y detección de fraudes. Por ejemplo, entrenar un Isolation Forest en registros de tráfico de red que contienen principalmente comportamiento normal; el bosque producirá caminos cortos para tráfico extraño (como una IP que utiliza un puerto desconocido o un patrón de tamaño de paquete inusual), marcándolo para inspección. Debido a que no requiere ataques etiquetados, es adecuado para detectar tipos de ataques desconocidos. También se puede implementar en datos de inicio de sesión de usuarios para detectar tomas de cuentas (los tiempos o ubicaciones de inicio de sesión anómalos se aíslan rápidamente). En un caso de uso, un Isolation Forest podría proteger a una empresa monitoreando métricas del sistema y generando una alerta cuando una combinación de métricas (CPU, red, cambios de archivos) se ve muy diferente (caminos de aislamiento cortos) de los patrones históricos.
@@ -308,7 +306,7 @@ La detección de anomalías se realiza observando la longitud del camino de cada
 <summary>Ejemplo -- Detección de Valores Atípicos en Registros de Red
 </summary>
 
-Usaremos el conjunto de datos de prueba anterior (que contiene puntos normales y algunos puntos de ataque) y ejecutaremos un Isolation Forest para ver si puede separar los ataques. Supondremos que esperamos que ~15% de los datos sean anómalos (para demostración).
+Usaremos el conjunto de datos de prueba anterior (que contiene puntos normales y algunos de ataque) y ejecutaremos un Isolation Forest para ver si puede separar los ataques. Supondremos que esperamos que ~15% de los datos sean anómalos (para demostración).
 ```python
 from sklearn.ensemble import IsolationForest
 
@@ -341,7 +339,7 @@ El algoritmo tiene dos etapas principales:
 El resultado es a menudo un gráfico de dispersión visualmente significativo donde los clústeres en los datos se vuelven evidentes.
 
 > [!TIP]
-> *Casos de uso en ciberseguridad:* t-SNE se utiliza a menudo para **visualizar datos de seguridad de alta dimensión para análisis humano**. Por ejemplo, en un centro de operaciones de seguridad, los analistas podrían tomar un conjunto de datos de eventos con docenas de características (números de puerto, frecuencias, conteos de bytes, etc.) y usar t-SNE para producir un gráfico en 2D. Los ataques podrían formar sus propios clústeres o separarse de los datos normales en este gráfico, lo que facilita su identificación. Se ha aplicado a conjuntos de datos de malware para ver agrupaciones de familias de malware o a datos de intrusión en redes donde diferentes tipos de ataque se agrupan de manera distinta, guiando una investigación adicional. Esencialmente, t-SNE proporciona una forma de ver la estructura en datos cibernéticos que de otro modo sería inescrutable.
+> *Casos de uso en ciberseguridad:* t-SNE se utiliza a menudo para **visualizar datos de seguridad de alta dimensión para análisis humano**. Por ejemplo, en un centro de operaciones de seguridad, los analistas podrían tomar un conjunto de datos de eventos con docenas de características (números de puerto, frecuencias, conteos de bytes, etc.) y usar t-SNE para producir un gráfico en 2D. Los ataques podrían formar sus propios clústeres o separarse de los datos normales en este gráfico, lo que facilita su identificación. Se ha aplicado a conjuntos de datos de malware para ver agrupaciones de familias de malware o a datos de intrusión en redes donde diferentes tipos de ataque se agrupan de manera distinta, guiando investigaciones adicionales. Esencialmente, t-SNE proporciona una forma de ver la estructura en datos cibernéticos que de otro modo serían inescrutables.
 
 #### Suposiciones y Limitaciones
 
@@ -436,7 +434,7 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 ```
-Aquí combinamos nuestro conjunto de datos normal 4D anterior con un puñado de valores atípicos extremos (los valores atípicos tienen una característica (“duración”) establecida muy alta, etc., para simular un patrón extraño). Ejecutamos t-SNE con una perplexidad típica de 30. Los datos de salida data_2d tienen forma (1505, 2). En este texto no vamos a graficar, pero si lo hiciéramos, esperaríamos ver quizás tres grupos compactos correspondientes a los 3 grupos normales, y los 5 valores atípicos apareciendo como puntos aislados lejos de esos grupos. En un flujo de trabajo interactivo, podríamos colorear los puntos según su etiqueta (normal o qué grupo, frente a anomalía) para verificar esta estructura. Incluso sin etiquetas, un analista podría notar esos 5 puntos sentados en un espacio vacío en la gráfica 2D y marcarlos. Esto muestra cómo t-SNE puede ser una herramienta poderosa para la detección visual de anomalías y la inspección de grupos en datos de ciberseguridad, complementando los algoritmos automatizados anteriores.
+Aquí combinamos nuestro conjunto de datos normal 4D anterior con un puñado de valores atípicos extremos (los valores atípicos tienen una característica (“duración”) establecida muy alta, etc., para simular un patrón extraño). Ejecutamos t-SNE con una perplexidad típica de 30. Los datos de salida data_2d tienen forma (1505, 2). En este texto no vamos a graficar, pero si lo hiciéramos, esperaríamos ver quizás tres grupos compactos correspondientes a los 3 grupos normales, y los 5 valores atípicos apareciendo como puntos aislados lejos de esos grupos. En un flujo de trabajo interactivo, podríamos colorear los puntos según su etiqueta (normal o qué grupo, frente a anomalía) para verificar esta estructura. Incluso sin etiquetas, un analista podría notar esos 5 puntos sentados en un espacio vacío en el gráfico 2D y marcarlos. Esto muestra cómo t-SNE puede ser una herramienta poderosa para la detección visual de anomalías y la inspección de grupos en datos de ciberseguridad, complementando los algoritmos automatizados anteriores.
 
 </details>
 
