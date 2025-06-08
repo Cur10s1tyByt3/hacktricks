@@ -27,7 +27,7 @@ El mejor punto de partida para aprender sobre IA es entender cómo funcionan los
 En la siguiente página encontrarás los conceptos básicos de cada componente para construir un LLM básico utilizando transformadores:
 
 {{#ref}}
-llm-architecture/README.md
+AI-llm-architecture/README.md
 {{#endref}}
 
 ## Seguridad de IA
