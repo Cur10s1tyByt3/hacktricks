@@ -58,7 +58,7 @@ AI-Models-RCE.md
 
 ### Protocolo de Contexto de Modelos de IA
 
-MCP (Protocolo de Contexto de Modelos) es un protocolo que permite a los clientes de agentes de IA conectarse con herramientas externas y fuentes de datos de manera plug-and-play. Esto habilita flujos de trabajo complejos e interacciones entre modelos de IA y sistemas externos:
+MCP (Protocolo de Contexto de Modelos) es un protocolo que permite a los clientes de agentes de IA conectarse con herramientas externas y fuentes de datos de manera plug-and-play. Esto permite flujos de trabajo e interacciones complejas entre modelos de IA y sistemas externos:
 
 {{#ref}}
 AI-MCP-Servers.md

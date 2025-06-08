@@ -10,7 +10,7 @@ El aprendizaje no supervisado se utiliza a menudo para tareas como agrupamiento,
 ### Agrupamiento K-Means
 
 K-Means es un algoritmo de agrupamiento basado en centroides que particiona los datos en K grupos asignando cada punto al centroide del grupo más cercano. El algoritmo funciona de la siguiente manera:
-1. **Inicialización**: Elegir K centros de grupo iniciales (centroides), a menudo aleatoriamente o mediante métodos más inteligentes como k-means++.
+1. **Inicialización**: Elegir K centros de grupo iniciales (centroides), a menudo de forma aleatoria o mediante métodos más inteligentes como k-means++.
 2. **Asignación**: Asignar cada punto de datos al centroide más cercano basado en una métrica de distancia (por ejemplo, distancia euclidiana).
 3. **Actualización**: Recalcular los centroides tomando la media de todos los puntos de datos asignados a cada grupo.
 4. **Repetir**: Los pasos 2–3 se repiten hasta que las asignaciones de grupos se estabilizan (los centroides ya no se mueven significativamente).
@@ -188,13 +188,13 @@ Vamos a explicar esto con un ejemplo. Imagina que tienes un conjunto de datos co
 - Tenga en cuenta que la covarianza entre dos variables (píxeles en este caso) indica cuánto cambian juntas, por lo que la idea aquí es averiguar qué píxeles tienden a aumentar o disminuir juntos con una relación lineal.
 - Por ejemplo, si el píxel 1 y el píxel 2 tienden a aumentar juntos, la covarianza entre ellos será positiva.
 - La matriz de covarianza será una matriz de 10,000x10,000 donde cada entrada representa la covarianza entre dos píxeles.
-3. **Resolver la ecuación de eigenvalores**: La ecuación de eigenvalores a resolver es `C * v = λ * v` donde C es la matriz de covarianza, v es el eigenvector y λ es el eigenvalor. Se puede resolver utilizando métodos como:
+3. **Resolver la ecuación de eigenvalores**: La ecuación de eigenvalores a resolver es `C * v = λ * v` donde C es la matriz de covarianza, v es el eigenvector, y λ es el eigenvalor. Se puede resolver utilizando métodos como:
 - **Descomposición de Eigenvalores**: Realizar la descomposición de eigenvalores en la matriz de covarianza para obtener los eigenvalores y eigenvectores.
 - **Descomposición en Valores Singulares (SVD)**: Alternativamente, puedes usar SVD para descomponer la matriz de datos en valores y vectores singulares, lo que también puede dar lugar a los componentes principales.
 4. **Seleccionar Componentes Principales**: Ordenar los eigenvalores en orden descendente y seleccionar los K eigenvectores superiores correspondientes a los eigenvalores más grandes. Estos eigenvectores representan las direcciones de máxima varianza en los datos.
 
 > [!TIP]
-> *Casos de uso en ciberseguridad:* Un uso común de PCA en seguridad es la reducción de características para la detección de anomalías. Por ejemplo, un sistema de detección de intrusiones con más de 40 métricas de red (como características de NSL-KDD) puede usar PCA para reducir a un puñado de componentes, resumiendo los datos para visualización o alimentando algoritmos de agrupamiento. Los analistas podrían trazar el tráfico de red en el espacio de los dos primeros componentes principales para ver si los ataques se separan del tráfico normal. PCA también puede ayudar a eliminar características redundantes (como bytes enviados frente a bytes recibidos si están correlacionados) para hacer que los algoritmos de detección sean más robustos y rápidos.
+> *Casos de uso en ciberseguridad:* Un uso común de PCA en seguridad es la reducción de características para la detección de anomalías. Por ejemplo, un sistema de detección de intrusiones con más de 40 métricas de red (como características de NSL-KDD) puede usar PCA para reducir a un puñado de componentes, resumiendo los datos para visualización o alimentando algoritmos de agrupamiento. Los analistas podrían trazar el tráfico de red en el espacio de los dos primeros componentes principales para ver si los ataques se separan del tráfico normal. PCA también puede ayudar a eliminar características redundantes (como bytes enviados vs. bytes recibidos si están correlacionados) para hacer que los algoritmos de detección sean más robustos y rápidos.
 
 #### Suposiciones y Limitaciones
 
@@ -224,10 +224,9 @@ print("Original shape:", data_4d.shape, "Reduced shape:", data_2d.shape)
 # We can examine a few transformed points
 print("First 5 data points in PCA space:\n", data_2d[:5])
 ```
-Aquí tomamos los clústeres de tráfico normal anteriores y extendimos cada punto de datos con dos características adicionales (paquetes y errores) que se correlacionan con bytes y duración. Luego se utiliza PCA para comprimir las 4 características en 2 componentes principales. Imprimimos la razón de varianza explicada, que podría mostrar que, digamos, más del 95% de la varianza es capturada por 2 componentes (lo que significa poca pérdida de información). La salida también muestra que la forma de los datos se reduce de (1500, 4) a (1500, 2). Los primeros puntos en el espacio PCA se dan como un ejemplo. En la práctica, uno podría graficar data_2d para verificar visualmente si los clústeres son distinguibles. Si hubiera una anomalía presente, uno podría verla como un punto alejado del clúster principal en el espacio PCA. Por lo tanto, PCA ayuda a destilar datos complejos en una forma manejable para la interpretación humana o como entrada para otros algoritmos.
+Aquí tomamos los clústeres de tráfico normal anteriores y extendimos cada punto de datos con dos características adicionales (paquetes y errores) que se correlacionan con bytes y duración. Luego se utiliza PCA para comprimir las 4 características en 2 componentes principales. Imprimimos la razón de varianza explicada, que podría mostrar que, digamos, >95% de la varianza es capturada por 2 componentes (lo que significa poca pérdida de información). La salida también muestra que la forma de los datos se reduce de (1500, 4) a (1500, 2). Los primeros puntos en el espacio PCA se dan como un ejemplo. En la práctica, uno podría graficar data_2d para verificar visualmente si los clústeres son distinguibles. Si hubiera una anomalía presente, uno podría verla como un punto alejado del clúster principal en el espacio PCA. Por lo tanto, PCA ayuda a destilar datos complejos en una forma manejable para la interpretación humana o como entrada para otros algoritmos.
 
 </details>
-
 
 ### Modelos de Mezcla Gaussiana (GMM)
 
@@ -263,7 +262,6 @@ GMM es una generalización de K-Means que incorpora covarianza, por lo que los c
 
 Por otro lado, GMM requiere especificar el número de componentes K (aunque se pueden usar criterios como BIC/AIC para seleccionarlo). EM a veces puede converger lentamente o a un óptimo local, por lo que la inicialización es importante (a menudo se ejecuta EM múltiples veces). Si los datos no siguen realmente una mezcla de Gaussianas, el modelo puede ser un mal ajuste. También existe el riesgo de que una Gaussiana se reduzca para cubrir solo un valor atípico (aunque la regularización o los límites de covarianza mínima pueden mitigar eso).
 
-
 <details>
 <summary>Ejemplo --  Agrupamiento Suave & Puntuaciones de Anomalía
 </summary>
@@ -291,7 +289,7 @@ En este código, entrenamos un GMM con 3 Gaussianos sobre el tráfico normal (su
 
 **Isolation Forest** es un algoritmo de detección de anomalías en conjunto basado en la idea de aislar puntos aleatoriamente. El principio es que las anomalías son pocas y diferentes, por lo que son más fáciles de aislar que los puntos normales. Un Isolation Forest construye muchos árboles de aislamiento binarios (árboles de decisión aleatorios) que particionan los datos aleatoriamente. En cada nodo de un árbol, se selecciona una característica aleatoria y se elige un valor de división aleatorio entre el mínimo y el máximo de esa característica para los datos en ese nodo. Esta división divide los datos en dos ramas. El árbol crece hasta que cada punto está aislado en su propia hoja o se alcanza una altura máxima del árbol.
 
-La detección de anomalías se realiza observando la longitud del camino de cada punto en estos árboles aleatorios: el número de divisiones requeridas para aislar el punto. Intuitivamente, las anomalías (valores atípicos) tienden a ser aisladas más rápido porque una división aleatoria es más probable que separe un valor atípico (que se encuentra en una región escasa) que un punto normal en un clúster denso. El Isolation Forest calcula una puntuación de anomalía a partir de la longitud promedio del camino en todos los árboles: longitud promedio más corta → más anómalo. Las puntuaciones suelen estar normalizadas a [0,1] donde 1 significa muy probable que sea una anomalía.
+La detección de anomalías se realiza observando la longitud del camino de cada punto en estos árboles aleatorios: el número de divisiones requeridas para aislar el punto. Intuitivamente, las anomalías (valores atípicos) tienden a ser aisladas más rápido porque una división aleatoria es más probable que separe un valor atípico (que se encuentra en una región escasa) que un punto normal en un clúster denso. El Isolation Forest calcula una puntuación de anomalía a partir de la longitud promedio del camino en todos los árboles: camino promedio más corto → más anómalo. Las puntuaciones suelen estar normalizadas a [0,1] donde 1 significa muy probable que sea una anomalía.
 
 > [!TIP]
 > *Casos de uso en ciberseguridad:* Los Isolation Forests se han utilizado con éxito en detección de intrusiones y detección de fraudes. Por ejemplo, entrenar un Isolation Forest en registros de tráfico de red que contienen principalmente comportamiento normal; el bosque producirá caminos cortos para tráfico extraño (como una IP que utiliza un puerto desconocido o un patrón de tamaño de paquete inusual), marcándolo para inspección. Debido a que no requiere ataques etiquetados, es adecuado para detectar tipos de ataques desconocidos. También se puede implementar en datos de inicio de sesión de usuarios para detectar tomas de cuentas (los tiempos o ubicaciones de inicio de sesión anómalos se aíslan rápidamente). En un caso de uso, un Isolation Forest podría proteger a una empresa monitoreando métricas del sistema y generando una alerta cuando una combinación de métricas (CPU, red, cambios de archivos) se ve muy diferente (caminos de aislamiento cortos) de los patrones históricos.
@@ -328,7 +326,7 @@ La salida muestra las etiquetas predichas para los primeros 20 puntos (donde -1 
 
 ### t-SNE (t-Distributed Stochastic Neighbor Embedding)
 
-**t-SNE** es una técnica de reducción de dimensionalidad no lineal diseñada específicamente para visualizar datos de alta dimensión en 2 o 3 dimensiones. Convierte similitudes entre puntos de datos en distribuciones de probabilidad conjunta y trata de preservar la estructura de los vecindarios locales en la proyección de menor dimensión. En términos más simples, t-SNE coloca puntos en (digamos) 2D de tal manera que puntos similares (en el espacio original) terminen cerca unos de otros y puntos disímiles terminen lejos con alta probabilidad.
+**t-SNE** es una técnica de reducción de dimensionalidad no lineal diseñada específicamente para visualizar datos de alta dimensión en 2 o 3 dimensiones. Convierte similitudes entre puntos de datos en distribuciones de probabilidad conjunta y trata de preservar la estructura de los vecindarios locales en la proyección de menor dimensión. En términos más simples, t-SNE coloca puntos en (digamos) 2D de tal manera que los puntos similares (en el espacio original) terminen cerca unos de otros y los puntos disímiles terminen lejos con alta probabilidad.
 
 El algoritmo tiene dos etapas principales:
 
@@ -345,7 +343,7 @@ El resultado es a menudo un gráfico de dispersión visualmente significativo do
 
 t-SNE es excelente para el descubrimiento visual de patrones. Puede revelar clústeres, subclústeres y atípicos que otros métodos lineales (como PCA) podrían no detectar. Se ha utilizado en investigaciones de ciberseguridad para visualizar datos complejos como perfiles de comportamiento de malware o patrones de tráfico de red. Debido a que preserva la estructura local, es bueno para mostrar agrupaciones naturales.
 
-Sin embargo, t-SNE es computacionalmente más pesado (aproximadamente $O(n^2)$), por lo que puede requerir muestreo para conjuntos de datos muy grandes. También tiene hiperparámetros (perplejidad, tasa de aprendizaje, iteraciones) que pueden afectar la salida; por ejemplo, diferentes valores de perplejidad podrían revelar clústeres a diferentes escalas. Los gráficos de t-SNE a veces pueden ser malinterpretados; las distancias en el mapa no son directamente significativas a nivel global (se enfoca en el vecindario local, a veces los clústeres pueden aparecer artificialmente bien separados). Además, t-SNE es principalmente para visualización; no proporciona una forma directa de proyectar nuevos puntos de datos sin recomputar, y no está destinado a ser utilizado como un preprocesamiento para modelado predictivo (UMAP es una alternativa que aborda algunos de estos problemas con mayor velocidad).
+Sin embargo, t-SNE es computacionalmente más pesado (aproximadamente $O(n^2)$), por lo que puede requerir muestreo para conjuntos de datos muy grandes. También tiene hiperparámetros (perplejidad, tasa de aprendizaje, iteraciones) que pueden afectar la salida; por ejemplo, diferentes valores de perplejidad podrían revelar clústeres a diferentes escalas. Los gráficos de t-SNE a veces pueden ser malinterpretados; las distancias en el mapa no son directamente significativas a nivel global (se centra en el vecindario local, a veces los clústeres pueden aparecer artificialmente bien separados). Además, t-SNE es principalmente para visualización; no proporciona una forma directa de proyectar nuevos puntos de datos sin recomputar, y no está destinado a ser utilizado como un preprocesamiento para modelado predictivo (UMAP es una alternativa que aborda algunos de estos problemas con mayor velocidad).
 
 <details>
 <summary>Ejemplo -- Visualizando Conexiones de Red
