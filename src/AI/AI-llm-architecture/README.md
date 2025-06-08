@@ -82,7 +82,7 @@ Deberías comenzar leyendo esta publicación para algunos conceptos básicos que
 ## 7.1. Ajuste Fino para Clasificación
 
 > [!TIP]
-> El objetivo de esta sección es mostrar cómo ajustar finamente un modelo ya preentrenado para que, en lugar de generar nuevo texto, el LLM seleccione y dé las **probabilidades de que el texto dado sea categorizado en cada una de las categorías dadas** (como si un texto es spam o no).
+> El objetivo de esta sección es mostrar cómo ajustar finamente un modelo ya preentrenado para que en lugar de generar nuevo texto, el LLM seleccione y dé las **probabilidades de que el texto dado sea categorizado en cada una de las categorías dadas** (como si un texto es spam o no).
 
 {{#ref}}
 7.1.-fine-tuning-for-classification.md
