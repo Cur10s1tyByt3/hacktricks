@@ -89,7 +89,7 @@ Finished in 0.920s.
 
 ## Servicios
 
-Ordenados alfabéticamente por nombre de servicio.
+Ordenado alfabéticamente por nombre del servicio.
 
 ### AFP
 ```bash
@@ -460,7 +460,7 @@ crackmapexec winrm <IP> -d <Domain Name> -u usernames.txt -p passwords.txt
 - [https://www.md5online.org/md5-decrypt.html](https://www.md5online.org/md5-decrypt.html) (MD5)
 - [http://reverse-hash-lookup.online-domain-tools.com/](http://reverse-hash-lookup.online-domain-tools.com)
 
-Revisa esto antes de intentar forzar un Hash.
+Revisa esto antes de intentar hacer un ataque de fuerza bruta a un Hash.
 
 ### ZIP
 ```bash
@@ -549,7 +549,7 @@ john --format=krb5tgs --wordlist=passwords_kerb.txt hashes.kerberoast
 hashcat -m 13100 --force -a 0 hashes.kerberoast passwords_kerb.txt
 ./tgsrepcrack.py wordlist.txt 1-MSSQLSvc~sql01.medin.local~1433-MYDOMAIN.LOCAL.kirbi
 ```
-### Imagen de Luks
+### Lucks image
 
 #### Método 1
 
@@ -592,7 +592,7 @@ Usa [https://github.com/openwall/john/blob/bleeding-jumbo/run/DPAPImk2john.py](h
 
 ### Columna Protegida por Contraseña de Open Office
 
-Si tienes un archivo xlsx con una columna protegida por una contraseña, puedes desprotegerla:
+Si tienes un archivo xlsx con una columna protegida por una contraseña, puedes desprotegerlo:
 
 - **Cárgalo en google drive** y la contraseña se eliminará automáticamente
 - Para **eliminarla** **manualmente**:
@@ -629,7 +629,7 @@ hash-identifier
 
 ### **Herramientas de generación de listas de palabras**
 
-- [**kwprocessor**](https://github.com/hashcat/kwprocessor)**:** Generador avanzado de recorrido de teclado con caracteres base configurables, mapa de teclas y rutas.
+- [**kwprocessor**](https://github.com/hashcat/kwprocessor)**:** Generador avanzado de recorrido por teclado con caracteres base configurables, mapa de teclas y rutas.
 ```bash
 kwp64.exe basechars\custom.base keymaps\uk.keymap routes\2-to-10-max-3-direction-changes.route -o D:\Tools\keywalk.txt
 ```
@@ -642,7 +642,7 @@ john --wordlist=words.txt --rules=all --stdout > w_mutated.txt #Apply all rules
 ```
 ### Hashcat
 
-#### Ataques de Hashcat
+#### Hashcat ataques
 
 - **Ataque de lista de palabras** (`-a 0`) con reglas
 
@@ -696,7 +696,7 @@ hashcat.exe -a 3 -m 1000 C:\Temp\ntlm.txt -1 ?d?s ?u?l?l?l?l?l?l?l?1
 ## Use it to crack the password
 hashcat.exe -a 3 -m 1000 C:\Temp\ntlm.txt .\masks.hcmask
 ```
-- Ataque de lista de palabras + máscara (`-a 6`) / ataque de máscara + lista de palabras (`-a 7`)
+- Lista de palabras + Máscara (`-a 6`) / Máscara + Lista de palabras (`-a 7`) ataque
 ```bash
 # Mask numbers will be appended to each word in the wordlist
 hashcat.exe -a 6 -m 1000 C:\Temp\ntlm.txt \wordlist.txt ?d?d?d?d
@@ -708,7 +708,7 @@ hashcat.exe -a 7 -m 1000 C:\Temp\ntlm.txt ?d?d?d?d \wordlist.txt
 ```bash
 hashcat --example-hashes | grep -B1 -A2 "NTLM"
 ```
-Rompiendo Hashes de Linux - archivo /etc/shadow
+Cracking Linux Hashes - /etc/shadow file
 ```
 500 | md5crypt $1$, MD5(Unix)                          | Operating-Systems
 3200 | bcrypt $2*$, Blowfish(Unix)                      | Operating-Systems
