@@ -1,32 +1,30 @@
-# Artefactos de Windows
-
-## Artefactos de Windows
+# Windows Artifacts
 
 {{#include ../../../banners/hacktricks-training.md}}
 
-## Artefactos Genéricos de Windows
+## Generic Windows Artifacts
 
-### Notificaciones de Windows 10
+### Windows 10 Notifications
 
-En la ruta `\Users\<username>\AppData\Local\Microsoft\Windows\Notifications` puedes encontrar la base de datos `appdb.dat` (antes del aniversario de Windows) o `wpndatabase.db` (después del aniversario de Windows).
+En la ruta `\Users\<username>\AppData\Local\Microsoft\Windows\Notifications` puedes encontrar la base de datos `appdb.dat` (antes de la actualización de aniversario de Windows) o `wpndatabase.db` (después de la actualización de aniversario de Windows).
 
 Dentro de esta base de datos SQLite, puedes encontrar la tabla `Notification` con todas las notificaciones (en formato XML) que pueden contener datos interesantes.
 
-### Línea de Tiempo
+### Timeline
 
-La línea de tiempo es una característica de Windows que proporciona **historial cronológico** de páginas web visitadas, documentos editados y aplicaciones ejecutadas.
+Timeline es una característica de Windows que proporciona **historial cronológico** de páginas web visitadas, documentos editados y aplicaciones ejecutadas.
 
-La base de datos reside en la ruta `\Users\<username>\AppData\Local\ConnectedDevicesPlatform\<id>\ActivitiesCache.db`. Esta base de datos se puede abrir con una herramienta SQLite o con la herramienta [**WxTCmd**](https://github.com/EricZimmerman/WxTCmd) **que genera 2 archivos que se pueden abrir con la herramienta** [**TimeLine Explorer**](https://ericzimmerman.github.io/#!index.md).
+La base de datos se encuentra en la ruta `\Users\<username>\AppData\Local\ConnectedDevicesPlatform\<id>\ActivitiesCache.db`. Esta base de datos se puede abrir con una herramienta SQLite o con la herramienta [**WxTCmd**](https://github.com/EricZimmerman/WxTCmd) **que genera 2 archivos que se pueden abrir con la herramienta** [**TimeLine Explorer**](https://ericzimmerman.github.io/#!index.md).
 
-### ADS (Flujos de Datos Alternativos)
+### ADS (Alternate Data Streams)
 
-Los archivos descargados pueden contener el **ADS Zone.Identifier** que indica **cómo** fue **descargado** desde la intranet, internet, etc. Algunos programas (como navegadores) suelen poner incluso **más** **información** como la **URL** desde donde se descargó el archivo.
+Los archivos descargados pueden contener el **ADS Zone.Identifier** que indica **cómo** fue **descargado** desde la intranet, internet, etc. Algunos programas (como navegadores) suelen incluir incluso **más** **información** como la **URL** desde donde se descargó el archivo.
 
-## **Copias de Seguridad de Archivos**
+## **File Backups**
 
-### Papelera de Reciclaje
+### Recycle Bin
 
-En Vista/Win7/Win8/Win10 la **Papelera de Reciclaje** se puede encontrar en la carpeta **`$Recycle.bin`** en la raíz de la unidad (`C:\$Recycle.bin`).\
+En Vista/Win7/Win8/Win10 la **Recycle Bin** se puede encontrar en la carpeta **`$Recycle.bin`** en la raíz de la unidad (`C:\$Recycle.bin`).\
 Cuando se elimina un archivo en esta carpeta se crean 2 archivos específicos:
 
 - `$I{id}`: Información del archivo (fecha de cuando fue eliminado)
@@ -42,7 +40,7 @@ Teniendo estos archivos puedes usar la herramienta [**Rifiuti**](https://github.
 
 ### Copias de Sombra de Volumen
 
-Shadow Copy es una tecnología incluida en Microsoft Windows que puede crear **copias de seguridad** o instantáneas de archivos o volúmenes de computadora, incluso cuando están en uso.
+La Copia de Sombra es una tecnología incluida en Microsoft Windows que puede crear **copias de seguridad** o instantáneas de archivos o volúmenes de computadora, incluso cuando están en uso.
 
 Estas copias de seguridad generalmente se encuentran en `\System Volume Information` desde la raíz del sistema de archivos y el nombre está compuesto por **UIDs** que se muestran en la siguiente imagen:
 
@@ -58,9 +56,9 @@ La entrada del registro `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bac
 
 El registro `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS` también contiene información de configuración sobre las `Copias de Sombra de Volumen`.
 
-### Archivos de Office AutoGuardados
+### Archivos AutoGuardados de Office
 
-Puedes encontrar los archivos de auto guardado de Office en: `C:\Usuarios\\AppData\Roaming\Microsoft{Excel|Word|Powerpoint}\`
+Puedes encontrar los archivos auto guardados de Office en: `C:\Usuarios\\AppData\Roaming\Microsoft{Excel|Word|Powerpoint}\`
 
 ## Elementos de Shell
 
@@ -120,7 +118,7 @@ Puedes inspeccionar los jumplists usando [**JumplistExplorer**](https://ericzimm
 
 [**Sigue este enlace para aprender qué son los shellbags.**](interesting-windows-registry-keys.md#shellbags)
 
-## Uso de USBs en Windows
+## Uso de USBs de Windows
 
 Es posible identificar que se utilizó un dispositivo USB gracias a la creación de:
 
@@ -128,7 +126,7 @@ Es posible identificar que se utilizó un dispositivo USB gracias a la creación
 - Carpeta Reciente de Microsoft Office
 - Jumplists
 
-Ten en cuenta que algunos archivos LNK en lugar de apuntar a la ruta original, apuntan a la carpeta WPDNSE:
+Nota que algunos archivos LNK en lugar de apuntar a la ruta original, apuntan a la carpeta WPDNSE:
 
 ![](<../../../images/image (218).png>)
 
@@ -161,7 +159,7 @@ Se proporciona una captura de pantalla que muestra el contenido de la tarea: ![]
 **Componentes Clave y Configuraciones de la Tarea:**
 
 - **pnpclean.dll**: Este DLL es responsable del proceso de limpieza real.
-- **UseUnifiedSchedulingEngine**: Establecido en `TRUE`, indicando el uso del motor de programación de tareas genérico.
+- **UseUnifiedSchedulingEngine**: Configurado en `TRUE`, indicando el uso del motor de programación de tareas genérico.
 - **MaintenanceSettings**:
 - **Period ('P1M')**: Indica al Programador de Tareas que inicie la tarea de limpieza mensualmente durante el mantenimiento automático regular.
 - **Deadline ('P2M')**: Instruye al Programador de Tareas, si la tarea falla durante dos meses consecutivos, a ejecutar la tarea durante el mantenimiento automático de emergencia.
@@ -191,7 +189,7 @@ Los **metadatos** de los correos y los **contactos** se pueden encontrar dentro 
 
 ### Microsoft Outlook
 
-Cuando se utilizan servidores Exchange o clientes de Outlook, habrá algunos encabezados MAPI:
+Cuando se utilizan servidores de Exchange o clientes de Outlook, habrá algunos encabezados MAPI:
 
 - `Mapi-Client-Submit-Time`: Hora del sistema cuando se envió el correo
 - `Mapi-Conversation-Index`: Número de mensajes hijos del hilo y marca de tiempo de cada mensaje del hilo
@@ -232,7 +230,7 @@ Los adjuntos perdidos podrían ser recuperables de:
 
 ### Información del Registro de Windows
 
-El Registro de Windows, que almacena una extensa cantidad de datos sobre la actividad del sistema y del usuario, se encuentra dentro de archivos en:
+El Registro de Windows, que almacena una extensa cantidad de datos sobre el sistema y la actividad del usuario, se encuentra dentro de archivos en:
 
 - `%windir%\System32\Config` para varias subclaves de `HKEY_LOCAL_MACHINE`.
 - `%UserProfile%{User}\NTUSER.DAT` para `HKEY_CURRENT_USER`.
@@ -280,7 +278,7 @@ Dentro del registro `NTUSER.DAT` en la ruta `Software\Microsoft\Current Version\
 
 ### BAM (Moderador de Actividad en Segundo Plano)
 
-Puedes abrir el archivo `SYSTEM` con un editor de registro y dentro de la ruta `SYSTEM\CurrentControlSet\Services\bam\UserSettings\{SID}` puedes encontrar la información sobre las **aplicaciones ejecutadas por cada usuario** (nota el `{SID}` en la ruta) y a **qué hora** fueron ejecutadas (la hora está dentro del valor de datos del registro).
+Puedes abrir el archivo `SYSTEM` con un editor de registro y dentro de la ruta `SYSTEM\CurrentControlSet\Services\bam\UserSettings\{SID}` puedes encontrar la información sobre las **aplicaciones ejecutadas por cada usuario** (nota el `{SID}` en la ruta) y a **qué hora** fueron ejecutadas (la hora está dentro del valor de Datos del registro).
 
 ### Prefetch de Windows
 
@@ -318,8 +316,8 @@ Proporciona la siguiente información:
 - Bytes Enviados
 - Bytes Recibidos
 - Interfaz de Red
-- Duración de la Conexión
-- Duración del Proceso
+- Duración de la conexión
+- Duración del proceso
 
 Esta información se actualiza cada 60 minutos.
 
@@ -388,7 +386,7 @@ Y **aplicaciones desinstaladas** en: `Software\Microsoft\Windows\CurrentVersion\
 
 La información que aparece dentro de los eventos de Windows es:
 
-- Qué sucedió
+- Lo que sucedió
 - Marca de tiempo (UTC + 0)
 - Usuarios involucrados
 - Hosts involucrados (nombre de host, IP)
@@ -418,7 +416,7 @@ Los eventos de acceso se registran en el archivo de configuración de seguridad 
 - **Lote (4)**: Ejecución de procesos por lotes.
 - **Servicio (5)**: Lanzamientos de servicios.
 - **Proxy (6)**: Autenticación proxy.
-- **Desbloquear (7)**: Pantalla desbloqueada con una contraseña.
+- **Desbloqueo (7)**: Pantalla desbloqueada con una contraseña.
 - **Texto claro de red (8)**: Transmisión de contraseña en texto claro, a menudo desde IIS.
 - **Nuevas credenciales (9)**: Uso de diferentes credenciales para el acceso.
 - **Interactivo remoto (10)**: Inicio de sesión en escritorio remoto o servicios de terminal.
@@ -430,7 +428,7 @@ Los eventos de acceso se registran en el archivo de configuración de seguridad 
 
 - **0xC0000064**: El nombre de usuario no existe - Podría indicar un ataque de enumeración de nombres de usuario.
 - **0xC000006A**: Nombre de usuario correcto pero contraseña incorrecta - Posible intento de adivinanza de contraseña o fuerza bruta.
-- **0xC0000234**: Cuenta de usuario bloqueada - Puede seguir a un ataque de fuerza bruta que resulte en múltiples inicios de sesión fallidos.
+- **0xC0000234**: Cuenta de usuario bloqueada - Puede seguir a un ataque de fuerza bruta que resulta en múltiples inicios de sesión fallidos.
 - **0xC0000072**: Cuenta deshabilitada - Intentos no autorizados de acceder a cuentas deshabilitadas.
 - **0xC000006F**: Inicio de sesión fuera del tiempo permitido - Indica intentos de acceso fuera de las horas de inicio de sesión establecidas, un posible signo de acceso no autorizado.
 - **0xC0000070**: Violación de restricciones de estación de trabajo - Podría ser un intento de inicio de sesión desde una ubicación no autorizada.
@@ -461,7 +459,7 @@ Los eventos de acceso se registran en el archivo de configuración de seguridad 
 
 Para ejemplos prácticos sobre cómo simular estos tipos de inicio de sesión y oportunidades de volcado de credenciales, consulta la [guía detallada de Altered Security](https://www.alteredsecurity.com/post/fantastic-windows-logon-types-and-where-to-find-credentials-in-them).
 
-Los detalles del evento, incluidos los códigos de estado y subestado, proporcionan más información sobre las causas del evento, particularmente notables en el Event ID 4625.
+Los detalles de los eventos, incluidos los códigos de estado y subestado, proporcionan más información sobre las causas de los eventos, particularmente notables en el Event ID 4625.
 
 ### Recuperando eventos de Windows
 
@@ -481,7 +479,7 @@ Registrado por EventID 4616, los cambios en la hora del sistema pueden complicar
 
 #### Seguimiento de dispositivos USB
 
-IDs de eventos del sistema útiles para el seguimiento de dispositivos USB incluyen 20001/20003/10000 para el uso inicial, 10100 para actualizaciones de controladores y EventID 112 de DeviceSetupManager para marcas de tiempo de inserción.
+Los System EventIDs útiles para el seguimiento de dispositivos USB incluyen 20001/20003/10000 para el uso inicial, 10100 para actualizaciones de controladores y EventID 112 de DeviceSetupManager para marcas de tiempo de inserción.
 
 #### Eventos de energía del sistema
 

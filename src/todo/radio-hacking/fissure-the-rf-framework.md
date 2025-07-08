@@ -1,10 +1,12 @@
 # FISSURE - El Marco RF
 
+{{#include /banners/hacktricks-training.md}}
+
 **Comprensión y Ingeniería Inversa de Señales SDR Independientes de Frecuencia**
 
-FISSURE es un marco de RF y ingeniería inversa de código abierto diseñado para todos los niveles de habilidad, con ganchos para la detección y clasificación de señales, descubrimiento de protocolos, ejecución de ataques, manipulación de IQ, análisis de vulnerabilidades, automatización y AI/ML. El marco fue construido para promover la integración rápida de módulos de software, radios, protocolos, datos de señales, scripts, gráficos de flujo, material de referencia y herramientas de terceros. FISSURE es un facilitador de flujo de trabajo que mantiene el software en un solo lugar y permite a los equipos ponerse al día sin esfuerzo mientras comparten la misma configuración base probada para distribuciones específicas de Linux.
+FISSURE es un marco de RF y ingeniería inversa de código abierto diseñado para todos los niveles de habilidad, con ganchos para la detección y clasificación de señales, descubrimiento de protocolos, ejecución de ataques, manipulación de IQ, análisis de vulnerabilidades, automatización y AI/ML. El marco fue construido para promover la integración rápida de módulos de software, radios, protocolos, datos de señales, scripts, gráficos de flujo, material de referencia y herramientas de terceros. FISSURE es un habilitador de flujo de trabajo que mantiene el software en un solo lugar y permite a los equipos ponerse al día sin esfuerzo mientras comparten la misma configuración base probada para distribuciones específicas de Linux.
 
-El marco y las herramientas incluidas con FISSURE están diseñadas para detectar la presencia de energía RF, comprender las características de una señal, recolectar y analizar muestras, desarrollar técnicas de transmisión y/o inyección, y crear cargas útiles o mensajes personalizados. FISSURE contiene una biblioteca en crecimiento de información sobre protocolos y señales para ayudar en la identificación, creación de paquetes y fuzzing. Existen capacidades de archivo en línea para descargar archivos de señales y construir listas de reproducción para simular tráfico y probar sistemas.
+El marco y las herramientas incluidas con FISSURE están diseñadas para detectar la presencia de energía RF, entender las características de una señal, recolectar y analizar muestras, desarrollar técnicas de transmisión y/o inyección, y crear cargas útiles o mensajes personalizados. FISSURE contiene una biblioteca en crecimiento de información sobre protocolos y señales para ayudar en la identificación, creación de paquetes y fuzzing. Existen capacidades de archivo en línea para descargar archivos de señales y construir listas de reproducción para simular tráfico y probar sistemas.
 
 La amigable base de código en Python y la interfaz de usuario permiten a los principiantes aprender rápidamente sobre herramientas y técnicas populares relacionadas con RF y la ingeniería inversa. Los educadores en ciberseguridad e ingeniería pueden aprovechar el material incorporado o utilizar el marco para demostrar sus propias aplicaciones del mundo real. Los desarrolladores e investigadores pueden usar FISSURE para sus tareas diarias o para exponer sus soluciones de vanguardia a una audiencia más amplia. A medida que la conciencia y el uso de FISSURE crecen en la comunidad, también lo hará la extensión de sus capacidades y la amplitud de la tecnología que abarca.
 
@@ -58,7 +60,7 @@ A continuación, seleccione la opción que mejor coincida con su sistema operati
 | :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
 | ![install1b](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install1b.png) | ![install1a](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install1a.png) | ![install1c](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install1c.png) |
 
-Se recomienda instalar FISSURE en un sistema operativo limpio para evitar conflictos existentes. Seleccione todas las casillas de verificación recomendadas (botón predeterminado) para evitar errores al operar las diversas herramientas dentro de FISSURE. Habrá múltiples mensajes durante la instalación, principalmente pidiendo permisos elevados y nombres de usuario. Si un elemento contiene una sección "Verificar" al final, el instalador ejecutará el comando que sigue y resaltará el elemento de la casilla de verificación en verde o rojo dependiendo de si se producen errores por el comando. Los elementos marcados sin una sección "Verificar" permanecerán en negro después de la instalación.
+Se recomienda instalar FISSURE en un sistema operativo limpio para evitar conflictos existentes. Seleccione todas las casillas de verificación recomendadas (botón predeterminado) para evitar errores al operar las diversas herramientas dentro de FISSURE. Habrá múltiples avisos durante la instalación, principalmente pidiendo permisos elevados y nombres de usuario. Si un elemento contiene una sección "Verificar" al final, el instalador ejecutará el comando que sigue y resaltará el elemento de la casilla de verificación en verde o rojo dependiendo de si se producen errores por el comando. Los elementos marcados sin una sección "Verificar" permanecerán en negro después de la instalación.
 
 ![install2](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install2.png)
 
@@ -68,7 +70,7 @@ Abra una terminal y escriba:
 ```
 fissure
 ```
-Refiérase al menú de ayuda de FISSURE para más detalles sobre el uso.
+Referirse al menú de ayuda de FISSURE para más detalles sobre el uso.
 
 ## Detalles
 
@@ -122,14 +124,14 @@ FISSURE viene con varias guías útiles para familiarizarse con diferentes tecno
 
 * [ ] Agregar más tipos de hardware, protocolos RF, parámetros de señal, herramientas de análisis
 * [ ] Soportar más sistemas operativos
-* [ ] Desarrollar material de clase alrededor de FISSURE (Ataques RF, Wi-Fi, GNU Radio, PyQt, etc.)
-* [ ] Crear un acondicionador de señal, extractor de características y clasificador de señal con técnicas AI/ML seleccionables
+* [ ] Desarrollar material de clase en torno a FISSURE (Ataques RF, Wi-Fi, GNU Radio, PyQt, etc.)
+* [ ] Crear un acondicionador de señal, extractor de características y clasificador de señales con técnicas AI/ML seleccionables
 * [ ] Implementar mecanismos de demodulación recursiva para producir un flujo de bits a partir de señales desconocidas
-* [ ] Transicionar los componentes principales de FISSURE a un esquema de despliegue de nodo sensor genérico
+* [ ] Transicionar los componentes principales de FISSURE a un esquema de implementación de nodo sensor genérico
 
-## Contribuyendo
+## Contribuciones
 
-Se alientan fuertemente las sugerencias para mejorar FISSURE. Deje un comentario en la página de [Discusiones](https://github.com/ainfosec/FISSURE/discussions) o en el Servidor de Discord si tiene alguna idea sobre lo siguiente:
+Se alientan fuertemente las sugerencias para mejorar FISSURE. Deja un comentario en la página de [Discusiones](https://github.com/ainfosec/FISSURE/discussions) o en el Servidor de Discord si tienes alguna idea sobre lo siguiente:
 
 * Nuevas sugerencias de características y cambios de diseño
 * Herramientas de software con pasos de instalación
@@ -139,31 +141,31 @@ Se alientan fuertemente las sugerencias para mejorar FISSURE. Deje un comentario
 * Scripts de análisis de IQ en Python
 * Correcciones y mejoras de instalación
 
-Las contribuciones para mejorar FISSURE son cruciales para acelerar su desarrollo. Cualquier contribución que realice es muy apreciada. Si desea contribuir a través del desarrollo de código, por favor bifurque el repositorio y cree una solicitud de extracción:
+Las contribuciones para mejorar FISSURE son cruciales para acelerar su desarrollo. Cualquier contribución que realices es muy apreciada. Si deseas contribuir a través del desarrollo de código, por favor bifurca el repositorio y crea una solicitud de extracción:
 
-1. Bifurque el proyecto
-2. Cree su rama de características (`git checkout -b feature/AmazingFeature`)
-3. Confirme sus cambios (`git commit -m 'Agregar alguna AmazingFeature'`)
-4. Empuje a la rama (`git push origin feature/AmazingFeature`)
-5. Abra una solicitud de extracción
+1. Bifurca el proyecto
+2. Crea tu rama de características (`git checkout -b feature/AmazingFeature`)
+3. Confirma tus cambios (`git commit -m 'Agregar alguna AmazingFeature'`)
+4. Envía a la rama (`git push origin feature/AmazingFeature`)
+5. Abre una solicitud de extracción
 
 Crear [Issues](https://github.com/ainfosec/FISSURE/issues) para llamar la atención sobre errores también es bienvenido.
 
-## Colaborando
+## Colaboración
 
-Contacte a Assured Information Security, Inc. (AIS) Desarrollo de Negocios para proponer y formalizar cualquier oportunidad de colaboración con FISSURE, ya sea dedicando tiempo a integrar su software, teniendo a las personas talentosas de AIS desarrollando soluciones para sus desafíos técnicos, o integrando FISSURE en otras plataformas/aplicaciones.
+Contacta a Assured Information Security, Inc. (AIS) Desarrollo de Negocios para proponer y formalizar cualquier oportunidad de colaboración con FISSURE, ya sea dedicando tiempo a integrar tu software, teniendo a las personas talentosas de AIS desarrollando soluciones para tus desafíos técnicos, o integrando FISSURE en otras plataformas/aplicaciones.
 
 ## Licencia
 
 GPL-3.0
 
-Para detalles de la licencia, consulte el archivo LICENSE.
+Para detalles de la licencia, consulta el archivo LICENSE.
 
 ## Contacto
 
-Únase al Servidor de Discord: [https://discord.gg/JZDs5sgxcG](https://discord.gg/JZDs5sgxcG)
+Únete al Servidor de Discord: [https://discord.gg/JZDs5sgxcG](https://discord.gg/JZDs5sgxcG)
 
-Siga en Twitter: [@FissureRF](https://twitter.com/fissurerf), [@AinfoSec](https://twitter.com/ainfosec)
+Síguenos en Twitter: [@FissureRF](https://twitter.com/fissurerf), [@AinfoSec](https://twitter.com/ainfosec)
 
 Chris Poore - Assured Information Security, Inc. - poorec@ainfosec.com
 
@@ -178,3 +180,7 @@ Reconocemos y estamos agradecidos a estos desarrolladores:
 ## Agradecimientos
 
 Agradecimientos especiales a Dr. Samuel Mantravadi y Joseph Reith por sus contribuciones a este proyecto.
+
+
+
+{{#include /banners/hacktricks-training.md}}

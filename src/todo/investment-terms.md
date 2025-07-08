@@ -1,12 +1,14 @@
 # Términos de Inversión
 
+{{#include /banners/hacktricks-training.md}}
+
 ## Spot
 
-Esta es la forma más básica de hacer trading. Puedes **indicar la cantidad del activo y el precio** que deseas comprar o vender, y siempre que se alcance ese precio, la operación se realiza.
+Esta es la forma más básica de hacer trading. Puedes **indicar la cantidad del activo y el precio** al que deseas comprar o vender, y siempre que se alcance ese precio, la operación se realiza.
 
 Por lo general, también puedes usar el **precio de mercado actual** para realizar la transacción lo más rápido posible al precio actual.
 
-**Stop Loss - Limit**: También puedes indicar la cantidad y el precio de los activos a comprar o vender, mientras indicas un precio más bajo para comprar o vender en caso de que se alcance (para detener pérdidas).
+**Stop Loss - Límite**: También puedes indicar la cantidad y el precio de los activos a comprar o vender, mientras indicas un precio más bajo para comprar o vender en caso de que se alcance (para detener pérdidas).
 
 ## Futuros
 
@@ -37,7 +39,7 @@ Ten en cuenta que en estos casos, los beneficios y pérdidas pueden ser en tiemp
 
 **El apalancamiento** te permite controlar una posición más grande en el mercado con una menor cantidad de dinero. Básicamente, te permite "apostar" mucho más dinero del que tienes, arriesgando solo el dinero que realmente posees.
 
-Por ejemplo, si abres una posición de futuro en el BTC/USDT con 100$ a un apalancamiento de 50x, esto significa que si el precio aumenta un 1%, entonces ganarías 1x50 = 50% de tu inversión inicial (50$). Y por lo tanto, tendrías 150$.\
+Por ejemplo, si abres una posición de futuros en el BTC/USDT con 100$ a un apalancamiento de 50x, esto significa que si el precio aumenta un 1%, entonces ganarías 1x50 = 50% de tu inversión inicial (50$). Y por lo tanto, tendrías 150$.\
 Sin embargo, si el precio disminuye un 1%, perderás el 50% de tus fondos (59$ en este caso). Y si el precio disminuye un 2%, perderás toda tu apuesta (2x50 = 100%).
 
 Por lo tanto, el apalancamiento permite controlar la cantidad de dinero que apuestas mientras aumenta las ganancias y pérdidas.
@@ -55,7 +57,7 @@ Sin embargo, el comprador pagará una tarifa al vendedor por abrir la opción (a
 ### 2. **Riesgo:**
 
 * **Futuros:** Tanto el comprador como el vendedor asumen un **riesgo ilimitado** porque están obligados a completar el contrato. El riesgo es la diferencia entre el precio acordado y el precio de mercado en la fecha de vencimiento.
-* **Opciones:** El riesgo del comprador está limitado a la **prima** pagada para adquirir la opción. Si el mercado no se mueve a favor del titular de la opción, simplemente puede dejar que la opción expire. Sin embargo, el **vendedor** (escritor) de la opción tiene un riesgo ilimitado si el mercado se mueve significativamente en su contra.
+* **Opciones:** El riesgo del comprador está limitado a la **prima** pagada para adquirir la opción. Si el mercado no se mueve a favor del titular de la opción, simplemente puede dejar que la opción expire. Sin embargo, el **vendedor** (emisor) de la opción tiene un riesgo ilimitado si el mercado se mueve significativamente en su contra.
 
 ### 3. **Costo:**
 
@@ -65,4 +67,6 @@ Sin embargo, el comprador pagará una tarifa al vendedor por abrir la opción (a
 ### 4. **Potencial de Ganancia:**
 
 * **Futuros:** La ganancia o pérdida se basa en la diferencia entre el precio de mercado al vencimiento y el precio acordado en el contrato.
-* **Opciones:** El comprador obtiene ganancias cuando el mercado se mueve favorablemente más allá del precio de ejercicio por más de la prima pagada. El vendedor gana manteniendo la prima si la opción no se ejerce.
+* **Opciones:** El comprador obtiene ganancias cuando el mercado se mueve favorablemente más allá del precio de ejercicio por más de la prima pagada. El vendedor gana al quedarse con la prima si la opción no se ejerce.
+
+{{#include /banners/hacktricks-training.md}}

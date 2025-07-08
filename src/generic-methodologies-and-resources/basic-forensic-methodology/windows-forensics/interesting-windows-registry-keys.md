@@ -1,10 +1,8 @@
 # Claves de Registro de Windows Interesantes
 
-### Claves de Registro de Windows Interesantes
-
 {{#include ../../../banners/hacktricks-training.md}}
 
-### **Información de Versión de Windows y Propietario**
+### **Información de la Versión de Windows y del Propietario**
 
 - Ubicado en **`Software\Microsoft\Windows NT\CurrentVersion`**, encontrarás la versión de Windows, el Service Pack, la hora de instalación y el nombre del propietario registrado de manera sencilla.
 
@@ -12,7 +10,7 @@
 
 - El nombre del host se encuentra en **`System\ControlSet001\Control\ComputerName\ComputerName`**.
 
-### **Configuración de Zona Horaria**
+### **Configuración de la Zona Horaria**
 
 - La zona horaria del sistema se almacena en **`System\ControlSet001\Control\TimeZoneInformation`**.
 
@@ -27,11 +25,11 @@
 
 ### Habilitando el Tiempo de Último Acceso
 
-- Habilitar el seguimiento del último tiempo de acceso te permite ver cuándo se abrieron por última vez los archivos, lo que puede ser crítico para el análisis forense o la supervisión del sistema.
+- Habilitar el seguimiento del tiempo de último acceso te permite ver cuándo se abrieron por última vez los archivos, lo que puede ser crítico para el análisis forense o la monitorización del sistema.
 
 ### Detalles de Información de Red
 
-- El registro contiene datos extensos sobre configuraciones de red, incluyendo **tipos de redes (inalámbrica, cable, 3G)** y **categorías de red (Pública, Privada/Hogar, Dominio/Trabajo)**, que son vitales para entender la configuración de seguridad de la red y los permisos.
+- El registro contiene datos extensos sobre configuraciones de red, incluyendo **tipos de redes (inalámbrica, cable, 3G)** y **categorías de red (Pública, Privada/Casa, Dominio/Trabajo)**, que son vitales para entender la configuración de seguridad de la red y los permisos.
 
 ### Caché del Lado del Cliente (CSC)
 
@@ -39,7 +37,7 @@
 
 ### Programas de Inicio Automático
 
-- Los programas listados en varias claves de registro `Run` y `RunOnce` se inician automáticamente al arrancar, afectando el tiempo de arranque del sistema y potencialmente siendo puntos de interés para identificar malware o software no deseado.
+- Los programas listados en varias claves de registro `Run` y `RunOnce` se inician automáticamente al arrancar, afectando el tiempo de arranque del sistema y siendo potencialmente puntos de interés para identificar malware o software no deseado.
 
 ### Shellbags
 
@@ -47,7 +45,7 @@
 
 ### Información y Forense de USB
 
-- Los detalles almacenados en el registro sobre dispositivos USB pueden ayudar a rastrear qué dispositivos se conectaron a un computador, potencialmente vinculando un dispositivo a transferencias de archivos sensibles o incidentes de acceso no autorizado.
+- Los detalles almacenados en el registro sobre dispositivos USB pueden ayudar a rastrear qué dispositivos se conectaron a una computadora, potencialmente vinculando un dispositivo a transferencias de archivos sensibles o incidentes de acceso no autorizado.
 
 ### Número de Serie del Volumen
 
@@ -82,7 +80,7 @@
 
 - Las listas MRU, que indican rutas de archivos y comandos recientes, se almacenan en varias subclaves de `ComDlg32` y `Explorer` bajo `NTUSER.DAT`.
 
-### **Seguimiento de Actividad del Usuario**
+### **Seguimiento de la Actividad del Usuario**
 
 - La función User Assist registra estadísticas detalladas de uso de aplicaciones, incluyendo el conteo de ejecuciones y la última hora de ejecución, en **`NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{GUID}\Count`**.
 

@@ -1,8 +1,10 @@
-# Rust Basics
+# Fundamentos de Rust
+
+{{#include /banners/hacktricks-training.md}}
 
 ### Tipos Genéricos
 
-Crea una estructura donde 1 de sus valores podría ser de cualquier tipo.
+Crea una estructura donde 1 de sus valores podría ser de cualquier tipo
 ```rust
 struct Wrapper<T> {
 value: T,
@@ -83,7 +85,7 @@ let list = Cons(1, Cons(2, Cons(3, Nil)));
 ```
 ### Condicionales
 
-#### si
+#### if
 ```rust
 let n = 5;
 if n < 0 {
@@ -220,7 +222,7 @@ optional = Some(i + 1);
 // explicitly handling the failing case.
 }
 ```
-### Rasgos
+### Traits
 
 Crea un nuevo método para un tipo
 ```rust
@@ -265,7 +267,7 @@ println!("{:?}", apple);
 });
 }
 ```
-#### Hilos
+#### Threads
 
 En este caso, pasaremos al hilo una variable que podrá modificar.
 ```rust
@@ -285,4 +287,4 @@ thread::sleep(Duration::from_millis(500));
 }
 }
 ```
-
+{{#include /banners/hacktricks-training.md}}

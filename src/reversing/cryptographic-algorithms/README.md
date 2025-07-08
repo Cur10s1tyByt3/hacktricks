@@ -1,12 +1,10 @@
 # Algoritmos Criptográficos/Compresión
 
-## Algoritmos Criptográficos/Compresión
-
 {{#include ../../banners/hacktricks-training.md}}
 
 ## Identificación de Algoritmos
 
-Si terminas en un código **usando desplazamientos a la derecha e izquierda, xors y varias operaciones aritméticas** es muy posible que sea la implementación de un **algoritmo criptográfico**. Aquí se mostrarán algunas formas de **identificar el algoritmo que se está utilizando sin necesidad de revertir cada paso**.
+Si terminas en un código **usando desplazamientos a la derecha e izquierda, xors y varias operaciones aritméticas** es muy probable que sea la implementación de un **algoritmo criptográfico**. Aquí se mostrarán algunas formas de **identificar el algoritmo que se está utilizando sin necesidad de revertir cada paso**.
 
 ### Funciones de API
 
@@ -64,17 +62,17 @@ En este caso, si buscas **0xA56363C6** puedes encontrar que está relacionado co
 Está compuesto por 3 partes principales:
 
 - **Etapa de inicialización/**: Crea una **tabla de valores de 0x00 a 0xFF** (256 bytes en total, 0x100). Esta tabla se llama comúnmente **Caja de Sustitución** (o SBox).
-- **Etapa de desordenamiento**: **Recorrerá la tabla** creada antes (bucle de 0x100 iteraciones, nuevamente) modificando cada valor con bytes **semi-aleatorios**. Para crear estos bytes semi-aleatorios, se utiliza la **clave RC4**. Las **claves RC4** pueden tener **entre 1 y 256 bytes de longitud**, sin embargo, generalmente se recomienda que sea superior a 5 bytes. Comúnmente, las claves RC4 tienen 16 bytes de longitud.
+- **Etapa de mezcla**: **Recorrerá la tabla** creada anteriormente (bucle de 0x100 iteraciones, nuevamente) modificando cada valor con bytes **semi-aleatorios**. Para crear estos bytes semi-aleatorios, se utiliza la **clave RC4**. Las **claves RC4** pueden tener **entre 1 y 256 bytes de longitud**, sin embargo, generalmente se recomienda que sea superior a 5 bytes. Comúnmente, las claves RC4 tienen 16 bytes de longitud.
 - **Etapa XOR**: Finalmente, el texto plano o el texto cifrado se **XORea con los valores creados anteriormente**. La función para cifrar y descifrar es la misma. Para esto, se realizará un **bucle a través de los 256 bytes creados** tantas veces como sea necesario. Esto generalmente se reconoce en un código decompilado con un **%256 (mod 256)**.
 
-> [!NOTE]
+> [!TIP]
 > **Para identificar un RC4 en un código desensamblado/decompilado, puedes buscar 2 bucles de tamaño 0x100 (con el uso de una clave) y luego un XOR de los datos de entrada con los 256 valores creados anteriormente en los 2 bucles, probablemente usando un %256 (mod 256)**
 
-### **Etapa de Inicialización/Caja de Sustitución:** (Nota el número 256 usado como contador y cómo se escribe un 0 en cada lugar de los 256 caracteres)
+### **Etapa de Inicialización/Caja de Sustitución:** (Nota el número 256 utilizado como contador y cómo se escribe un 0 en cada lugar de los 256 caracteres)
 
 ![](<../../images/image (377).png>)
 
-### **Etapa de Desordenamiento:**
+### **Etapa de Mezcla:**
 
 ![](<../../images/image (378).png>)
 
@@ -87,7 +85,7 @@ Está compuesto por 3 partes principales:
 ### **Características**
 
 - Uso de **cajas de sustitución y tablas de búsqueda**
-- Es posible **distinguir AES gracias al uso de valores específicos de tablas de búsqueda** (constantes). _Nota que la **constante** puede ser **almacenada** en el binario **o creada** _**dinámicamente**._
+- Es posible **distinguir AES gracias al uso de valores específicos de tablas de búsqueda** (constantes). _Nota que la **constante** puede ser **almacenada** en el binario **o creada** _ **dinámicamente**._
 - La **clave de cifrado** debe ser **divisible** por **16** (generalmente 32B) y generalmente se utiliza un **IV** de 16B.
 
 ### Constantes SBox
@@ -108,11 +106,11 @@ También nota el **tamaño del bucle** (**132**) y el **número de operaciones X
 
 ![](<../../images/image (381).png>)
 
-Como se mencionó antes, este código puede visualizarse dentro de cualquier decompilador como una **función muy larga** ya que **no hay saltos** dentro de ella. El código decompilado puede verse como el siguiente:
+Como se mencionó anteriormente, este código puede visualizarse dentro de cualquier decompilador como una **función muy larga** ya que **no hay saltos** dentro de ella. El código decompilado puede verse como el siguiente:
 
 ![](<../../images/image (382).png>)
 
-Por lo tanto, es posible identificar este algoritmo verificando el **número mágico** y los **XORs iniciales**, viendo una **función muy larga** y **comparando** algunas **instrucciones** de la función larga **con una implementación** (como el desplazamiento a la izquierda por 7 y la rotación a la izquierda por 22).
+Por lo tanto, es posible identificar este algoritmo verificando el **número mágico** y los **XORs iniciales**, viendo una **función muy larga** y **comparando** algunas **instrucciones** de la larga función **con una implementación** (como el desplazamiento a la izquierda por 7 y la rotación a la izquierda por 22).
 
 ## RSA **(Criptografía Asimétrica)**
 
@@ -161,7 +159,7 @@ Consulta **constantes de tablas de búsqueda**:
 
 ![](<../../images/image (387).png>)
 
-Un algoritmo hash CRC se ve como:
+Un algoritmo de hash CRC se ve como:
 
 ![](<../../images/image (386).png>)
 
