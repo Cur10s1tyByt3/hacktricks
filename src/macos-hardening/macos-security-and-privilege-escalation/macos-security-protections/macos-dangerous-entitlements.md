@@ -25,15 +25,15 @@ Este derecho permite a otros procesos con el derecho **`com.apple.security.cs.de
 
 ### `com.apple.security.cs.debugger`
 
-Las aplicaciones con el derecho de Herramienta de Depuración pueden llamar a `task_for_pid()` para recuperar un puerto de tarea válido para aplicaciones no firmadas y de terceros con el derecho `Get Task Allow` establecido en `true`. Sin embargo, incluso con el derecho de herramienta de depuración, un depurador **no puede obtener los puertos de tarea** de procesos que **no tienen el derecho `Get Task Allow`**, y que por lo tanto están protegidos por la Protección de Integridad del Sistema. Consulte [**esto para más información**](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_debugger).
+Las aplicaciones con el derecho de Herramienta de Depuración pueden llamar a `task_for_pid()` para recuperar un puerto de tarea válido para aplicaciones no firmadas y de terceros con el derecho `Get Task Allow` configurado en `true`. Sin embargo, incluso con el derecho de herramienta de depuración, un depurador **no puede obtener los puertos de tarea** de procesos que **no tienen el derecho `Get Task Allow`**, y que por lo tanto están protegidos por la Protección de Integridad del Sistema. Consulte [**esto para más información**](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_debugger).
 
 ### `com.apple.security.cs.disable-library-validation`
 
-Este derecho permite **cargar frameworks, plug-ins o bibliotecas sin estar firmados por Apple o firmados con el mismo Team ID** que el ejecutable principal, por lo que un atacante podría abusar de alguna carga de biblioteca arbitraria para inyectar código. Consulte [**esto para más información**](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_disable-library-validation).
+Este derecho permite **cargar frameworks, plug-ins o bibliotecas sin estar firmados por Apple o firmados con el mismo ID de equipo** que el ejecutable principal, por lo que un atacante podría abusar de alguna carga de biblioteca arbitraria para inyectar código. Consulte [**esto para más información**](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_disable-library-validation).
 
 ### `com.apple.private.security.clear-library-validation`
 
-Este derecho es muy similar a **`com.apple.security.cs.disable-library-validation`** pero **en lugar de** **deshabilitar directamente** la validación de bibliotecas, permite al proceso **realizar una llamada al sistema `csops` para deshabilitarla**.\
+Este derecho es muy similar a **`com.apple.security.cs.disable-library-validation`** pero **en lugar de** **deshabilitar directamente** la validación de bibliotecas, permite al proceso **llamar a una llamada al sistema `csops` para deshabilitarla**.\
 Consulte [**esto para más información**](https://theevilbit.github.io/posts/com.apple.private.security.clear-library-validation/).
 
 ### `com.apple.security.cs.allow-dyld-environment-variables`
@@ -117,7 +117,7 @@ Es posible verificar quién tiene este acceso en _Configuración del Sistema_ > 
 
 ### `kTCCServiceAccessibility`
 
-El proceso podrá **abusar de las funciones de accesibilidad de macOS**, lo que significa que, por ejemplo, podrá presionar combinaciones de teclas. Así que podría solicitar acceso para controlar una aplicación como Finder y aprobar el diálogo con este permiso.
+El proceso podrá **abusar de las características de accesibilidad de macOS**, lo que significa que, por ejemplo, podrá presionar combinaciones de teclas. Así que podría solicitar acceso para controlar una aplicación como Finder y aprobar el diálogo con este permiso.
 
 ## Medio
 
@@ -130,7 +130,7 @@ Este derecho permite **crear memoria que es escribible y ejecutable** al pasar l
 Este derecho permite **sobrescribir o parchear código C**, usar el obsoleto **`NSCreateObjectFileImageFromMemory`** (que es fundamentalmente inseguro), o usar el marco **DVDPlayback**. Consulta [**esto para más información**](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_allow-unsigned-executable-memory).
 
 > [!CAUTION]
-> Incluir este derecho expone tu aplicación a vulnerabilidades comunes en lenguajes de código inseguro en memoria. Considera cuidadosamente si tu aplicación necesita esta excepción.
+> Incluir este derecho expone tu aplicación a vulnerabilidades comunes en lenguajes de código inseguros en memoria. Considera cuidadosamente si tu aplicación necesita esta excepción.
 
 ### `com.apple.security.cs.disable-executable-page-protection`
 
@@ -161,3 +161,10 @@ Permitir que el proceso **pida todos los permisos de TCC**.
 ### **`kTCCServicePostEvent`**
 
 {{#include ../../../banners/hacktricks-training.md}}
+
+</details>
+
+
+
+
+{{#include /banners/hacktricks-training.md}}

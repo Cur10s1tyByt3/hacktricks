@@ -1,4 +1,6 @@
-# Mythic
+# Mythic
+
+{{#include ../banners/hacktricks-training.md}}
 
 ## ¿Qué es Mythic?
 
@@ -21,9 +23,9 @@ sudo ./mythic-cli install github https://github.com/MythicAgents/apfell
 ```
 Puedes agregar nuevos agentes con el comando anterior incluso si Mythic ya está en funcionamiento.
 
-### Perfiles de C2
+### Perfiles C2
 
-Los perfiles de C2 en Mythic definen **cómo se comunican los agentes con el servidor Mythic**. Especifican el protocolo de comunicación, los métodos de cifrado y otras configuraciones. Puedes crear y gestionar perfiles de C2 a través de la interfaz web de Mythic.
+Los perfiles C2 en Mythic definen **cómo se comunican los agentes con el servidor Mythic**. Especifican el protocolo de comunicación, los métodos de cifrado y otras configuraciones. Puedes crear y gestionar perfiles C2 a través de la interfaz web de Mythic.
 
 Por defecto, Mythic se instala sin perfiles, sin embargo, es posible descargar algunos perfiles del repositorio [**https://github.com/MythicC2Profiles**](https://github.com/MythicC2Profiles) ejecutando:
 ```bash
@@ -47,7 +49,7 @@ Este agente tiene muchos comandos que lo hacen muy similar al Beacon de Cobalt S
 - `cp`: Copiar un archivo de una ubicación a otra
 - `ls`: Listar archivos y directorios en el directorio actual o en la ruta especificada
 - `pwd`: Imprimir el directorio de trabajo actual
-- `ps`: Listar procesos en ejecución en el sistema objetivo (con información adicional)
+- `ps`: Listar los procesos en ejecución en el sistema objetivo (con información adicional)
 - `download`: Descargar un archivo del sistema objetivo a la máquina local
 - `upload`: Subir un archivo de la máquina local al sistema objetivo
 - `reg_query`: Consultar claves y valores del registro en el sistema objetivo
@@ -61,7 +63,7 @@ Este agente tiene muchos comandos que lo hacen muy similar al Beacon de Cobalt S
 - `getsystem`: Abrir un manejador a winlogon y duplicar el token, escalando efectivamente los privilegios al nivel de SYSTEM
 - `make_token`: Crear una nueva sesión de inicio de sesión y aplicarla al agente, permitiendo la suplantación de otro usuario
 - `steal_token`: Robar un token primario de otro proceso, permitiendo que el agente suplante al usuario de ese proceso
-- `pth`: Ataque Pass-the-Hash, permitiendo que el agente se autentique como un usuario usando su hash NTLM sin necesidad de la contraseña en texto plano
+- `pth`: Ataque Pass-the-Hash, permitiendo que el agente se autentique como un usuario utilizando su hash NTLM sin necesidad de la contraseña en texto plano
 - `mimikatz`: Ejecutar comandos de Mimikatz para extraer credenciales, hashes y otra información sensible de la memoria o de la base de datos SAM
 - `rev2self`: Revertir el token del agente a su token primario, efectivamente reduciendo los privilegios al nivel original
 - `ppid`: Cambiar el proceso padre para trabajos de post-explotación especificando un nuevo ID de proceso padre, permitiendo un mejor control sobre el contexto de ejecución del trabajo
@@ -101,7 +103,7 @@ Después de que se cargue un módulo, aparecerá en la lista como otro comando c
 
 - `powershell_import`: Importa un nuevo script de PowerShell (.ps1) en la caché del agente para su ejecución posterior.
 - `powershell`: Ejecuta un comando de PowerShell en el contexto del agente, permitiendo scripting y automatización avanzados.
-- `powerpick`: Inyecta un ensamblado cargador de PowerShell en un proceso sacrificial y ejecuta un comando de PowerShell (sin registro de PowerShell).
+- `powerpick`: Inyecta un ensamblaje cargador de PowerShell en un proceso sacrificial y ejecuta un comando de PowerShell (sin registro de PowerShell).
 - `psinject`: Ejecuta PowerShell en un proceso especificado, permitiendo la ejecución dirigida de scripts en el contexto de otro proceso.
 - `shell`: Ejecuta un comando de shell en el contexto del agente, similar a ejecutar un comando en cmd.exe.
 
@@ -129,7 +131,7 @@ Poseidon es un agente de Golang que se compila en ejecutables de **Linux y macOS
 ```bash
 ./mythic-cli install github https://github.com/MythicAgents/Poseidon.git
 ```
-Cuando el usuario está en Linux, tiene algunos comandos interesantes:
+Cuando el usuario está en linux, tiene algunos comandos interesantes:
 
 ### Acciones comunes
 
@@ -163,3 +165,5 @@ Cuando el usuario está en Linux, tiene algunos comandos interesantes:
 - `shell`: Ejecutar un solo comando de shell a través de /bin/sh, permitiendo la ejecución directa de comandos en el sistema objetivo.
 - `run`: Ejecutar un comando desde el disco con argumentos, permitiendo la ejecución de binarios o scripts en el sistema objetivo.
 - `pty`: Abrir un PTY interactivo, permitiendo la interacción directa con el shell en el sistema objetivo.
+
+{{#include ../banners/hacktricks-training.md}}
