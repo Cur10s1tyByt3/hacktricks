@@ -30,12 +30,12 @@ y solo mostrar la **Actividad del Sistema de Archivos**:
 
 ![](<../../../images/image (153).png>)
 
-Si estás buscando **dlls faltantes en general**, debes **dejar** esto funcionando por algunos **segundos**.\
-Si estás buscando un **dll faltante dentro de un ejecutable específico**, deberías establecer **otro filtro como "Process Name" "contains" "\<exec name>", ejecutarlo y detener la captura de eventos**.
+Si estás buscando **DLLs faltantes en general**, debes **dejar** esto corriendo por algunos **segundos**.\
+Si estás buscando un **DLL faltante dentro de un ejecutable específico**, deberías establecer **otro filtro como "Process Name" "contains" "\<exec name>", ejecutarlo y detener la captura de eventos**.
 
 ## Explotando DLLs Faltantes
 
-Para escalar privilegios, la mejor oportunidad que tenemos es poder **escribir un dll que un proceso privilegiado intentará cargar** en algún **lugar donde se va a buscar**. Por lo tanto, podremos **escribir** un dll en una **carpeta** donde el **dll se busca antes** de la carpeta donde está el **dll original** (caso extraño), o podremos **escribir en alguna carpeta donde se va a buscar el dll** y el **dll original no existe** en ninguna carpeta.
+Para escalar privilegios, la mejor oportunidad que tenemos es poder **escribir un DLL que un proceso privilegiado intentará cargar** en alguno de **los lugares donde se va a buscar**. Por lo tanto, podremos **escribir** un DLL en una **carpeta** donde el **DLL se busca antes** de la carpeta donde se encuentra el **DLL original** (caso extraño), o podremos **escribir en alguna carpeta donde se va a buscar el DLL** y el **DLL original no existe** en ninguna carpeta.
 
 ### Orden de Búsqueda de DLL
 
@@ -53,11 +53,11 @@ Puedes ver el **orden de búsqueda de DLL en sistemas de 32 bits** a continuaci�
 5. El directorio actual.
 6. Los directorios que están listados en la variable de entorno PATH. Ten en cuenta que esto no incluye la ruta por aplicación especificada por la clave de registro **App Paths**. La clave **App Paths** no se utiliza al calcular la ruta de búsqueda de DLL.
 
-Ese es el **orden de búsqueda predeterminado** con **SafeDllSearchMode** habilitado. Cuando está deshabilitado, el directorio actual asciende al segundo lugar. Para deshabilitar esta función, crea el valor de registro **HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager**\\**SafeDllSearchMode** y configúralo en 0 (el valor predeterminado está habilitado).
+Ese es el **orden de búsqueda** **predeterminado** con **SafeDllSearchMode** habilitado. Cuando está deshabilitado, el directorio actual asciende al segundo lugar. Para deshabilitar esta función, crea el valor de registro **HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager**\\**SafeDllSearchMode** y configúralo en 0 (el valor predeterminado está habilitado).
 
 Si se llama a la función [**LoadLibraryEx**](https://docs.microsoft.com/en-us/windows/desktop/api/LibLoaderAPI/nf-libloaderapi-loadlibraryexa) con **LOAD_WITH_ALTERED_SEARCH_PATH**, la búsqueda comienza en el directorio del módulo ejecutable que **LoadLibraryEx** está cargando.
 
-Finalmente, ten en cuenta que **un dll podría ser cargado indicando la ruta absoluta en lugar de solo el nombre**. En ese caso, ese dll **solo se buscará en esa ruta** (si el dll tiene dependencias, se buscarán como si se cargaran solo por nombre).
+Finalmente, ten en cuenta que **un DLL podría ser cargado indicando la ruta absoluta en lugar de solo el nombre**. En ese caso, ese DLL **solo se va a buscar en esa ruta** (si el DLL tiene alguna dependencia, se buscarán como si se cargaran solo por nombre).
 
 Hay otras formas de alterar el orden de búsqueda, pero no voy a explicarlas aquí.
 
@@ -73,10 +73,10 @@ Ciertas excepciones al orden de búsqueda estándar de DLL se mencionan en la do
 
 **Requisitos**:
 
-- Identificar un proceso que opere o operará bajo **diferentes privilegios** (movimiento horizontal o lateral), que **carezca de un DLL**.
+- Identificar un proceso que opera o operará bajo **diferentes privilegios** (movimiento horizontal o lateral), que **carece de un DLL**.
 - Asegurarse de que hay **acceso de escritura** disponible para cualquier **directorio** en el que se **buscará el DLL**. Esta ubicación podría ser el directorio del ejecutable o un directorio dentro de la ruta del sistema.
 
-Sí, los requisitos son complicados de encontrar ya que **por defecto es un poco extraño encontrar un ejecutable privilegiado que falte un dll** y es aún **más extraño tener permisos de escritura en una carpeta de ruta del sistema** (no puedes por defecto). Pero, en entornos mal configurados, esto es posible.\
+Sí, los requisitos son complicados de encontrar ya que **por defecto es un poco extraño encontrar un ejecutable privilegiado que carezca de un DLL** y es aún **más extraño tener permisos de escritura en una carpeta de ruta del sistema** (no puedes por defecto). Pero, en entornos mal configurados, esto es posible.\
 En el caso de que tengas suerte y te encuentres cumpliendo con los requisitos, podrías revisar el proyecto [UACME](https://github.com/hfiref0x/UACME). Aunque el **objetivo principal del proyecto es eludir UAC**, puedes encontrar allí un **PoC** de un Dll hijacking para la versión de Windows que puedes usar (probablemente solo cambiando la ruta de la carpeta donde tienes permisos de escritura).
 
 Ten en cuenta que puedes **verificar tus permisos en una carpeta** haciendo:
@@ -106,7 +106,7 @@ Otras herramientas automatizadas interesantes para descubrir esta vulnerabilidad
 
 ### Ejemplo
 
-En caso de que encuentres un escenario explotable, una de las cosas más importantes para explotarlo con éxito sería **crear un dll que exporte al menos todas las funciones que el ejecutable importará de él**. De todos modos, ten en cuenta que Dll Hijacking es útil para [escalar de nivel de integridad medio a alto **(eludiendo UAC)**](../../authentication-credentials-uac-and-efs/#uac) o de [**alta integridad a SYSTEM**](../#from-high-integrity-to-system)**.** Puedes encontrar un ejemplo de **cómo crear un dll válido** dentro de este estudio de dll hijacking enfocado en dll hijacking para ejecución: [**https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows**](https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows)**.**\
+En caso de que encuentres un escenario explotable, una de las cosas más importantes para explotarlo con éxito sería **crear un dll que exporte al menos todas las funciones que el ejecutable importará de él**. De todos modos, ten en cuenta que Dll Hijacking es útil para [escalar de nivel de integridad medio a alto **(eludiendo UAC)**](../../authentication-credentials-uac-and-efs/index.html#uac) o de [**alta integridad a SYSTEM**](../index.html#from-high-integrity-to-system)**.** Puedes encontrar un ejemplo de **cómo crear un dll válido** dentro de este estudio de dll hijacking enfocado en dll hijacking para ejecución: [**https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows**](https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows)**.**\
 Además, en la **siguiente sección** puedes encontrar algunos **códigos dll básicos** que podrían ser útiles como **plantillas** o para crear un **dll con funciones no requeridas exportadas**.
 
 ## **Creando y compilando Dlls**
@@ -133,7 +133,7 @@ msfvenom -p windows/adduser USER=privesc PASS=Attacker@123 -f dll -o msf.dll
 ```
 ### Tu propio
 
-Ten en cuenta que en varios casos el Dll que compiles debe **exportar varias funciones** que van a ser cargadas por el proceso víctima; si estas funciones no existen, el **binario no podrá cargarlas** y el **exploit fallará**.
+Ten en cuenta que en varios casos el Dll que compiles debe **exportar varias funciones** que serán cargadas por el proceso víctima; si estas funciones no existen, el **binario no podrá cargarlas** y el **exploit fallará**.
 ```c
 // Tested in Win10
 // i686-w64-mingw32-g++ dll.c -lws2_32 -o srrstr.dll -shared
@@ -214,7 +214,47 @@ break;
 return TRUE;
 }
 ```
+## Estudio de Caso: CVE-2025-1729 - Escalación de Privilegios Usando TPQMAssistant.exe
+
+Este caso demuestra **Phantom DLL Hijacking** en el Menú Rápido TrackPoint de Lenovo (`TPQMAssistant.exe`), rastreado como **CVE-2025-1729**.
+
+### Detalles de la Vulnerabilidad
+
+- **Componente**: `TPQMAssistant.exe` ubicado en `C:\ProgramData\Lenovo\TPQM\Assistant\`.
+- **Tarea Programada**: `Lenovo\TrackPointQuickMenu\Schedule\ActivationDailyScheduleTask` se ejecuta diariamente a las 9:30 AM bajo el contexto del usuario conectado.
+- **Permisos de Directorio**: Escribible por `CREATOR OWNER`, permitiendo a los usuarios locales colocar archivos arbitrarios.
+- **Comportamiento de Búsqueda de DLL**: Intenta cargar `hostfxr.dll` desde su directorio de trabajo primero y registra "NAME NOT FOUND" si falta, indicando la precedencia de búsqueda en el directorio local.
+
+### Implementación del Exploit
+
+Un atacante puede colocar un stub malicioso `hostfxr.dll` en el mismo directorio, explotando la DLL faltante para lograr la ejecución de código bajo el contexto del usuario:
+```c
+#include <windows.h>
+
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved) {
+if (fdwReason == DLL_PROCESS_ATTACH) {
+// Payload: display a message box (proof-of-concept)
+MessageBoxA(NULL, "DLL Hijacked!", "TPQM", MB_OK);
+}
+return TRUE;
+}
+```
+### Flujo de Ataque
+
+1. Como usuario estándar, coloca `hostfxr.dll` en `C:\ProgramData\Lenovo\TPQM\Assistant\`.
+2. Espera a que la tarea programada se ejecute a las 9:30 AM bajo el contexto del usuario actual.
+3. Si un administrador ha iniciado sesión cuando se ejecuta la tarea, el DLL malicioso se ejecuta en la sesión del administrador con integridad media.
+4. Encadena técnicas estándar de bypass de UAC para elevar de integridad media a privilegios de SYSTEM.
+
+### Mitigación
+
+Lenovo lanzó la versión UWP **1.12.54.0** a través de Microsoft Store, que instala TPQMAssistant en `C:\Program Files (x86)\Lenovo\TPQM\TPQMAssistant\`, elimina la tarea programada vulnerable y desinstala los componentes heredados de Win32.
+
 ## Referencias
+
+- [CVE-2025-1729 - Escalación de Privilegios Usando TPQMAssistant.exe](https://trustedsec.com/blog/cve-2025-1729-privilege-escalation-using-tpqmassistant-exe)
+- [Microsoft Store - TPQM Assistant UWP](https://apps.microsoft.com/detail/9mz08jf4t3ng)
+
 
 - [https://medium.com/@pranaybafna/tcapt-dll-hijacking-888d181ede8e](https://medium.com/@pranaybafna/tcapt-dll-hijacking-888d181ede8e)
 - [https://cocomelonc.github.io/pentest/2021/09/24/dll-hijacking-1.html](https://cocomelonc.github.io/pentest/2021/09/24/dll-hijacking-1.html)
