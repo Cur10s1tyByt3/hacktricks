@@ -34,7 +34,7 @@ AD CS reconoce los certificados de CA en un bosque de AD a través de contenedor
 
 1. El proceso de solicitud comienza con los clientes encontrando una CA empresarial.
 2. Se crea un CSR, que contiene una clave pública y otros detalles, después de generar un par de claves pública-privada.
-3. La CA evalúa el CSR contra las plantillas de certificados disponibles, emitiendo el certificado basado en los permisos de la plantilla.
+3. La CA evalúa el CSR en función de las plantillas de certificados disponibles, emitiendo el certificado según los permisos de la plantilla.
 4. Tras la aprobación, la CA firma el certificado con su clave privada y se lo devuelve al cliente.
 
 ### Plantillas de Certificados
@@ -45,9 +45,9 @@ Definidas dentro de AD, estas plantillas describen la configuración y permisos 
 
 El proceso de inscripción para certificados es iniciado por un administrador que **crea una plantilla de certificado**, que luego es **publicada** por una Autoridad de Certificación Empresarial (CA). Esto hace que la plantilla esté disponible para la inscripción del cliente, un paso logrado al agregar el nombre de la plantilla al campo `certificatetemplates` de un objeto de Active Directory.
 
-Para que un cliente solicite un certificado, deben otorgarse **derechos de inscripción**. Estos derechos están definidos por descriptores de seguridad en la plantilla de certificado y en la CA empresarial misma. Los permisos deben otorgarse en ambas ubicaciones para que una solicitud sea exitosa.
+Para que un cliente solicite un certificado, deben otorgarse **derechos de inscripción**. Estos derechos están definidos por descriptores de seguridad en la plantilla de certificado y en la propia CA empresarial. Los permisos deben otorgarse en ambas ubicaciones para que una solicitud sea exitosa.
 
-### Derechos de Inscripción de Plantilla
+### Derechos de Inscripción de Plantillas
 
 Estos derechos se especifican a través de Entradas de Control de Acceso (ACEs), detallando permisos como:
 
@@ -87,7 +87,7 @@ Active Directory (AD) admite la autenticación por certificado, utilizando princ
 
 ### Proceso de Autenticación Kerberos
 
-En el proceso de autenticación Kerberos, la solicitud de un usuario para un Ticket Granting Ticket (TGT) se firma utilizando la **clave privada** del certificado del usuario. Esta solicitud pasa por varias validaciones por parte del controlador de dominio, incluyendo la **validez**, **ruta** y **estado de revocación** del certificado. Las validaciones también incluyen verificar que el certificado provenga de una fuente confiable y confirmar la presencia del emisor en el **almacén de certificados NTAUTH**. Las validaciones exitosas resultan en la emisión de un TGT. El objeto **`NTAuthCertificates`** en AD, se encuentra en:
+En el proceso de autenticación Kerberos, la solicitud de un usuario para un Ticket Granting Ticket (TGT) se firma utilizando la **clave privada** del certificado del usuario. Esta solicitud pasa por varias validaciones por parte del controlador de dominio, incluyendo la **validez**, **ruta** y **estado de revocación** del certificado. Las validaciones también incluyen verificar que el certificado provenga de una fuente confiable y confirmar la presencia del emisor en el **almacén de certificados NTAUTH**. Las validaciones exitosas resultan en la emisión de un TGT. El objeto **`NTAuthCertificates`** en AD, que se encuentra en:
 ```bash
 CN=NTAuthCertificates,CN=Public Key Services,CN=Services,CN=Configuration,DC=<domain>,DC=<com>
 ```
@@ -120,13 +120,13 @@ certutil -v -dstemplate
 ```
 ---
 
-## Vulnerabilidades Recientes y Actualizaciones de Seguridad (2022-2025)
+## Vulnerabilidades recientes y actualizaciones de seguridad (2022-2025)
 
-| Año | ID / Nombre | Impacto | Conclusiones Clave |
+| Año | ID / Nombre | Impacto | Conclusiones clave |
 |------|-----------|--------|----------------|
-| 2022 | **CVE-2022-26923** – “Certifried” / ESC6 | *Escalación de privilegios* al suplantar certificados de cuentas de máquina durante PKINIT. | El parche está incluido en las actualizaciones de seguridad del **10 de mayo de 2022**. Se introdujeron controles de auditoría y mapeo fuerte a través de **KB5014754**; los entornos ahora deberían estar en modo *Full Enforcement*. citeturn2search0 |
-| 2023 | **CVE-2023-35350 / 35351** | *Ejecución remota de código* en el AD CS Web Enrollment (certsrv) y roles CES. | Los PoCs públicos son limitados, pero los componentes vulnerables de IIS a menudo están expuestos internamente. Parche a partir del **julio de 2023** Patch Tuesday. citeturn3search0 |
-| 2024 | **CVE-2024-49019** – “EKUwu” / ESC15 | Los usuarios con bajos privilegios y derechos de inscripción podrían anular **cualquier** EKU o SAN durante la generación de CSR, emitiendo certificados utilizables para autenticación de cliente o firma de código, lo que lleva a un *compromiso de dominio*. | Abordado en las actualizaciones de **abril de 2024**. Eliminar “Supply in the request” de las plantillas y restringir los permisos de inscripción. citeturn1search3 |
+| 2022 | **CVE-2022-26923** – “Certifried” / ESC6 | *Escalación de privilegios* al suplantar certificados de cuentas de máquina durante PKINIT. | El parche está incluido en las actualizaciones de seguridad del **10 de mayo de 2022**. Se introdujeron controles de auditoría y mapeo fuerte a través de **KB5014754**; los entornos ahora deberían estar en modo *Full Enforcement*.  |
+| 2023 | **CVE-2023-35350 / 35351** | *Ejecución remota de código* en los roles de Inscripción Web de AD CS (certsrv) y CES. | Los PoCs públicos son limitados, pero los componentes vulnerables de IIS a menudo están expuestos internamente. Parche a partir del **julio de 2023** Patch Tuesday.  |
+| 2024 | **CVE-2024-49019** – “EKUwu” / ESC15 | Los usuarios con bajos privilegios y derechos de inscripción podrían anular **cualquier** EKU o SAN durante la generación de CSR, emitiendo certificados utilizables para autenticación de cliente o firma de código, lo que lleva a un *compromiso de dominio*. | Abordado en las actualizaciones de **abril de 2024**. Eliminar “Suministrar en la solicitud” de las plantillas y restringir los permisos de inscripción.  |
 
 ### Cronología de endurecimiento de Microsoft (KB5014754)
 
@@ -134,17 +134,17 @@ Microsoft introdujo un despliegue en tres fases (Compatibilidad → Auditoría �
 
 1. Parchear todos los DCs y servidores AD CS (mayo de 2022 o posterior).
 2. Monitorear el ID de Evento 39/41 para mapeos débiles durante la fase de *Auditoría*.
-3. Reemitir certificados de autenticación de cliente con la nueva **extensión SID** o configurar mapeos manuales fuertes antes de febrero de 2025. citeturn2search0
+3. Reemitir certificados de autenticación de cliente con la nueva **extensión SID** o configurar mapeos manuales fuertes antes de febrero de 2025.
 
 ---
 
-## Mejoras en Detección y Endurecimiento
+## Mejoras en la detección y endurecimiento
 
-* El **sensor Defender for Identity AD CS (2023-2024)** ahora presenta evaluaciones de postura para ESC1-ESC8/ESC11 y genera alertas en tiempo real como *“Emisión de certificado de controlador de dominio para un no-DC”* (ESC8) y *“Prevenir la Inscripción de Certificados con Políticas de Aplicación arbitrarias”* (ESC15). Asegúrese de que los sensores estén desplegados en todos los servidores AD CS para beneficiarse de estas detecciones. citeturn5search0
-* Desactive o limite estrictamente la opción **“Supply in the request”** en todas las plantillas; prefiera valores SAN/EKU definidos explícitamente.
-* Elimine **Any Purpose** o **No EKU** de las plantillas a menos que sea absolutamente necesario (aborda escenarios ESC2).
+* El **sensor Defender for Identity AD CS (2023-2024)** ahora presenta evaluaciones de postura para ESC1-ESC8/ESC11 y genera alertas en tiempo real como *“Emisión de certificado de controlador de dominio para un no-DC”* (ESC8) y *“Prevenir la Inscripción de Certificados con Políticas de Aplicación arbitrarias”* (ESC15). Asegúrese de que los sensores estén desplegados en todos los servidores AD CS para beneficiarse de estas detecciones.
+* Desactive o limite estrictamente la opción **“Suministrar en la solicitud”** en todas las plantillas; prefiera valores SAN/EKU definidos explícitamente.
+* Elimine **Cualquier Propósito** o **Sin EKU** de las plantillas a menos que sea absolutamente necesario (aborda escenarios ESC2).
 * Requiera **aprobación del gerente** o flujos de trabajo dedicados de Agente de Inscripción para plantillas sensibles (por ejemplo, WebServer / CodeSigning).
-* Restringa la inscripción web (`certsrv`) y los puntos finales CES/NDES a redes de confianza o detrás de la autenticación de certificados de cliente.
+* Restringa la inscripción web (`certsrv`) y los puntos finales de CES/NDES a redes de confianza o detrás de la autenticación de certificados de cliente.
 * Aplique cifrado de inscripción RPC (`certutil –setreg CA\InterfaceFlags +IF_ENFORCEENCRYPTICERTREQ`) para mitigar ESC11.
 
 ---

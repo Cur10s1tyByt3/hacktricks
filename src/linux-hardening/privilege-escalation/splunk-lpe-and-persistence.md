@@ -4,16 +4,16 @@
 
 Si **enumerando** una máquina **internamente** o **externamente** encuentras **Splunk en ejecución** (puerto 8090), si tienes la suerte de conocer alguna **credencial válida** puedes **abusar del servicio de Splunk** para **ejecutar un shell** como el usuario que ejecuta Splunk. Si lo está ejecutando root, puedes escalar privilegios a root.
 
-Además, si ya eres root y el servicio de Splunk no está escuchando solo en localhost, puedes **robar** el archivo de **contraseña** **del** servicio de Splunk y **crackear** las contraseñas, o **agregar nuevas** credenciales a él. Y mantener persistencia en el host.
+Además, si ya eres **root y el servicio de Splunk no está escuchando solo en localhost**, puedes **robar** el archivo de **contraseña** **del** servicio de Splunk y **crackear** las contraseñas, o **agregar nuevas** credenciales a él. Y mantener persistencia en el host.
 
 En la primera imagen a continuación puedes ver cómo se ve una página web de Splunkd.
 
-## Resumen de la Explotación del Agente Splunk Universal Forwarder
+## Resumen de la Explotación del Agente Universal Forwarder de Splunk
 
-Para más detalles, consulta la publicación [https://eapolsniper.github.io/2020/08/14/Abusing-Splunk-Forwarders-For-RCE-And-Persistence/](https://eapolsniper.github.io/2020/08/14/Abusing-Splunk-Forwarders-For-RCE-And-Persistence/). Esto es solo un resumen:
+Para más detalles, consulta la publicación [https://eapolsniper.github.io/2020/08/14/Abusing-Splunk-Forwarders-For-RCE-And-Persistence/](https://eapolsniper.github.io/2020/08/14/Abusing-Splunk-Forwarders-For-RCE-And-Persistence/). Este es solo un resumen:
 
 **Descripción de la Explotación:**
-Una explotación que apunta al Agente Splunk Universal Forwarder (UF) permite a los atacantes con la contraseña del agente ejecutar código arbitrario en sistemas que ejecutan el agente, comprometiendo potencialmente toda una red.
+Una explotación que apunta al Agente Universal Forwarder de Splunk (UF) permite a los atacantes con la contraseña del agente ejecutar código arbitrario en sistemas que ejecutan el agente, comprometiendo potencialmente toda una red.
 
 **Puntos Clave:**
 
@@ -29,7 +29,7 @@ Una explotación que apunta al Agente Splunk Universal Forwarder (UF) permite a 
 
 **Impacto:**
 
-- Compromiso total de la red con permisos de nivel SYSTEM/root en cada host.
+- Compromiso total de la red con permisos a nivel de SYSTEM/root en cada host.
 - Potencial para deshabilitar el registro para evadir la detección.
 - Instalación de puertas traseras o ransomware.
 
@@ -39,11 +39,11 @@ for i in `cat ip.txt`; do python PySplunkWhisperer2_remote.py --host $i --port 8
 ```
 **Exploits públicos utilizables:**
 
-- https://github.com/cnotin/SplunkWhisperer2/tree/master/PySplunkWhisperer2
-- https://www.exploit-db.com/exploits/46238
-- https://www.exploit-db.com/exploits/46487
+- [https://github.com/cnotin/SplunkWhisperer2/tree/master/PySplunkWhisperer2](https://github.com/cnotin/SplunkWhisperer2/tree/master/PySplunkWhisperer2)
+- [https://www.exploit-db.com/exploits/46238](https://www.exploit-db.com/exploits/46238)
+- [https://www.exploit-db.com/exploits/46487](https://www.exploit-db.com/exploits/46487)
 
-## Abusando de las consultas de Splunk
+## Abusando de Consultas de Splunk
 
 **Para más detalles, consulta la publicación [https://blog.hrncirik.net/cve-2023-46214-analysis](https://blog.hrncirik.net/cve-2023-46214-analysis)**
 

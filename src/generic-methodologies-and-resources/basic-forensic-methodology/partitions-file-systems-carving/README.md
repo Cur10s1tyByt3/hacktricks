@@ -1,4 +1,4 @@
-# Particiones/Sistemas de Archivos/Carving
+# Partitions/File Systems/Carving
 
 {{#include ../../../banners/hacktricks-training.md}}
 
@@ -17,7 +17,7 @@ MBR permite **máx 2.2TB**.
 
 ![](<../../../images/image (304).png>)
 
-Desde los **bytes 440 a 443** del MBR puedes encontrar la **Firma de Disco de Windows** (si se utiliza Windows). La letra de unidad lógica del disco duro depende de la Firma de Disco de Windows. Cambiar esta firma podría impedir que Windows arranque (herramienta: [**Active Disk Editor**](https://www.disk-editor.org/index.html)**)**.
+Desde los **bytes 440 a 443** del MBR puedes encontrar la **Firma del Disco de Windows** (si se utiliza Windows). La letra de unidad lógica del disco duro depende de la Firma del Disco de Windows. Cambiar esta firma podría impedir que Windows arranque (herramienta: [**Active Disk Editor**](https://www.disk-editor.org/index.html)**)**.
 
 ![](<../../../images/image (310).png>)
 
@@ -26,10 +26,10 @@ Desde los **bytes 440 a 443** del MBR puedes encontrar la **Firma de Disco de Wi
 | Offset      | Longitud   | Elemento            |
 | ----------- | ---------- | ------------------- |
 | 0 (0x00)    | 446(0x1BE) | Código de arranque   |
-| 446 (0x1BE) | 16 (0x10)  | Primera Partición    |
-| 462 (0x1CE) | 16 (0x10)  | Segunda Partición     |
-| 478 (0x1DE) | 16 (0x10)  | Tercera Partición     |
-| 494 (0x1EE) | 16 (0x10)  | Cuarta Partición      |
+| 446 (0x1BE) | 16 (0x10)  | Primera partición    |
+| 462 (0x1CE) | 16 (0x10)  | Segunda partición     |
+| 478 (0x1DE) | 16 (0x10)  | Tercera partición     |
+| 494 (0x1EE) | 16 (0x10)  | Cuarta partición      |
 | 510 (0x1FE) | 2 (0x2)    | Firma 0x55 0xAA      |
 
 **Formato del Registro de Partición**
@@ -49,7 +49,7 @@ Desde los **bytes 440 a 443** del MBR puedes encontrar la **Firma de Disco de Wi
 
 Para montar un MBR en Linux, primero necesitas obtener el desplazamiento de inicio (puedes usar `fdisk` y el comando `p`)
 
-![](<../../../images/image (413) (3) (3) (3) (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../../../images/image (413) (3) (3) (3) (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 Y luego usa el siguiente código
 ```bash
@@ -68,7 +68,7 @@ La Tabla de Particiones GUID, conocida como GPT, es preferida por sus capacidade
 
 - **Ubicación y tamaño**: Tanto GPT como MBR comienzan en **sector 0**. Sin embargo, GPT opera en **64 bits**, en contraste con los 32 bits de MBR.
 - **Límites de partición**: GPT admite hasta **128 particiones** en sistemas Windows y acomoda hasta **9.4ZB** de datos.
-- **Nombres de partición**: Ofrece la capacidad de nombrar particiones con hasta 36 caracteres Unicode.
+- **Nombres de particiones**: Ofrece la capacidad de nombrar particiones con hasta 36 caracteres Unicode.
 
 **Resiliencia y recuperación de datos**:
 
@@ -77,32 +77,32 @@ La Tabla de Particiones GUID, conocida como GPT, es preferida por sus capacidade
 
 **MBR protector (LBA0)**:
 
-- GPT mantiene la compatibilidad hacia atrás a través de un MBR protector. Esta característica reside en el espacio MBR legado pero está diseñada para evitar que utilidades basadas en MBR más antiguas sobrescriban accidentalmente discos GPT, protegiendo así la integridad de los datos en discos formateados con GPT.
+- GPT mantiene la compatibilidad hacia atrás a través de un MBR protector. Esta característica reside en el espacio MBR legado pero está diseñada para evitar que utilidades basadas en MBR más antiguas sobrescriban erróneamente discos GPT, protegiendo así la integridad de los datos en discos formateados con GPT.
 
 ![https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/800px-GUID_Partition_Table_Scheme.svg.png](<../../../images/image (1062).png>)
 
 **MBR híbrido (LBA 0 + GPT)**
 
-[Desde Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
+[From Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
 
 En sistemas operativos que soportan **arranque basado en GPT a través de servicios BIOS** en lugar de EFI, el primer sector también puede seguir utilizándose para almacenar la primera etapa del código del **bootloader**, pero **modificado** para reconocer **particiones GPT**. El bootloader en el MBR no debe asumir un tamaño de sector de 512 bytes.
 
 **Encabezado de la tabla de particiones (LBA 1)**
 
-[Desde Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
+[From Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
 
 El encabezado de la tabla de particiones define los bloques utilizables en el disco. También define el número y tamaño de las entradas de partición que componen la tabla de particiones (desplazamientos 80 y 84 en la tabla).
 
 | Desplazamiento | Longitud | Contenido                                                                                                                                                                     |
 | -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 (0x00)      | 8 bytes  | Firma ("EFI PART", 45h 46h 49h 20h 50h 41h 52h 54h o 0x5452415020494645ULL[ ](https://en.wikipedia.org/wiki/GUID_Partition_Table#cite_note-8)en máquinas little-endian) |
+| 0 (0x00)      | 8 bytes  | Firma ("EFI PART", 45h 46h 49h 20h 50h 41h 52h 54h o 0x5452415020494645ULL[ ](https://en.wikipedia.org/wiki/GUID_Partition_Table#_note-8)en máquinas little-endian) |
 | 8 (0x08)      | 4 bytes  | Revisión 1.0 (00h 00h 01h 00h) para UEFI 2.8                                                                                                                                  |
 | 12 (0x0C)     | 4 bytes  | Tamaño del encabezado en little endian (en bytes, generalmente 5Ch 00h 00h 00h o 92 bytes)                                                                                                 |
 | 16 (0x10)     | 4 bytes  | [CRC32](https://en.wikipedia.org/wiki/CRC32) del encabezado (desplazamiento +0 hasta el tamaño del encabezado) en little endian, con este campo en cero durante el cálculo                             |
 | 20 (0x14)     | 4 bytes  | Reservado; debe ser cero                                                                                                                                                       |
 | 24 (0x18)     | 8 bytes  | LBA actual (ubicación de esta copia del encabezado)                                                                                                                                   |
 | 32 (0x20)     | 8 bytes  | LBA de respaldo (ubicación de la otra copia del encabezado)                                                                                                                               |
-| 40 (0x28)     | 8 bytes  | Primer LBA utilizable para particiones (LBA del último de la tabla de particiones primaria + 1)                                                                                                       |
+| 40 (0x28)     | 8 bytes  | Primer LBA utilizable para particiones (último LBA de la tabla de particiones primaria + 1)                                                                                                       |
 | 48 (0x30)     | 8 bytes  | Último LBA utilizable (primer LBA de la tabla de particiones secundaria − 1)                                                                                                                    |
 | 56 (0x38)     | 16 bytes | GUID del disco en endian mixto                                                                                                                                                    |
 | 72 (0x48)     | 8 bytes  | LBA inicial de un array de entradas de partición (siempre 2 en la copia primaria)                                                                                                     |
@@ -116,7 +116,7 @@ El encabezado de la tabla de particiones define los bloques utilizables en el di
 | Formato de entrada de partición GUID |          |                                                                                                               |
 | ------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
 | Desplazamiento                        | Longitud | Contenido                                                                                                      |
-| 0 (0x00)                              | 16 bytes | [Tipo de partición GUID](https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs) (endian mixto) |
+| 0 (0x00)                              | 16 bytes | [GUID de tipo de partición](https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs) (endian mixto) |
 | 16 (0x10)                             | 16 bytes | GUID de partición único (endian mixto)                                                                          |
 | 32 (0x20)                             | 8 bytes  | Primer LBA ([little endian](https://en.wikipedia.org/wiki/Little_endian))                                      |
 | 40 (0x28)                             | 8 bytes  | Último LBA (inclusive, generalmente impar)                                                                             |
@@ -164,12 +164,12 @@ Los componentes clave del directorio raíz, particularmente para FAT12 y FAT16, 
 - **Nombre de archivo/carpeta** (hasta 8 caracteres)
 - **Atributos**
 - **Fechas de creación, modificación y último acceso**
-- **Dirección de la tabla FAT** (indicando el cluster inicial del archivo)
+- **Dirección de la tabla FAT** (indicando el cluster de inicio del archivo)
 - **Tamaño del archivo**
 
 ### EXT
 
-**Ext2** es el sistema de archivos más común para **particiones que no registran** (**particiones que no cambian mucho**) como la partición de arranque. **Ext3/4** son **registradores** y se utilizan generalmente para el **resto de las particiones**.
+**Ext2** es el sistema de archivos más común para **particiones que no utilizan journaling** (**particiones que no cambian mucho**) como la partición de arranque. **Ext3/4** son **journaling** y se utilizan generalmente para el **resto de las particiones**.
 
 ## **Metadatos**
 
@@ -197,21 +197,21 @@ Además, el sistema operativo generalmente guarda mucha información sobre los c
 file-data-carving-recovery-tools.md
 {{#endref}}
 
-### **Carving de archivos**
+### **File Carving**
 
-**El carving de archivos** es una técnica que intenta **encontrar archivos en la gran cantidad de datos**. Hay 3 formas principales en que herramientas como esta funcionan: **Basado en encabezados y pies de tipos de archivos**, basado en **estructuras** de tipos de archivos y basado en el **contenido** mismo.
+**File carving** es una técnica que intenta **encontrar archivos en la gran cantidad de datos**. Hay 3 formas principales en que herramientas como esta funcionan: **Basado en encabezados y pies de tipos de archivos**, basado en **estructuras** de tipos de archivos y basado en el **contenido** mismo.
 
 Ten en cuenta que esta técnica **no funciona para recuperar archivos fragmentados**. Si un archivo **no está almacenado en sectores contiguos**, entonces esta técnica no podrá encontrarlo o al menos parte de él.
 
-Hay varias herramientas que puedes usar para el carving de archivos indicando los tipos de archivos que deseas buscar.
+Hay varias herramientas que puedes usar para file carving indicando los tipos de archivos que deseas buscar.
 
 {{#ref}}
 file-data-carving-recovery-tools.md
 {{#endref}}
 
-### Carving de flujo de datos
+### Carving de flujo de datos **C**
 
-El carving de flujo de datos es similar al carving de archivos, pero **en lugar de buscar archivos completos, busca fragmentos interesantes** de información.\
+El carving de flujo de datos es similar al file carving, pero **en lugar de buscar archivos completos, busca fragmentos interesantes** de información.\
 Por ejemplo, en lugar de buscar un archivo completo que contenga URLs registradas, esta técnica buscará URLs.
 
 {{#ref}}
