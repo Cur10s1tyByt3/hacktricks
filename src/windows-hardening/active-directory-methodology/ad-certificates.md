@@ -34,7 +34,7 @@ AD CS reconoce los certificados de CA en un bosque de AD a través de contenedor
 
 1. El proceso de solicitud comienza con los clientes encontrando una CA empresarial.
 2. Se crea un CSR, que contiene una clave pública y otros detalles, después de generar un par de claves pública-privada.
-3. La CA evalúa el CSR en función de las plantillas de certificados disponibles, emitiendo el certificado según los permisos de la plantilla.
+3. La CA evalúa el CSR contra las plantillas de certificados disponibles, emitiendo el certificado basado en los permisos de la plantilla.
 4. Tras la aprobación, la CA firma el certificado con su clave privada y se lo devuelve al cliente.
 
 ### Plantillas de Certificados
@@ -53,7 +53,7 @@ Estos derechos se especifican a través de Entradas de Control de Acceso (ACEs),
 
 - Derechos de **Inscripción de Certificado** y **Autoinscripción de Certificado**, cada uno asociado con GUIDs específicos.
 - **Derechos Extendidos**, que permiten todos los permisos extendidos.
-- **ControlTotal/GenericAll**, proporcionando control completo sobre la plantilla.
+- **ControlTotal/TodosGenericos**, proporcionando control completo sobre la plantilla.
 
 ### Derechos de Inscripción de CA Empresarial
 
@@ -71,7 +71,7 @@ Ciertos controles pueden aplicarse, como:
 Los certificados se pueden solicitar a través de:
 
 1. **Protocolo de Inscripción de Certificados de Cliente de Windows** (MS-WCCE), utilizando interfaces DCOM.
-2. **Protocolo Remoto ICertPassage** (MS-ICPR), a través de pipes nombrados o TCP/IP.
+2. **Protocolo Remoto ICertPassage** (MS-ICPR), a través de tuberías nombradas o TCP/IP.
 3. La **interfaz web de inscripción de certificados**, con el rol de Inscripción Web de Autoridad de Certificación instalado.
 4. El **Servicio de Inscripción de Certificados** (CES), en conjunto con el servicio de Política de Inscripción de Certificados (CEP).
 5. El **Servicio de Inscripción de Dispositivos de Red** (NDES) para dispositivos de red, utilizando el Protocolo Simple de Inscripción de Certificados (SCEP).
@@ -81,13 +81,13 @@ Los usuarios de Windows también pueden solicitar certificados a través de la G
 # Example of requesting a certificate using PowerShell
 Get-Certificate -Template "User" -CertStoreLocation "cert:\\CurrentUser\\My"
 ```
-## Autenticación de Certificados
+## Autenticación por Certificado
 
-Active Directory (AD) admite la autenticación de certificados, utilizando principalmente los protocolos **Kerberos** y **Secure Channel (Schannel)**.
+Active Directory (AD) admite la autenticación por certificado, utilizando principalmente los protocolos **Kerberos** y **Secure Channel (Schannel)**.
 
-### Proceso de Autenticación de Kerberos
+### Proceso de Autenticación Kerberos
 
-En el proceso de autenticación de Kerberos, la solicitud de un usuario para un Ticket Granting Ticket (TGT) se firma utilizando la **clave privada** del certificado del usuario. Esta solicitud pasa por varias validaciones por parte del controlador de dominio, incluyendo la **validez**, **ruta** y **estado de revocación** del certificado. Las validaciones también incluyen verificar que el certificado provenga de una fuente confiable y confirmar la presencia del emisor en el **almacén de certificados NTAUTH**. Las validaciones exitosas resultan en la emisión de un TGT. El objeto **`NTAuthCertificates`** en AD, encontrado en:
+En el proceso de autenticación Kerberos, la solicitud de un usuario para un Ticket Granting Ticket (TGT) se firma utilizando la **clave privada** del certificado del usuario. Esta solicitud pasa por varias validaciones por parte del controlador de dominio, incluyendo la **validez**, **ruta** y **estado de revocación** del certificado. Las validaciones también incluyen verificar que el certificado provenga de una fuente confiable y confirmar la presencia del emisor en el **almacén de certificados NTAUTH**. Las validaciones exitosas resultan en la emisión de un TGT. El objeto **`NTAuthCertificates`** en AD, se encuentra en:
 ```bash
 CN=NTAuthCertificates,CN=Public Key Services,CN=Services,CN=Configuration,DC=<domain>,DC=<com>
 ```
@@ -108,16 +108,52 @@ Certify.exe cas
 # Identify vulnerable certificate templates with Certify
 Certify.exe find /vulnerable
 
-# Use Certipy for enumeration and identifying vulnerable templates
-certipy find -vulnerable -u john@corp.local -p Passw0rd -dc-ip 172.16.126.128
+# Use Certipy (>=4.0) for enumeration and identifying vulnerable templates
+certipy find -vulnerable -dc-only -u john@corp.local -p Passw0rd -target dc.corp.local
+
+# Request a certificate over the web enrollment interface (new in Certipy 4.x)
+certipy req -web -target ca.corp.local -template WebServer -upn john@corp.local -dns www.corp.local
 
 # Enumerate Enterprise CAs and certificate templates with certutil
 certutil.exe -TCAInfo
 certutil -v -dstemplate
 ```
+---
+
+## Vulnerabilidades Recientes y Actualizaciones de Seguridad (2022-2025)
+
+| Año | ID / Nombre | Impacto | Conclusiones Clave |
+|------|-----------|--------|----------------|
+| 2022 | **CVE-2022-26923** – “Certifried” / ESC6 | *Escalación de privilegios* al suplantar certificados de cuentas de máquina durante PKINIT. | El parche está incluido en las actualizaciones de seguridad del **10 de mayo de 2022**. Se introdujeron controles de auditoría y mapeo fuerte a través de **KB5014754**; los entornos ahora deberían estar en modo *Full Enforcement*. citeturn2search0 |
+| 2023 | **CVE-2023-35350 / 35351** | *Ejecución remota de código* en el AD CS Web Enrollment (certsrv) y roles CES. | Los PoCs públicos son limitados, pero los componentes vulnerables de IIS a menudo están expuestos internamente. Parche a partir del **julio de 2023** Patch Tuesday. citeturn3search0 |
+| 2024 | **CVE-2024-49019** – “EKUwu” / ESC15 | Los usuarios con bajos privilegios y derechos de inscripción podrían anular **cualquier** EKU o SAN durante la generación de CSR, emitiendo certificados utilizables para autenticación de cliente o firma de código, lo que lleva a un *compromiso de dominio*. | Abordado en las actualizaciones de **abril de 2024**. Eliminar “Supply in the request” de las plantillas y restringir los permisos de inscripción. citeturn1search3 |
+
+### Cronología de endurecimiento de Microsoft (KB5014754)
+
+Microsoft introdujo un despliegue en tres fases (Compatibilidad → Auditoría → Aplicación) para mover la autenticación de certificados Kerberos lejos de mapeos implícitos débiles. A partir del **11 de febrero de 2025**, los controladores de dominio cambian automáticamente a **Full Enforcement** si el valor del registro `StrongCertificateBindingEnforcement` no está configurado. Los administradores deben:
+
+1. Parchear todos los DCs y servidores AD CS (mayo de 2022 o posterior).
+2. Monitorear el ID de Evento 39/41 para mapeos débiles durante la fase de *Auditoría*.
+3. Reemitir certificados de autenticación de cliente con la nueva **extensión SID** o configurar mapeos manuales fuertes antes de febrero de 2025. citeturn2search0
+
+---
+
+## Mejoras en Detección y Endurecimiento
+
+* El **sensor Defender for Identity AD CS (2023-2024)** ahora presenta evaluaciones de postura para ESC1-ESC8/ESC11 y genera alertas en tiempo real como *“Emisión de certificado de controlador de dominio para un no-DC”* (ESC8) y *“Prevenir la Inscripción de Certificados con Políticas de Aplicación arbitrarias”* (ESC15). Asegúrese de que los sensores estén desplegados en todos los servidores AD CS para beneficiarse de estas detecciones. citeturn5search0
+* Desactive o limite estrictamente la opción **“Supply in the request”** en todas las plantillas; prefiera valores SAN/EKU definidos explícitamente.
+* Elimine **Any Purpose** o **No EKU** de las plantillas a menos que sea absolutamente necesario (aborda escenarios ESC2).
+* Requiera **aprobación del gerente** o flujos de trabajo dedicados de Agente de Inscripción para plantillas sensibles (por ejemplo, WebServer / CodeSigning).
+* Restringa la inscripción web (`certsrv`) y los puntos finales CES/NDES a redes de confianza o detrás de la autenticación de certificados de cliente.
+* Aplique cifrado de inscripción RPC (`certutil –setreg CA\InterfaceFlags +IF_ENFORCEENCRYPTICERTREQ`) para mitigar ESC11.
+
+---
+
 ## Referencias
 
 - [https://www.specterops.io/assets/resources/Certified_Pre-Owned.pdf](https://www.specterops.io/assets/resources/Certified_Pre-Owned.pdf)
 - [https://comodosslstore.com/blog/what-is-ssl-tls-client-authentication-how-does-it-work.html](https://comodosslstore.com/blog/what-is-ssl-tls-client-authentication-how-does-it-work.html)
+- [https://support.microsoft.com/en-us/topic/kb5014754-certificate-based-authentication-changes-on-windows-domain-controllers-ad2c23b0-15d8-4340-a468-4d4f3b188f16](https://support.microsoft.com/en-us/topic/kb5014754-certificate-based-authentication-changes-on-windows-domain-controllers-ad2c23b0-15d8-4340-a468-4d4f3b188f16)
+- [https://advisory.eventussecurity.com/advisory/critical-vulnerability-in-ad-cs-allows-privilege-escalation/](https://advisory.eventussecurity.com/advisory/critical-vulnerability-in-ad-cs-allows-privilege-escalation/)
 
 {{#include ../../banners/hacktricks-training.md}}
