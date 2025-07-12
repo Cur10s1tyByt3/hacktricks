@@ -23,10 +23,10 @@ Long Range (**LoRa**) es actualmente la capa física LPWAN más desplegada y su 
 ## Resumen de la superficie de ataque
 
 | Capa | Vulnerabilidad | Impacto práctico |
-|------|----------------|------------------|
+|-------|----------|------------------|
 | PHY | Jamming reactivo / selectivo | 100 % de pérdida de paquetes demostrada con un solo SDR y <1 W de salida |
 | MAC | Repetición de Join-Accept y data-frame (reutilización de nonce, desbordamiento de contador ABP) | Suplantación de dispositivos, inyección de mensajes, DoS |
-| Servidor de Red | Retransmisor de paquetes inseguro, filtros MQTT/UDP débiles, firmware de puerta de enlace desactualizado | RCE en puertas de enlace → pivoteo en la red OT/IT |
+| Servidor de Red | Retransmisor de paquetes inseguro, filtros MQTT/UDP débiles, firmware de puerta de enlace desactualizado | RCE en puertas de enlace → pivote hacia la red OT/IT |
 | Aplicación | AppKeys codificadas o predecibles | Fuerza bruta/desencriptar tráfico, suplantar sensores |
 
 ---
@@ -35,7 +35,7 @@ Long Range (**LoRa**) es actualmente la capa física LPWAN más desplegada y su 
 
 * **CVE-2024-29862** – *ChirpStack gateway-bridge & mqtt-forwarder* aceptó paquetes TCP que eludieron las reglas de firewall con estado en puertas de enlace Kerlink, permitiendo la exposición de la interfaz de gestión remota. Corregido en 4.0.11 / 4.2.1 respectivamente.
 * **Dragino LG01/LG308 series** – Múltiples CVEs de 2022-2024 (por ejemplo, 2022-45227 recorrido de directorio, 2022-45228 CSRF) aún observados sin parches en 2025; habilitar volcado de firmware no autenticado o sobrescritura de configuración en miles de puertas de enlace públicas.
-* Desbordamiento de *retransmisor de paquetes UDP* de Semtech (aviso no publicado, parcheado en 2023-10): uplink elaborado mayor a 255 B activó stack-smash ‑> RCE en puertas de enlace de referencia SX130x (encontrado por Black Hat EU 2023 “LoRa Exploitation Reloaded”).
+* Desbordamiento de *retransmisor de paquetes UDP* de Semtech (aviso no publicado, parcheado en 2023-10): uplink elaborado mayor que 255 B activó stack-smash ‑> RCE en puertas de enlace de referencia SX130x (encontrado por Black Hat EU 2023 “LoRa Exploitation Reloaded”).
 
 ---
 
@@ -50,13 +50,13 @@ python3 lorattack/sniffer.py \
 # Bruteforce AppKey from captured OTAA join-request/accept pairs
 python3 lorapwn/bruteforce_join.py --pcap smartcity.pcap --wordlist top1m.txt
 ```
-### 2. OTAA join-replay (reutilización de DevNonce)
+### 2. Repetición de unión OTAA (reutilización de DevNonce)
 
 1. Captura un **JoinRequest** legítimo.
 2. Reenvíalo inmediatamente (o incrementa RSSI) antes de que el dispositivo original transmita de nuevo.
 3. El servidor de red asigna un nuevo DevAddr y claves de sesión mientras el dispositivo objetivo continúa con la sesión antigua → el atacante posee la sesión vacante y puede inyectar uplinks falsificados.
 
-### 3. Downgrading de Adaptive Data-Rate (ADR)
+### 3. Degradación de la tasa de datos adaptativa (ADR)
 
 Forzar SF12/125 kHz para aumentar el tiempo de aire → agotar el ciclo de trabajo de la puerta de enlace (denegación de servicio) mientras se mantiene bajo el impacto en la batería del atacante (solo enviar comandos MAC a nivel de red).
 
@@ -71,17 +71,17 @@ Forzar SF12/125 kHz para aumentar el tiempo de aire → agotar el ciclo de traba
 | Herramienta | Propósito | Notas |
 |-------------|-----------|-------|
 | **LoRaWAN Auditing Framework (LAF)** | Crear/analizar/atacar tramas LoRaWAN, analizadores respaldados por DB, fuerza bruta | Imagen de Docker, soporta entrada UDP de Semtech |
-| **LoRaPWN** | Utilidad de Python de Trend Micro para fuerza bruta OTAA, generar downlinks, descifrar cargas útiles | Demo lanzada en 2023, agnóstico a SDR |
-| **LoRAttack** | Sniffer de múltiples canales + replay con USRP; exporta PCAP/LoRaTap | Buena integración con Wireshark |
+| **LoRaPWN** | Utilidad de Python de Trend Micro para fuerza bruta OTAA, generar downlinks, descifrar cargas útiles | Demo lanzada en 2023, agnóstica a SDR |
+| **LoRAttack** | Sniffer de múltiples canales + repetición con USRP; exporta PCAP/LoRaTap | Buena integración con Wireshark |
 | **gr-lora / gr-lorawan** | Bloques OOT de GNU Radio para TX/RX de banda base | Fundación para ataques personalizados |
 
 ---
 
-## Recomendaciones defensivas (lista de verificación para pentesters)
+## Recomendaciones defensivas (lista de verificación de pentester)
 
 1. Preferir dispositivos **OTAA** con DevNonce verdaderamente aleatorio; monitorear duplicados.
-2. Hacer cumplir **LoRaWAN 1.1**: contadores de trama de 32 bits, FNwkSIntKey / SNwkSIntKey distintos.
-3. Almacenar el contador de trama en memoria no volátil (**ABP**) o migrar a OTAA.
+2. Hacer cumplir **LoRaWAN 1.1**: contadores de tramas de 32 bits, FNwkSIntKey / SNwkSIntKey distintos.
+3. Almacenar el contador de tramas en memoria no volátil (**ABP**) o migrar a OTAA.
 4. Desplegar **elemento seguro** (ATECC608A/SX1262-TRX-SE) para proteger las claves raíz contra la extracción de firmware.
 5. Deshabilitar puertos de reenvío de paquetes UDP remotos (1700/1701) o restringir con WireGuard/VPN.
 6. Mantener las puertas de enlace actualizadas; Kerlink/Dragino proporcionan imágenes parcheadas de 2024.
@@ -89,6 +89,6 @@ Forzar SF12/125 kHz para aumentar el tiempo de aire → agotar el ciclo de traba
 
 ## Referencias
 
-* LoRaWAN Auditing Framework (LAF) – https://github.com/IOActive/laf
-* Resumen de Trend Micro LoRaPWN – https://www.hackster.io/news/trend-micro-finds-lorawan-security-lacking-develops-lorapwn-python-utility-bba60c27d57a
+* LoRaWAN Auditing Framework (LAF) – [https://github.com/IOActive/laf](https://github.com/IOActive/laf)
+* Resumen de Trend Micro LoRaPWN – [https://www.hackster.io/news/trend-micro-finds-lorawan-security-lacking-develops-lorapwn-python-utility-bba60c27d57a](https://www.hackster.io/news/trend-micro-finds-lorawan-security-lacking-develops-lorapwn-python-utility-bba60c27d57a)
 {{#include ../../banners/hacktricks-training.md}}

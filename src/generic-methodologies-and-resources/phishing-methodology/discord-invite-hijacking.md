@@ -51,11 +51,11 @@ Este enfoque evita descargas directas de archivos y aprovecha elementos de inter
 - Utilizar enlaces de invitación permanentes que contengan al menos una letra mayúscula o un carácter no alfanumérico (nunca expiran, no reutilizables).
 - Rotar regularmente los códigos de invitación y revocar enlaces antiguos.
 - Monitorear el estado de impulso del servidor de Discord y las reclamaciones de URL de vanidad.
-- Educar a los usuarios para verificar la autenticidad del servidor y evitar ejecutar comandos pegados desde el portapapeles.
+- Educar a los usuarios para que verifiquen la autenticidad del servidor y eviten ejecutar comandos pegados desde el portapapeles.
 
 ## Referencias
 
-- From Trust to Threat: Hijacked Discord Invites Used for Multi-Stage Malware Delivery – https://research.checkpoint.com/2025/from-trust-to-threat-hijacked-discord-invites-used-for-multi-stage-malware-delivery/
-- Discord Custom Invite Link Documentation – https://support.discord.com/hc/en-us/articles/115001542132-Custom-Invite-Link
+- From Trust to Threat: Hijacked Discord Invites Used for Multi-Stage Malware Delivery – [https://research.checkpoint.com/2025/from-trust-to-threat-hijacked-discord-invites-used-for-multi-stage-malware-delivery/](https://research.checkpoint.com/2025/from-trust-to-threat-hijacked-discord-invites-used-for-multi-stage-malware-delivery/)
+- Discord Custom Invite Link Documentation – [https://support.discord.com/hc/en-us/articles/115001542132-Custom-Invite-Link](https://support.discord.com/hc/en-us/articles/115001542132-Custom-Invite-Link)
 
 {{#include ../../banners/hacktricks-training.md}}
