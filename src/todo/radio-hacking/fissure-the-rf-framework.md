@@ -1,12 +1,12 @@
 # FISSURE - El Marco RF
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../banners/hacktricks-training.md}}
 
 **Comprensión y Ingeniería Inversa de Señales SDR Independientes de Frecuencia**
 
-FISSURE es un marco de RF y ingeniería inversa de código abierto diseñado para todos los niveles de habilidad, con ganchos para la detección y clasificación de señales, descubrimiento de protocolos, ejecución de ataques, manipulación de IQ, análisis de vulnerabilidades, automatización y AI/ML. El marco fue construido para promover la integración rápida de módulos de software, radios, protocolos, datos de señales, scripts, gráficos de flujo, material de referencia y herramientas de terceros. FISSURE es un habilitador de flujo de trabajo que mantiene el software en un solo lugar y permite a los equipos ponerse al día sin esfuerzo mientras comparten la misma configuración base probada para distribuciones específicas de Linux.
+FISSURE es un marco de RF y ingeniería inversa de código abierto diseñado para todos los niveles de habilidad, con ganchos para la detección y clasificación de señales, descubrimiento de protocolos, ejecución de ataques, manipulación de IQ, análisis de vulnerabilidades, automatización y AI/ML. El marco fue construido para promover la integración rápida de módulos de software, radios, protocolos, datos de señales, scripts, gráficos de flujo, material de referencia y herramientas de terceros. FISSURE es un facilitador de flujo de trabajo que mantiene el software en un solo lugar y permite a los equipos ponerse al día sin esfuerzo mientras comparten la misma configuración base probada para distribuciones específicas de Linux.
 
-El marco y las herramientas incluidas con FISSURE están diseñadas para detectar la presencia de energía RF, entender las características de una señal, recolectar y analizar muestras, desarrollar técnicas de transmisión y/o inyección, y crear cargas útiles o mensajes personalizados. FISSURE contiene una biblioteca en crecimiento de información sobre protocolos y señales para ayudar en la identificación, creación de paquetes y fuzzing. Existen capacidades de archivo en línea para descargar archivos de señales y construir listas de reproducción para simular tráfico y probar sistemas.
+El marco y las herramientas incluidas con FISSURE están diseñadas para detectar la presencia de energía RF, comprender las características de una señal, recolectar y analizar muestras, desarrollar técnicas de transmisión y/o inyección, y crear cargas útiles o mensajes personalizados. FISSURE contiene una biblioteca en crecimiento de información sobre protocolos y señales para ayudar en la identificación, creación de paquetes y fuzzing. Existen capacidades de archivo en línea para descargar archivos de señal y construir listas de reproducción para simular tráfico y probar sistemas.
 
 La amigable base de código en Python y la interfaz de usuario permiten a los principiantes aprender rápidamente sobre herramientas y técnicas populares relacionadas con RF y la ingeniería inversa. Los educadores en ciberseguridad e ingeniería pueden aprovechar el material incorporado o utilizar el marco para demostrar sus propias aplicaciones del mundo real. Los desarrolladores e investigadores pueden usar FISSURE para sus tareas diarias o para exponer sus soluciones de vanguardia a una audiencia más amplia. A medida que la conciencia y el uso de FISSURE crecen en la comunidad, también lo hará la extensión de sus capacidades y la amplitud de la tecnología que abarca.
 
@@ -25,7 +25,7 @@ La amigable base de código en Python y la interfaz de usuario permiten a los pr
 Hay tres ramas dentro de FISSURE para facilitar la navegación de archivos y reducir la redundancia de código. La rama Python2\_maint-3.7 contiene una base de código construida alrededor de Python2, PyQt4 y GNU Radio 3.7; la rama Python3\_maint-3.8 está construida alrededor de Python3, PyQt5 y GNU Radio 3.8; y la rama Python3\_maint-3.10 está construida alrededor de Python3, PyQt5 y GNU Radio 3.10.
 
 |   Sistema Operativo   |   Rama FISSURE   |
-| :------------------: | :----------------: |
+| :------------------: | :--------------: |
 |  Ubuntu 18.04 (x64)  | Python2\_maint-3.7 |
 | Ubuntu 18.04.5 (x64) | Python2\_maint-3.7 |
 | Ubuntu 18.04.6 (x64) | Python2\_maint-3.7 |
@@ -38,7 +38,7 @@ Hay tres ramas dentro de FISSURE para facilitar la navegación de archivos y red
 Estos sistemas operativos aún están en estado beta. Están en desarrollo y se sabe que faltan varias características. Los elementos en el instalador pueden entrar en conflicto con programas existentes o no instalarse hasta que se elimine el estado.
 
 |     Sistema Operativo     |    Rama FISSURE   |
-| :----------------------: | :-----------------: |
+| :----------------------: | :---------------: |
 | DragonOS Focal (x86\_64) |  Python3\_maint-3.8 |
 |    Ubuntu 22.04 (x64)    | Python3\_maint-3.10 |
 
@@ -60,7 +60,7 @@ A continuación, seleccione la opción que mejor coincida con su sistema operati
 | :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
 | ![install1b](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install1b.png) | ![install1a](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install1a.png) | ![install1c](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install1c.png) |
 
-Se recomienda instalar FISSURE en un sistema operativo limpio para evitar conflictos existentes. Seleccione todas las casillas de verificación recomendadas (botón predeterminado) para evitar errores al operar las diversas herramientas dentro de FISSURE. Habrá múltiples avisos durante la instalación, principalmente pidiendo permisos elevados y nombres de usuario. Si un elemento contiene una sección "Verificar" al final, el instalador ejecutará el comando que sigue y resaltará el elemento de la casilla de verificación en verde o rojo dependiendo de si se producen errores por el comando. Los elementos marcados sin una sección "Verificar" permanecerán en negro después de la instalación.
+Se recomienda instalar FISSURE en un sistema operativo limpio para evitar conflictos existentes. Seleccione todas las casillas de verificación recomendadas (botón predeterminado) para evitar errores al operar las diversas herramientas dentro de FISSURE. Habrá múltiples mensajes durante la instalación, principalmente pidiendo permisos elevados y nombres de usuario. Si un elemento contiene una sección "Verificar" al final, el instalador ejecutará el comando que sigue y resaltará el elemento de la casilla de verificación en verde o rojo dependiendo de si se producen errores por el comando. Los elementos marcados sin una sección "Verificar" permanecerán en negro después de la instalación.
 
 ![install2](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/install2.png)
 
@@ -80,7 +80,7 @@ Referirse al menú de ayuda de FISSURE para más detalles sobre el uso.
 * Central Hub (HIPRFISR)
 * Identificación de Señal Objetivo (TSI)
 * Descubrimiento de Protocolo (PD)
-* Gráfico de Flujo y Ejecutador de Script (FGE)
+* Grafo de Flujo y Ejecutador de Script (FGE)
 
 ![components](https://github.com/ainfosec/FISSURE/blob/Python3\_maint-3.8/Icons/README/components.png)
 
@@ -124,16 +124,16 @@ FISSURE viene con varias guías útiles para familiarizarse con diferentes tecno
 
 * [ ] Agregar más tipos de hardware, protocolos RF, parámetros de señal, herramientas de análisis
 * [ ] Soportar más sistemas operativos
-* [ ] Desarrollar material de clase en torno a FISSURE (Ataques RF, Wi-Fi, GNU Radio, PyQt, etc.)
+* [ ] Desarrollar material de clase alrededor de FISSURE (Ataques RF, Wi-Fi, GNU Radio, PyQt, etc.)
 * [ ] Crear un acondicionador de señal, extractor de características y clasificador de señales con técnicas AI/ML seleccionables
 * [ ] Implementar mecanismos de demodulación recursiva para producir un flujo de bits a partir de señales desconocidas
 * [ ] Transicionar los componentes principales de FISSURE a un esquema de implementación de nodo sensor genérico
 
 ## Contribuciones
 
-Se alientan fuertemente las sugerencias para mejorar FISSURE. Deja un comentario en la página de [Discusiones](https://github.com/ainfosec/FISSURE/discussions) o en el Servidor de Discord si tienes alguna idea sobre lo siguiente:
+Se alientan fuertemente las sugerencias para mejorar FISSURE. Deja un comentario en la página de [Discusiones](https://github.com/ainfosec/FISSURE/discussions) o en el servidor de Discord si tienes alguna idea sobre lo siguiente:
 
-* Nuevas sugerencias de características y cambios de diseño
+* Sugerencias de nuevas características y cambios de diseño
 * Herramientas de software con pasos de instalación
 * Nuevas lecciones o material adicional para lecciones existentes
 * Protocolos RF de interés
@@ -163,7 +163,7 @@ Para detalles de la licencia, consulta el archivo LICENSE.
 
 ## Contacto
 
-Únete al Servidor de Discord: [https://discord.gg/JZDs5sgxcG](https://discord.gg/JZDs5sgxcG)
+Únete al servidor de Discord: [https://discord.gg/JZDs5sgxcG](https://discord.gg/JZDs5sgxcG)
 
 Síguenos en Twitter: [@FissureRF](https://twitter.com/fissurerf), [@AinfoSec](https://twitter.com/ainfosec)
 
@@ -181,6 +181,4 @@ Reconocemos y estamos agradecidos a estos desarrolladores:
 
 Agradecimientos especiales a Dr. Samuel Mantravadi y Joseph Reith por sus contribuciones a este proyecto.
 
-
-
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../banners/hacktricks-training.md}}

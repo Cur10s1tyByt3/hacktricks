@@ -1,10 +1,10 @@
 # Modelado de Amenazas
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../banners/hacktricks-training.md}}
 
 ## Modelado de Amenazas
 
-¡Bienvenido a la guía completa de HackTricks sobre el Modelado de Amenazas! Emprende una exploración de este aspecto crítico de la ciberseguridad, donde identificamos, entendemos y diseñamos estrategias contra posibles vulnerabilidades en un sistema. Este hilo sirve como una guía paso a paso repleta de ejemplos del mundo real, software útil y explicaciones fáciles de entender. Ideal tanto para novatos como para profesionales experimentados que buscan fortalecer sus defensas de ciberseguridad.
+¡Bienvenido a la guía completa de HackTricks sobre Modelado de Amenazas! Emprende una exploración de este aspecto crítico de la ciberseguridad, donde identificamos, entendemos y diseñamos estrategias contra posibles vulnerabilidades en un sistema. Este hilo sirve como una guía paso a paso repleta de ejemplos del mundo real, software útil y explicaciones fáciles de entender. Ideal tanto para novatos como para profesionales experimentados que buscan fortalecer sus defensas de ciberseguridad.
 
 ### Escenarios Comúnmente Usados
 
@@ -29,10 +29,10 @@ El Triángulo CIA es un modelo ampliamente reconocido en el campo de la segurida
 
 1. **STRIDE**: Desarrollado por Microsoft, STRIDE es un acrónimo de **Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege**. Cada categoría representa un tipo de amenaza, y esta metodología se utiliza comúnmente en la fase de diseño de un programa o sistema para identificar amenazas potenciales.
 2. **DREAD**: Esta es otra metodología de Microsoft utilizada para la evaluación de riesgos de amenazas identificadas. DREAD significa **Damage potential, Reproducibility, Exploitability, Affected users, and Discoverability**. Cada uno de estos factores se puntúa, y el resultado se utiliza para priorizar las amenazas identificadas.
-3. **PASTA** (Proceso de Simulación de Ataques y Análisis de Amenazas): Esta es una metodología de siete pasos, **centrada en el riesgo**. Incluye la definición e identificación de objetivos de seguridad, la creación de un alcance técnico, la descomposición de la aplicación, el análisis de amenazas, el análisis de vulnerabilidades y la evaluación de riesgos/triage.
+3. **PASTA** (Proceso para Simulación de Ataques y Análisis de Amenazas): Esta es una metodología de siete pasos, **centrada en el riesgo**. Incluye la definición e identificación de objetivos de seguridad, la creación de un alcance técnico, la descomposición de la aplicación, el análisis de amenazas, el análisis de vulnerabilidades y la evaluación de riesgos/triage.
 4. **Trike**: Esta es una metodología basada en riesgos que se centra en defender activos. Comienza desde una perspectiva de **gestión de riesgos** y examina amenazas y vulnerabilidades en ese contexto.
 5. **VAST** (Modelado de Amenazas Visual, Ágil y Simple): Este enfoque busca ser más accesible e integrarse en entornos de desarrollo ágil. Combina elementos de las otras metodologías y se centra en **representaciones visuales de amenazas**.
-6. **OCTAVE** (Evaluación de Amenazas, Activos y Vulnerabilidades Críticos Operacionales): Desarrollado por el Centro de Coordinación CERT, este marco está orientado a **la evaluación de riesgos organizacionales en lugar de sistemas o software específicos**.
+6. **OCTAVE** (Evaluación de Amenazas, Activos y Vulnerabilidades Críticos Operacionalmente): Desarrollado por el Centro de Coordinación CERT, este marco está orientado a **la evaluación de riesgos organizacionales en lugar de sistemas o software específicos**.
 
 ## Herramientas
 
@@ -40,7 +40,7 @@ Hay varias herramientas y soluciones de software disponibles que pueden **asisti
 
 ### [SpiderSuite](https://github.com/3nock/SpiderSuite)
 
-Un avanzado spider/crawler GUI multiplataforma y multifuncional para profesionales de ciberseguridad. Spider Suite se puede utilizar para el mapeo y análisis de la superficie de ataque.
+Una avanzada GUI de múltiples características y multiplataforma para profesionales de ciberseguridad. Spider Suite se puede utilizar para el mapeo y análisis de la superficie de ataque.
 
 **Uso**
 
@@ -86,7 +86,7 @@ Solo un poco de explicación sobre las entidades:
 - Actor (Una persona como un visitante del sitio web, usuario o administrador)
 - Línea de flujo de datos (Indicador de interacción)
 - Límite de confianza (Diferentes segmentos o ámbitos de red.)
-- Almacenar (Cosas donde se almacenan los datos, como bases de datos)
+- Almacenar (Cosas donde se almacenan los datos como bases de datos)
 
 5. Crear una amenaza (Paso 1)
 
@@ -113,4 +113,4 @@ Ahora tu modelo terminado debería verse algo así. Y así es como haces un mode
 Esta es una herramienta gratuita de Microsoft que ayuda a encontrar amenazas en la fase de diseño de proyectos de software. Utiliza la metodología STRIDE y es particularmente adecuada para aquellos que desarrollan en la pila de Microsoft.
 
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../banners/hacktricks-training.md}}

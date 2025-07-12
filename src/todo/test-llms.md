@@ -1,6 +1,6 @@
 # Prueba LLMs
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../banners/hacktricks-training.md}}
 
 ## Ejecutar y entrenar modelos localmente
 
@@ -38,7 +38,7 @@ Ofrece varias secciones como:
 
 ## [**TensorFlow Hub**](https://www.tensorflow.org/hub) **&** [**Kaggle**](https://www.kaggle.com/)
 
-**TensorFlow Hub** es un repositorio integral de módulos reutilizables de aprendizaje automático desarrollados por Google. Se centra en facilitar la compartición y despliegue de modelos de aprendizaje automático, especialmente aquellos construidos con TensorFlow.
+**TensorFlow Hub** es un repositorio integral de módulos de aprendizaje automático reutilizables desarrollados por Google. Se centra en facilitar la compartición y despliegue de modelos de aprendizaje automático, especialmente aquellos construidos con TensorFlow.
 
 * **Módulos:** Una vasta colección de modelos preentrenados y componentes de modelos donde los usuarios pueden explorar, descargar e integrar módulos para tareas como clasificación de imágenes, incrustación de texto y más.
 * **Tutoriales:** Guías y ejemplos paso a paso que ayudan a los usuarios a entender cómo implementar y ajustar modelos utilizando TensorFlow Hub.
@@ -51,4 +51,4 @@ Ofrece varias secciones como:
 * **Modelos:** Un repositorio de modelos de aprendizaje automático contribuidos por la comunidad que los usuarios pueden explorar, probar e integrar modelos en sus aplicaciones con un esfuerzo mínimo.
 * **Acceso a API:** APIs simples para ejecutar modelos que permiten a los desarrolladores desplegar y escalar modelos sin esfuerzo dentro de sus propias aplicaciones.
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../banners/hacktricks-training.md}}

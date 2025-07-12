@@ -1,10 +1,10 @@
 # El Protocolo Modbus
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../banners/hacktricks-training.md}}
 
 ## Introducción al Protocolo Modbus
 
-El protocolo Modbus es un protocolo ampliamente utilizado en la Automatización Industrial y los Sistemas de Control. Modbus permite la comunicación entre varios dispositivos como controladores lógicos programables (PLC), sensores, actuadores y otros dispositivos industriales. Comprender el Protocolo Modbus es esencial, ya que este es el protocolo de comunicación más utilizado en los ICS y tiene una gran superficie de ataque potencial para el espionaje e incluso la inyección de comandos en los PLC.
+El protocolo Modbus es un protocolo ampliamente utilizado en Automatización Industrial y Sistemas de Control. Modbus permite la comunicación entre varios dispositivos como controladores lógicos programables (PLCs), sensores, actuadores y otros dispositivos industriales. Comprender el Protocolo Modbus es esencial, ya que este es el protocolo de comunicación más utilizado en los ICS y tiene una gran superficie de ataque potencial para el espionaje e incluso la inyección de comandos en los PLCs.
 
 Aquí, los conceptos se presentan de manera puntual proporcionando contexto sobre el protocolo y su naturaleza de operación. El mayor desafío en la seguridad de los sistemas ICS es el costo de implementación y actualización. Estos protocolos y estándares fueron diseñados a principios de los años 80 y 90, que todavía se utilizan ampliamente. Dado que una industria tiene muchos dispositivos y conexiones, actualizar los dispositivos es muy difícil, lo que proporciona a los hackers una ventaja al tratar con protocolos obsoletos. Los ataques a Modbus son prácticamente inevitables, ya que se va a utilizar sin actualización y su operación es crítica para la industria.
 
@@ -22,7 +22,7 @@ Los datos se transmiten en el protocolo Modbus como ASCII o Binario, aunque el f
 
 ## Códigos de Función
 
-El Protocolo ModBus funciona con la transmisión de códigos de función específicos que se utilizan para operar los PLC y varios dispositivos de control. Esta parte es importante de entender, ya que los ataques de repetición se pueden realizar retransmitiendo códigos de función. Los dispositivos heredados no admiten ninguna encriptación para la transmisión de datos y generalmente tienen cables largos que los conectan, lo que resulta en la manipulación de estos cables y la captura/inyección de datos.
+El Protocolo ModBus funciona con la transmisión de códigos de función específicos que se utilizan para operar los PLCs y varios dispositivos de control. Esta parte es importante de entender, ya que los ataques de repetición pueden realizarse retransmitiendo códigos de función. Los dispositivos heredados no admiten ninguna encriptación para la transmisión de datos y generalmente tienen cables largos que los conectan, lo que resulta en la manipulación de estos cables y la captura/inyección de datos.
 
 ## Direccionamiento de Modbus
 
@@ -32,4 +32,4 @@ Además, Modbus también implementa verificaciones de errores para garantizar la
 
 Debido a su uso a gran escala y la falta de actualizaciones, atacar Modbus proporciona una ventaja significativa con su superficie de ataque. Los ICS dependen en gran medida de la comunicación entre dispositivos y cualquier ataque realizado sobre ellos puede ser peligroso para la operación de los sistemas industriales. Ataques como repetición, inyección de datos, espionaje de datos y filtraciones, Denegación de Servicio, falsificación de datos, etc. pueden llevarse a cabo si el medio de transmisión es identificado por el atacante.
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../banners/hacktricks-training.md}}

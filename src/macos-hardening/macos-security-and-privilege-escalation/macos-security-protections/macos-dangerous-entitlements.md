@@ -137,7 +137,7 @@ Este derecho permite **sobrescribir o parchear código C**, usar el obsoleto **`
 Este derecho permite **modificar secciones de sus propios archivos ejecutables** en disco para salir forzosamente. Consulta [**esto para más información**](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_disable-executable-page-protection).
 
 > [!CAUTION]
-> El Derecho de Desactivar la Protección de Memoria Ejecutable es un derecho extremo que elimina una protección de seguridad fundamental de tu aplicación, lo que permite a un atacante reescribir el código ejecutable de tu aplicación sin ser detectado. Prefiere derechos más restringidos si es posible.
+> El Derecho a Desactivar la Protección de Memoria Ejecutable es un derecho extremo que elimina una protección de seguridad fundamental de tu aplicación, lo que permite a un atacante reescribir el código ejecutable de tu aplicación sin ser detectado. Prefiere derechos más restringidos si es posible.
 
 ### `com.apple.security.cs.allow-relative-library-loads`
 
@@ -160,11 +160,11 @@ Permitir que el proceso **pida todos los permisos de TCC**.
 
 ### **`kTCCServicePostEvent`**
 
-{{#include ../../../banners/hacktricks-training.md}}
+
 
 </details>
 
 
 
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../../banners/hacktricks-training.md}}

@@ -1,6 +1,6 @@
-# LLM Training - Preparación de Datos
+# Entrenamiento de LLM - Preparación de Datos
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../banners/hacktricks-training.md}}
 
 **Estas son mis notas del libro muy recomendado** [**https://www.manning.com/books/build-a-large-language-model-from-scratch**](https://www.manning.com/books/build-a-large-language-model-from-scratch) **con información adicional.**
 
@@ -36,7 +36,7 @@ Deberías comenzar leyendo esta publicación para algunos conceptos básicos que
 > El objetivo de esta tercera fase es muy simple: **Asignar a cada uno de los tokens anteriores en el vocabulario un vector de las dimensiones deseadas para entrenar el modelo.** Cada palabra en el vocabulario será un punto en un espacio de X dimensiones.\
 > Ten en cuenta que inicialmente la posición de cada palabra en el espacio se inicializa "aleatoriamente" y estas posiciones son parámetros entrenables (se mejorarán durante el entrenamiento).
 >
-> Además, durante el embedding de tokens **se crea otra capa de embeddings** que representa (en este caso) la **posición absoluta de la palabra en la oración de entrenamiento**. De esta manera, una palabra en diferentes posiciones en la oración tendrá una representación diferente (significado).
+> Además, durante el embedding de tokens **se crea otra capa de embeddings** que representa (en este caso) la **posición absoluta de la palabra en la oración de entrenamiento**. De esta manera, una palabra en diferentes posiciones en la oración tendrá una representación (significado) diferente.
 
 {{#ref}}
 3.-token-embeddings.md
@@ -52,7 +52,7 @@ Deberías comenzar leyendo esta publicación para algunos conceptos básicos que
 4.-attention-mechanisms.md
 {{#endref}}
 
-## 5. Arquitectura del LLM
+## 5. Arquitectura de LLM
 
 > [!TIP]
 > El objetivo de esta quinta fase es muy simple: **Desarrollar la arquitectura del LLM completo**. Juntar todo, aplicar todas las capas y crear todas las funciones para generar texto o transformar texto a IDs y viceversa.
@@ -99,4 +99,4 @@ Deberías comenzar leyendo esta publicación para algunos conceptos básicos que
 7.2.-fine-tuning-to-follow-instructions.md
 {{#endref}}
 
-{{#include /banners/hacktricks-training.md}}
+{{#include ../../banners/hacktricks-training.md}}
