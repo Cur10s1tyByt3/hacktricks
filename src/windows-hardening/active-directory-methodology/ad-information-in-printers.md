@@ -17,7 +17,7 @@ Algunos blogs introductorios sobre el tema:
 ---
 ## Configuración de la Impresora
 
-- **Ubicación**: La lista de servidores LDAP generalmente se encuentra en la interfaz web (por ejemplo, *Red ➜ Configuración de LDAP ➜ Configuración de LDAP*).
+- **Ubicación**: La lista de servidores LDAP generalmente se encuentra en la interfaz web (por ejemplo, *Red ➜ Configuración LDAP ➜ Configuración de LDAP*).
 - **Comportamiento**: Muchos servidores web integrados permiten modificaciones del servidor LDAP **sin volver a ingresar credenciales** (característica de usabilidad → riesgo de seguridad).
 - **Explotar**: Redirigir la dirección del servidor LDAP a un host controlado por el atacante y usar el botón *Probar Conexión* / *Sincronización de Libreta de Direcciones* para forzar a la impresora a vincularse contigo.
 
@@ -28,7 +28,7 @@ Algunos blogs introductorios sobre el tema:
 ```bash
 sudo nc -k -v -l -p 389     # LDAPS → 636 (or 3269)
 ```
-Pequeños/antiguos MFPs pueden enviar un *simple-bind* simple en texto claro que netcat puede capturar. Los dispositivos modernos generalmente realizan una consulta anónima primero y luego intentan el bind, por lo que los resultados varían.
+Small/old MFPs pueden enviar un *simple-bind* en texto claro que netcat puede capturar. Los dispositivos modernos generalmente realizan una consulta anónima primero y luego intentan el bind, por lo que los resultados varían.
 
 ### Método 2 – Servidor LDAP rogue completo (recomendado)
 
@@ -55,7 +55,7 @@ El pass-back *no* es un problema teórico: los proveedores siguen publicando avi
 El firmware ≤ 57.69.91 de las MFP Xerox VersaLink C70xx permitió a un administrador autenticado (o a cualquiera cuando las credenciales predeterminadas permanecen) hacer lo siguiente:
 
 * **CVE-2024-12510 – LDAP pass-back**: cambiar la dirección del servidor LDAP y activar una búsqueda, lo que provoca que el dispositivo filtre las credenciales de Windows configuradas al host controlado por el atacante.
-* **CVE-2024-12511 – SMB/FTP pass-back**: problema idéntico a través de destinos de *scan-to-folder*, filtrando credenciales en texto claro de NetNTLMv2 o FTP.
+* **CVE-2024-12511 – SMB/FTP pass-back**: problema idéntico a través de destinos de *scan-to-folder*, filtrando credenciales NetNTLMv2 o credenciales FTP en texto claro.
 
 Un simple listener como:
 ```bash
@@ -91,7 +91,7 @@ La guía del proveedor recomienda explícitamente:
 3. **Restringir el Acceso de Gestión** – colocar las interfaces web/IPP/SNMP de la impresora en una VLAN de gestión o detrás de un ACL/VPN.
 4. **Deshabilitar Protocolos No Utilizados** – FTP, Telnet, raw-9100, cifrados SSL más antiguos.
 5. **Habilitar Registro de Auditoría** – algunos dispositivos pueden syslog fallos de LDAP/SMTP; correlacionar enlaces inesperados.
-6. **Monitorear enlaces LDAP en texto claro** de fuentes inusuales (las impresoras normalmente solo deben comunicarse con DCs).
+6. **Monitorear enlaces LDAP en texto claro** de fuentes inusuales (las impresoras normalmente solo deben comunicarse con los DCs).
 7. **SNMPv3 o deshabilitar SNMP** – la comunidad `public` a menudo filtra la configuración del dispositivo y LDAP.
 
 ---
