@@ -15,7 +15,7 @@ Apple parcheó dos errores de corrupción de memoria que fueron explotados activ
 
 * **CVE-2024-23225 – Kernel**
 • Escritura fuera de límites en el subsistema de memoria virtual XNU permite a un proceso no privilegiado obtener lectura/escritura arbitraria en el espacio de direcciones del kernel, eludiendo PAC/KTRR.
-• Activado desde el espacio de usuario a través de un mensaje XPC manipulado que desborda un búfer en `libxpc`, luego pivota al kernel cuando se analiza el mensaje.
+• Activado desde el espacio de usuario a través de un mensaje XPC diseñado que desborda un búfer en `libxpc`, luego pivota al kernel cuando se analiza el mensaje.
 * **CVE-2024-23296 – RTKit**
 • Corrupción de memoria en el RTKit de Apple Silicon (coprocesador en tiempo real).
 • Las cadenas de explotación observadas utilizaron CVE-2024-23225 para R/W del kernel y CVE-2024-23296 para escapar del sandbox del coprocesador seguro y deshabilitar PAC.
@@ -55,7 +55,7 @@ Exploits públicos aprovechan el error al:
 
 ## 2024-2025: Bypass de SIP a través de Kexts de terceros – CVE-2024-44243 (también conocido como “Sigma”)
 
-Investigadores de seguridad de Microsoft demostraron que el demonio de alto privilegio `storagekitd` puede ser forzado a cargar una **extensión de kernel no firmada** y así deshabilitar completamente la **Protección de Integridad del Sistema (SIP)** en macOS completamente parcheado (anterior a 15.2). El flujo del ataque es:
+Investigadores de seguridad de Microsoft demostraron que el demonio de alto privilegio `storagekitd` puede ser forzado a cargar una **extensión de kernel no firmada** y así deshabilitar completamente la **Protección de Integridad del Sistema (SIP)** en macOS completamente parcheado (anterior a 15.2). El flujo de ataque es:
 
 1. Abusar del derecho privado `com.apple.storagekitd.kernel-management` para generar un ayudante bajo el control del atacante.
 2. El ayudante llama a `IOService::AddPersonalitiesFromKernelModule` con un diccionario de información elaborado que apunta a un paquete de kext malicioso.
