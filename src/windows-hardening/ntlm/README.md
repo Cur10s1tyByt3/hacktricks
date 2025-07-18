@@ -78,7 +78,7 @@ El **hash NT (16bytes)** se divide en **3 partes de 7bytes cada una** (7B + 7B +
 
 Hoy en día es cada vez menos común encontrar entornos con Delegación No Restringida configurada, pero esto no significa que no puedas **abusar de un servicio de Print Spooler** configurado.
 
-Podrías abusar de algunas credenciales/sesiones que ya tienes en el AD para **pedir a la impresora que se autentique** contra algún **host bajo tu control**. Luego, usando `metasploit auxiliary/server/capture/smb` o `responder` puedes **establecer el reto de autenticación a 1122334455667788**, capturar el intento de autenticación, y si se realizó usando **NTLMv1** podrás **crackearlo**.\
+Podrías abusar de algunas credenciales/sesiones que ya tienes en el AD para **pedir a la impresora que se autentique** contra algún **host bajo tu control**. Luego, usando `metasploit auxiliary/server/capture/smb` o `responder` puedes **configurar el reto de autenticación a 1122334455667788**, capturar el intento de autenticación, y si se realizó usando **NTLMv1** podrás **crackearlo**.\
 Si estás usando `responder` podrías intentar **usar la bandera `--lm`** para intentar **degradar** la **autenticación**.\
 _Ten en cuenta que para esta técnica la autenticación debe realizarse usando NTLMv1 (NTLMv2 no es válido)._
 
@@ -167,7 +167,7 @@ Si tienes un **pcap que ha capturado un proceso de autenticación exitoso**, pue
 ## Pass-the-Hash
 
 **Una vez que tengas el hash de la víctima**, puedes usarlo para **suplantarla**.\
-Necesitas usar una **herramienta** que **realice** la **autenticación NTLM usando** ese **hash**, **o** podrías crear un nuevo **sessionlogon** e **inyectar** ese **hash** dentro de **LSASS**, de modo que cuando se realice cualquier **autenticación NTLM**, ese **hash será utilizado.** La última opción es lo que hace mimikatz.
+Necesitas usar una **herramienta** que **realice** la **autenticación NTLM usando** ese **hash**, **o** podrías crear un nuevo **sessionlogon** e **inyectar** ese **hash** dentro del **LSASS**, de modo que cuando se realice cualquier **autenticación NTLM**, ese **hash será utilizado.** La última opción es lo que hace mimikatz.
 
 **Por favor, recuerda que también puedes realizar ataques Pass-the-Hash usando cuentas de computadora.**
 
@@ -223,7 +223,7 @@ Invoke-TheHash -Type WMIExec -Target 192.168.100.0/24 -TargetExclude 192.168.100
 
 ### Windows Credentials Editor (WCE)
 
-**Debe ejecutarse como administrador**
+**Necesita ejecutarse como administrador**
 
 Esta herramienta hará lo mismo que mimikatz (modificar la memoria de LSASS).
 ```
@@ -241,7 +241,7 @@ wce.exe -s <username>:<domain>:<hash_lm>:<hash_nt>
 
 ## Ataque de Monólogo Interno
 
-El Ataque de Monólogo Interno es una técnica sigilosa de extracción de credenciales que permite a un atacante recuperar hashes NTLM de la máquina de una víctima **sin interactuar directamente con el proceso LSASS**. A diferencia de Mimikatz, que lee hashes directamente de la memoria y es frecuentemente bloqueado por soluciones de seguridad de endpoint o Credential Guard, este ataque aprovecha **llamadas locales al paquete de autenticación NTLM (MSV1_0) a través de la Interfaz de Proveedor de Soporte de Seguridad (SSPI)**. El atacante primero **reduce la configuración de NTLM** (por ejemplo, LMCompatibilityLevel, NTLMMinClientSec, RestrictSendingNTLMTraffic) para asegurarse de que se permita NetNTLMv1. Luego, impersona tokens de usuario existentes obtenidos de procesos en ejecución y activa la autenticación NTLM localmente para generar respuestas NetNTLMv1 utilizando un desafío conocido.
+El Ataque de Monólogo Interno es una técnica sigilosa de extracción de credenciales que permite a un atacante recuperar hashes NTLM de la máquina de una víctima **sin interactuar directamente con el proceso LSASS**. A diferencia de Mimikatz, que lee hashes directamente de la memoria y es frecuentemente bloqueado por soluciones de seguridad de endpoints o Credential Guard, este ataque aprovecha **llamadas locales al paquete de autenticación NTLM (MSV1_0) a través de la Interfaz de Proveedor de Soporte de Seguridad (SSPI)**. El atacante primero **reduce la configuración de NTLM** (por ejemplo, LMCompatibilityLevel, NTLMMinClientSec, RestrictSendingNTLMTraffic) para asegurarse de que se permita NetNTLMv1. Luego, impersona tokens de usuario existentes obtenidos de procesos en ejecución y activa la autenticación NTLM localmente para generar respuestas NetNTLMv1 utilizando un desafío conocido.
 
 Después de capturar estas respuestas NetNTLMv1, el atacante puede recuperar rápidamente los hashes NTLM originales utilizando **tablas arcoíris precomputadas**, lo que permite ataques adicionales de Pass-the-Hash para movimiento lateral. Crucialmente, el Ataque de Monólogo Interno permanece sigiloso porque no genera tráfico de red, inyecta código ni activa volcado de memoria directa, lo que lo hace más difícil de detectar para los defensores en comparación con métodos tradicionales como Mimikatz.
 
@@ -256,7 +256,7 @@ El PoC se puede encontrar en **[https://github.com/eladshamir/Internal-Monologue
 **Lee una guía más detallada sobre cómo realizar esos ataques aquí:**
 
 {{#ref}}
-../../generic-methodologies-and-resources/pentesting-network/`spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md`
+../../generic-methodologies-and-resources/pentesting-network/spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md
 {{#endref}}
 
 ## Analizar desafíos NTLM de una captura de red
@@ -270,7 +270,7 @@ Windows contiene varias mitigaciones que intentan prevenir ataques de *reflejo* 
 Microsoft rompió la mayoría de las cadenas públicas con MS08-068 (SMB→SMB), MS09-013 (HTTP→SMB), MS15-076 (DCOM→DCOM) y parches posteriores, sin embargo **CVE-2025-33073** muestra que las protecciones aún pueden ser eludidas abusando de cómo el **cliente SMB trunca los Nombres de Principales de Servicio (SPNs)** que contienen información de destino *marshalled* (serializada).
 
 ### Resumen del error
-1. Un atacante registra un **registro A de DNS** cuyo etiqueta codifica un SPN marshalled – por ejemplo:
+1. Un atacante registra un **registro A de DNS** cuyo etiqueta codifica un SPN marshalled – por ejemplo,
 `srv11UWhRCAAAAAAAAAAAAAAAAAAAAAAAAAAAAwbEAYBAAAA → 10.10.10.50`
 2. La víctima es coaccionada a autenticarse a ese nombre de host (PetitPotam, DFSCoerce, etc.).
 3. Cuando el cliente SMB pasa la cadena de destino `cifs/srv11UWhRCAAAAA…` a `lsasrv!LsapCheckMarshalledTargetInfo`, la llamada a `CredUnmarshalTargetInfo` **elimina** el blob serializado, dejando **`cifs/srv1`**.
@@ -303,10 +303,10 @@ krbrelayx.py -t TARGET.DOMAIN.LOCAL -smb2support
 ### Ideas de detección
 * Capturas de red con `NTLMSSP_NEGOTIATE_LOCAL_CALL` donde la IP del cliente ≠ la IP del servidor.
 * Kerberos AP-REQ que contenga una clave de subsesión y un principal de cliente igual al nombre del host.
-* Inicios de sesión del sistema Windows Event 4624/4648 seguidos inmediatamente por escrituras SMB remotas desde el mismo host.
+* Inicios de sesión del sistema en el registro de eventos de Windows 4624/4648 seguidos inmediatamente por escrituras remotas SMB desde el mismo host.
 
 ## Referencias
-* [Synacktiv – NTLM Reflection is Dead, Long Live NTLM Reflection!](https://www.synacktiv.com/en/publications/la-reflexion-ntlm-est-morte-vive-la-reflexion-ntlm-analyse-approfondie-de-la-cve-2025.html)
+* [NTLM Reflection is Dead, Long Live NTLM Reflection!](https://www.synacktiv.com/en/publications/la-reflexion-ntlm-est-morte-vive-la-reflexion-ntlm-analyse-approfondie-de-la-cve-2025.html)
 * [MSRC – CVE-2025-33073](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-33073)
 
 {{#include ../../banners/hacktricks-training.md}}
