@@ -26,7 +26,7 @@ Vous pouvez vérifier et configurer quel protocole sera utilisé :
 
 ### GUI
 
-Exécutez _secpol.msc_ -> Politiques locales -> Options de sécurité -> Sécurité réseau : niveau d'authentification LAN Manager. Il y a 6 niveaux (de 0 à 5).
+Exécutez _secpol.msc_ -> Politiques locales -> Options de sécurité -> Sécurité du réseau : niveau d'authentification LAN Manager. Il y a 6 niveaux (de 0 à 5).
 
 ![](<../../images/image (919).png>)
 
@@ -64,7 +64,7 @@ L'authentification est comme celle mentionnée **avant mais** le **serveur** con
 
 La **longueur du défi est de 8 octets** et la **réponse fait 24 octets** de long.
 
-Le **hachage NT (16 octets)** est divisé en **3 parties de 7 octets chacune** (7B + 7B + (2B+0x00\*5)): la **dernière partie est remplie de zéros**. Ensuite, le **défi** est **chiffré séparément** avec chaque partie et les **octets chiffrés résultants sont joints**. Total : 8B + 8B + 8B = 24 Octets.
+Le **hachage NT (16 octets)** est divisé en **3 parties de 7 octets chacune** (7B + 7B + (2B+0x00\*5)): la **dernière partie est remplie de zéros**. Ensuite, le **défi** est **chiffré séparément** avec chaque partie et les **octets chiffrés résultants sont joints**. Total : 8B + 8B + 8B = 24 octets.
 
 **Problèmes** :
 
@@ -78,7 +78,7 @@ Le **hachage NT (16 octets)** est divisé en **3 parties de 7 octets chacune** (
 
 De nos jours, il devient moins courant de trouver des environnements avec une délégation non contrainte configurée, mais cela ne signifie pas que vous ne pouvez pas **abuser d'un service de spooler d'impression** configuré.
 
-Vous pourriez abuser de certains identifiants/sessions que vous avez déjà sur l'AD pour **demander à l'imprimante de s'authentifier** contre un **hôte sous votre contrôle**. Ensuite, en utilisant `metasploit auxiliary/server/capture/smb` ou `responder`, vous pouvez **définir le défi d'authentification à 1122334455667788**, capturer la tentative d'authentification, et si cela a été fait en utilisant **NTLMv1**, vous pourrez **le casser**.\
+Vous pourriez abuser de certains identifiants/sessions que vous avez déjà sur l'AD pour **demander à l'imprimante de s'authentifier** contre un **hôte sous votre contrôle**. Ensuite, en utilisant `metasploit auxiliary/server/capture/smb` ou `responder`, vous pouvez **définir le défi d'authentification à 1122334455667788**, capturer la tentative d'authentification, et si elle a été effectuée en utilisant **NTLMv1**, vous pourrez **le casser**.\
 Si vous utilisez `responder`, vous pourriez essayer d'**utiliser le drapeau `--lm`** pour essayer de **rétrograder** l'**authentification**.\
 _Remarque : pour cette technique, l'authentification doit être effectuée en utilisant NTLMv1 (NTLMv2 n'est pas valide)._
 
@@ -86,7 +86,7 @@ N'oubliez pas que l'imprimante utilisera le compte de l'ordinateur pendant l'aut
 
 ### Attaque NTLMv1 avec hashcat
 
-NTLMv1 peut également être cassé avec le NTLMv1 Multi Tool [https://github.com/evilmog/ntlmv1-multi](https://github.com/evilmog/ntlmv1-multi) qui formate les messages NTLMv1 d'une manière qui peut être cassée avec hashcat.
+NTLMv1 peut également être cassé avec l'outil NTLMv1 Multi [https://github.com/evilmog/ntlmv1-multi](https://github.com/evilmog/ntlmv1-multi) qui formate les messages NTLMv1 d'une manière qui peut être cassée avec hashcat.
 
 La commande
 ```bash
@@ -144,13 +144,13 @@ b4b9b02e6f09a9 # this is part 1
 ./hashcat-utils/src/deskey_to_ntlm.pl bcba83e6895b9d
 bd760f388b6700 # this is part 2
 ```
-It seems that you haven't provided the text you want translated. Please share the relevant English text, and I'll be happy to translate it to French for you.
+It seems that you haven't provided the text you want to be translated. Please share the relevant English text, and I'll be happy to translate it to French for you.
 ```bash
 ./hashcat-utils/src/ct3_to_ntlm.bin BB23EF89F50FC595 1122334455667788
 
 586c # this is the last part
 ```
-Please provide the text you would like me to translate.
+I'm sorry, but I need the specific text you would like me to translate in order to assist you. Please provide the content you want translated.
 ```bash
 NTHASH=b4b9b02e6f09a9bd760f388b6700586c
 ```
@@ -177,7 +177,7 @@ Vous devez utiliser un **outil** qui va **effectuer** l'**authentification NTLM 
 ```bash
 Invoke-Mimikatz -Command '"sekurlsa::pth /user:username /domain:domain.tld /ntlm:NTLMhash /run:powershell.exe"'
 ```
-Cela lancera un processus qui appartiendra aux utilisateurs ayant lancé mimikatz, mais en interne dans LSASS, les identifiants sauvegardés sont ceux à l'intérieur des paramètres de mimikatz. Ensuite, vous pouvez accéder aux ressources réseau comme si vous étiez cet utilisateur (similaire à la méthode `runas /netonly`, mais vous n'avez pas besoin de connaître le mot de passe en clair).
+Cela lancera un processus qui appartiendra aux utilisateurs ayant lancé mimikatz, mais en interne dans LSASS, les identifiants enregistrés sont ceux à l'intérieur des paramètres de mimikatz. Ensuite, vous pouvez accéder aux ressources réseau comme si vous étiez cet utilisateur (similaire à l'astuce `runas /netonly`, mais vous n'avez pas besoin de connaître le mot de passe en clair).
 
 ### Pass-the-Hash depuis Linux
 
@@ -191,7 +191,7 @@ Vous pouvez télécharger [les binaires impacket pour Windows ici](https://githu
 - **psexec_windows.exe** `C:\AD\MyTools\psexec_windows.exe -hashes ":b38ff50264b74508085d82c69794a4d8" svcadmin@dcorp-mgmt.my.domain.local`
 - **wmiexec.exe** `wmiexec_windows.exe -hashes ":b38ff50264b74508085d82c69794a4d8" svcadmin@dcorp-mgmt.dollarcorp.moneycorp.local`
 - **atexec.exe** (Dans ce cas, vous devez spécifier une commande, cmd.exe et powershell.exe ne sont pas valides pour obtenir un shell interactif) `C:\AD\MyTools\atexec_windows.exe -hashes ":b38ff50264b74508085d82c69794a4d8" svcadmin@dcorp-mgmt.dollarcorp.moneycorp.local 'whoami'`
-- Il y a plusieurs autres binaires Impacket...
+- Il existe plusieurs autres binaires Impacket...
 
 ### Invoke-TheHash
 
@@ -241,13 +241,13 @@ wce.exe -s <username>:<domain>:<hash_lm>:<hash_nt>
 
 ## Attaque de Monologue Interne
 
-L'attaque de Monologue Interne est une technique d'extraction de crédentiels discrète qui permet à un attaquant de récupérer des hachages NTLM depuis la machine d'une victime **sans interagir directement avec le processus LSASS**. Contrairement à Mimikatz, qui lit les hachages directement depuis la mémoire et est souvent bloqué par des solutions de sécurité des points de terminaison ou Credential Guard, cette attaque exploite **des appels locaux au package d'authentification NTLM (MSV1_0) via l'Interface de Fournisseur de Support de Sécurité (SSPI)**. L'attaquant commence par **rétrograder les paramètres NTLM** (par exemple, LMCompatibilityLevel, NTLMMinClientSec, RestrictSendingNTLMTraffic) pour s'assurer que NetNTLMv1 est autorisé. Il imite ensuite des jetons d'utilisateur existants obtenus à partir de processus en cours d'exécution et déclenche l'authentification NTLM localement pour générer des réponses NetNTLMv1 en utilisant un défi connu.
+L'attaque de Monologue Interne est une technique d'extraction de crédentiels discrète qui permet à un attaquant de récupérer des hachages NTLM depuis la machine d'une victime **sans interagir directement avec le processus LSASS**. Contrairement à Mimikatz, qui lit les hachages directement depuis la mémoire et est souvent bloqué par des solutions de sécurité des points de terminaison ou Credential Guard, cette attaque exploite **des appels locaux au package d'authentification NTLM (MSV1_0) via l'Interface de Fournisseur de Support de Sécurité (SSPI)**. L'attaquant commence par **rétrograder les paramètres NTLM** (par exemple, LMCompatibilityLevel, NTLMMinClientSec, RestrictSendingNTLMTraffic) pour s'assurer que NetNTLMv1 est autorisé. Il se fait ensuite passer pour des jetons d'utilisateur existants obtenus à partir de processus en cours d'exécution et déclenche l'authentification NTLM localement pour générer des réponses NetNTLMv1 en utilisant un défi connu.
 
 Après avoir capturé ces réponses NetNTLMv1, l'attaquant peut rapidement récupérer les hachages NTLM d'origine en utilisant **des tables arc-en-ciel précalculées**, permettant d'autres attaques Pass-the-Hash pour le mouvement latéral. Il est crucial de noter que l'attaque de Monologue Interne reste discrète car elle ne génère pas de trafic réseau, n'injecte pas de code et ne déclenche pas de vidages de mémoire directs, ce qui la rend plus difficile à détecter pour les défenseurs par rapport aux méthodes traditionnelles comme Mimikatz.
 
-Si NetNTLMv1 n'est pas accepté—en raison de politiques de sécurité appliquées, alors l'attaquant peut échouer à récupérer une réponse NetNTLMv1.
+Si NetNTLMv1 n'est pas accepté—en raison de politiques de sécurité imposées, alors l'attaquant peut échouer à récupérer une réponse NetNTLMv1.
 
-Pour gérer ce cas, l'outil Monologue Interne a été mis à jour : il acquiert dynamiquement un jeton de serveur en utilisant `AcceptSecurityContext()` pour toujours **capturer les réponses NetNTLMv2** si NetNTLMv1 échoue. Bien que NetNTLMv2 soit beaucoup plus difficile à craquer, il ouvre toujours une voie pour des attaques de relais ou des attaques par force brute hors ligne dans des cas limités.
+Pour gérer ce cas, l'outil Monologue Interne a été mis à jour : il acquiert dynamiquement un jeton de serveur en utilisant `AcceptSecurityContext()` pour toujours **capturer les réponses NetNTLMv2** si NetNTLMv1 échoue. Bien que NetNTLMv2 soit beaucoup plus difficile à casser, il ouvre toujours une voie pour des attaques de relais ou des attaques par force brute hors ligne dans des cas limités.
 
 Le PoC peut être trouvé dans **[https://github.com/eladshamir/Internal-Monologue](https://github.com/eladshamir/Internal-Monologue)**.
 
@@ -256,7 +256,7 @@ Le PoC peut être trouvé dans **[https://github.com/eladshamir/Internal-Monolog
 **Lisez un guide plus détaillé sur la façon de réaliser ces attaques ici :**
 
 {{#ref}}
-../../generic-methodologies-and-resources/pentesting-network/`spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md`
+../../generic-methodologies-and-resources/pentesting-network/spoofing-llmnr-nbt-ns-mdns-dns-and-wpad-and-relay-attacks.md
 {{#endref}}
 
 ## Analyser les défis NTLM à partir d'une capture réseau
@@ -297,8 +297,8 @@ krbrelayx.py -t TARGET.DOMAIN.LOCAL -smb2support
 ```
 ### Patch & Mitigations
 * Le correctif KB pour **CVE-2025-33073** ajoute une vérification dans `mrxsmb.sys::SmbCeCreateSrvCall` qui bloque toute connexion SMB dont la cible contient des informations marshallées (`CredUnmarshalTargetInfo` ≠ `STATUS_INVALID_PARAMETER`).
-* Appliquer **SMB signing** pour prévenir la réflexion même sur des hôtes non corrigés.
-* Surveiller les enregistrements DNS ressemblant à `*<base64>...*` et bloquer les vecteurs de coercition (PetitPotam, DFSCoerce, AuthIP...).
+* Appliquez **SMB signing** pour prévenir la réflexion même sur des hôtes non corrigés.
+* Surveillez les enregistrements DNS ressemblant à `*<base64>...*` et bloquez les vecteurs de coercition (PetitPotam, DFSCoerce, AuthIP...).
 
 ### Detection ideas
 * Captures réseau avec `NTLMSSP_NEGOTIATE_LOCAL_CALL` où l'IP du client ≠ l'IP du serveur.
@@ -306,7 +306,7 @@ krbrelayx.py -t TARGET.DOMAIN.LOCAL -smb2support
 * Connexions SYSTEM Windows Event 4624/4648 immédiatement suivies d'écritures SMB distantes depuis le même hôte.
 
 ## References
-* [Synacktiv – NTLM Reflection is Dead, Long Live NTLM Reflection!](https://www.synacktiv.com/en/publications/la-reflexion-ntlm-est-morte-vive-la-reflexion-ntlm-analyse-approfondie-de-la-cve-2025.html)
+* [NTLM Reflection is Dead, Long Live NTLM Reflection!](https://www.synacktiv.com/en/publications/la-reflexion-ntlm-est-morte-vive-la-reflexion-ntlm-analyse-approfondie-de-la-cve-2025.html)
 * [MSRC – CVE-2025-33073](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-33073)
 
 {{#include ../../banners/hacktricks-training.md}}
