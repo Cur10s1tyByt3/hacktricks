@@ -37,7 +37,7 @@ Esto es análogo a un *Golden Ticket* para cuentas de servicio.
 
 ### Fase 1 – Extraer la Clave Raíz KDS
 
-Volcar desde cualquier DC (Copia de Sombra de Volumen / colmenas SAM+SECURITY en bruto o secretos remotos):
+Volcado desde cualquier DC (Copia de Sombra de Volumen / colmenas SAM+SECURITY en bruto o secretos remotos):
 ```cmd
 reg save HKLM\SECURITY security.hive
 reg save HKLM\SYSTEM  system.hive
@@ -67,16 +67,16 @@ GoldendMSA.exe info -d example.local -m brute -r 5000 -u jdoe -p P@ssw0rd
 ### Fase 3 – Adivinar / Descubrir el ManagedPasswordID (cuando falta)
 
 Algunas implementaciones *eliminan* `msDS-ManagedPasswordId` de lecturas protegidas por ACL.  
-Debido a que el GUID es de 128 bits, el bruteforce ingenuo es inviable, pero:
+Debido a que el GUID es de 128 bits, el ataque de fuerza bruta ingenuo es inviable, pero:
 
 1. Los primeros **32 bits = tiempo de época Unix** de la creación de la cuenta (resolución en minutos).  
-2. Seguidos de 96 bits aleatorios.
+2. Seguidos por 96 bits aleatorios.
 
-Por lo tanto, una **lista de palabras estrecha por cuenta** (± pocas horas) es realista.
+Por lo tanto, una **lista de palabras estrecha por cuenta** (± unas pocas horas) es realista.
 ```powershell
 GoldendMSA.exe wordlist -s <SID> -d example.local -f example.local -k <KDSKeyGUID>
 ```
-La herramienta calcula contraseñas candidatas y compara su blob base64 con el atributo real `msDS-ManagedPassword` – la coincidencia revela el GUID correcto.
+La herramienta calcula contraseñas candidatas y compara su blob en base64 con el atributo real `msDS-ManagedPassword` – la coincidencia revela el GUID correcto.
 
 ### Fase 4 – Cálculo y Conversión de Contraseña Offline
 
