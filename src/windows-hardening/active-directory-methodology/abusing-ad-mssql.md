@@ -176,7 +176,7 @@ Vérifiez dans la page mentionnée dans la **section suivante comment le faire m
 
 ## Liens de Confiance MSSQL
 
-Si une instance MSSQL est de confiance (lien de base de données) par une autre instance MSSQL. Si l'utilisateur a des privilèges sur la base de données de confiance, il va pouvoir **utiliser la relation de confiance pour exécuter des requêtes également dans l'autre instance**. Ces confiances peuvent être enchaînées et à un moment donné, l'utilisateur pourrait être en mesure de trouver une base de données mal configurée où il peut exécuter des commandes.
+Si une instance MSSQL est de confiance (lien de base de données) par une autre instance MSSQL. Si l'utilisateur a des privilèges sur la base de données de confiance, il pourra **utiliser la relation de confiance pour exécuter des requêtes également dans l'autre instance**. Ces confiances peuvent être enchaînées et à un moment donné, l'utilisateur pourrait être en mesure de trouver une base de données mal configurée où il peut exécuter des commandes.
 
 **Les liens entre les bases de données fonctionnent même à travers les confiances de forêt.**
 
@@ -226,7 +226,7 @@ Vous pouvez facilement vérifier les liens de confiance en utilisant metasploit.
 msf> use exploit/windows/mssql/mssql_linkcrawler
 [msf> set DEPLOY true] #Set DEPLOY to true if you want to abuse the privileges to obtain a meterpreter session
 ```
-Remarquez que metasploit essaiera d'abuser uniquement de la fonction `openquery()` dans MSSQL (donc, si vous ne pouvez pas exécuter de commande avec `openquery()`, vous devrez essayer la méthode `EXECUTE` **manuellement** pour exécuter des commandes, voir plus ci-dessous.)
+Remarquez que metasploit essaiera d'abuser uniquement de la fonction `openquery()` dans MSSQL (donc, si vous ne pouvez pas exécuter de commande avec `openquery()`, vous devrez essayer la méthode `EXECUTE` **manuellement** pour exécuter des commandes, voir plus bas.)
 
 ### Manuel - Openquery()
 
@@ -268,7 +268,7 @@ Si vous ne pouvez pas effectuer d'actions comme `exec xp_cmdshell` depuis `openq
 
 ### Manuel - EXECUTE
 
-Vous pouvez également abuser des liens de confiance en utilisant `EXECUTE`:
+Vous pouvez également abuser des liens de confiance en utilisant `EXECUTE` :
 ```bash
 #Create user and give admin privileges
 EXECUTE('EXECUTE(''CREATE LOGIN hacker WITH PASSWORD = ''''P@ssword123.'''' '') AT "DOMINIO\SERVER1"') AT "DOMINIO\SERVER2"

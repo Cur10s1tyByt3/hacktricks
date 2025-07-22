@@ -77,7 +77,7 @@ Concentrez-vous sur les politiques :
 * **CollectionSettings** – Peut contenir des comptes d'exécution
 
 ### 3.3  Récupérer le corps complet
-Si vous avez déjà `PolicyID` et `PolicyVersion`, vous pouvez ignorer l'exigence de clientID en utilisant :
+Si vous avez déjà `PolicyID` & `PolicyVersion`, vous pouvez ignorer l'exigence de clientID en utilisant :
 ```sql
 EXEC MP_GetPolicyBody N'{083afd7a-b0be-4756-a4ce-c31825050325}', N'2.00';
 ```
@@ -109,7 +109,7 @@ Lors du relais, la connexion est mappée à :
 
 Ces rôles exposent des dizaines de permissions EXEC, les principales utilisées dans cette attaque sont :
 
-| Procédure stockée | But |
+| Procédure stockée | Objectif |
 |------------------|---------|
 | `MP_GetMachinePolicyAssignments` | Lister les politiques appliquées à un `clientID`. |
 | `MP_GetPolicyBody` / `MP_GetPolicyBodyAfterAuthorization` | Retourner le corps complet de la politique. |
