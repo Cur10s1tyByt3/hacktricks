@@ -3,13 +3,13 @@
 {{#include ../../banners/hacktricks-training.md}}
 
 ## TL;DR
-Al forzar un **System Center Configuration Manager (SCCM) Management Point (MP)** a autenticar a través de SMB/RPC y **retransmitir** esa cuenta de máquina NTLM a la **base de datos del sitio (MSSQL)** obtienes derechos `smsdbrole_MP` / `smsdbrole_MPUserSvc`. Estos roles te permiten llamar a un conjunto de procedimientos almacenados que exponen blobs de políticas de **Despliegue del Sistema Operativo (OSD)** (credenciales de la Cuenta de Acceso a la Red, variables de Secuencia de Tareas, etc.). Los blobs están codificados/encriptados en hexadecimales, pero pueden ser decodificados y desencriptados con **PXEthief**, obteniendo secretos en texto plano.
+Al forzar un **System Center Configuration Manager (SCCM) Management Point (MP)** a autenticar a través de SMB/RPC y **retransmitir** esa cuenta de máquina NTLM a la **base de datos del sitio (MSSQL)**, obtienes derechos `smsdbrole_MP` / `smsdbrole_MPUserSvc`. Estos roles te permiten llamar a un conjunto de procedimientos almacenados que exponen blobs de políticas de **Despliegue del Sistema Operativo (OSD)** (credenciales de la Cuenta de Acceso a la Red, variables de Secuencia de Tareas, etc.). Los blobs están codificados/encriptados en hexadecimales, pero pueden ser decodificados y desencriptados con **PXEthief**, obteniendo secretos en texto plano.
 
 Cadena de alto nivel:
 1. Descubrir MP y base de datos del sitio ↦ punto final HTTP no autenticado `/SMS_MP/.sms_aut?MPKEYINFORMATIONMEDIA`.
 2. Iniciar `ntlmrelayx.py -t mssql://<SiteDB> -ts -socks`.
 3. Forzar MP usando **PetitPotam**, PrinterBug, DFSCoerce, etc.
-4. A través del proxy SOCKS conectarse con `mssqlclient.py -windows-auth` como la cuenta retransmitida **<DOMAIN>\\<MP-host>$**.
+4. A través del proxy SOCKS, conectarse con `mssqlclient.py -windows-auth` como la cuenta retransmitida **<DOMAIN>\\<MP-host>$**.
 5. Ejecutar:
 * `use CM_<SiteCode>`
 * `exec MP_GetMachinePolicyAssignments N'<UnknownComputerGUID>',N''`
@@ -58,7 +58,7 @@ proxychains mssqlclient.py CONTOSO/MP01$@10.10.10.15 -windows-auth
 ```
 Cambia a la base de datos **CM_<SiteCode>** (usa el código de sitio de 3 dígitos, por ejemplo, `CM_001`).
 
-### 3.1  Encontrar GUIDs de Computadora Desconocida (opcional)
+### 3.1  Encontrar GUIDs de Computadoras Desconocidas (opcional)
 ```sql
 USE CM_001;
 SELECT SMS_Unique_Identifier0

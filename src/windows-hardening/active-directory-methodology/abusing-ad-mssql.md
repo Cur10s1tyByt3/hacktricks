@@ -7,7 +7,7 @@
 
 ### Python
 
-La herramienta [MSSQLPwner](https://github.com/ScorpionesLabs/MSSqlPwner) se basa en impacket, y también permite autenticarse utilizando tickets kerberos, y atacar a través de cadenas de enlaces.
+La herramienta [MSSQLPwner](https://github.com/ScorpionesLabs/MSSqlPwner) se basa en impacket y también permite autenticarse utilizando tickets kerberos y atacar a través de cadenas de enlaces.
 
 <figure><img src="https://raw.githubusercontent.com/ScorpionesLabs/MSSqlPwner/main/assets/interractive.png"></figure>
 ```shell
@@ -176,7 +176,7 @@ Revisa en la página mencionada en la **siguiente sección cómo hacerlo manualm
 
 ## Enlaces de Confianza en MSSQL
 
-Si una instancia de MSSQL es de confianza (enlace de base de datos) por otra instancia de MSSQL. Si el usuario tiene privilegios sobre la base de datos de confianza, podrá **utilizar la relación de confianza para ejecutar consultas también en la otra instancia**. Estas confianzas pueden encadenarse y en algún momento el usuario podría encontrar alguna base de datos mal configurada donde pueda ejecutar comandos.
+Si una instancia de MSSQL es confiable (enlace de base de datos) por otra instancia de MSSQL. Si el usuario tiene privilegios sobre la base de datos confiable, podrá **utilizar la relación de confianza para ejecutar consultas también en la otra instancia**. Estas confianzas pueden encadenarse y en algún momento el usuario podría encontrar alguna base de datos mal configurada donde pueda ejecutar comandos.
 
 **Los enlaces entre bases de datos funcionan incluso a través de confianzas de bosque.**
 
@@ -220,13 +220,13 @@ inject-assembly 4704 ../SharpCollection/SharpSQLPwn.exe /modules:LIC /linkedsql:
 ```
 ### Metasploit
 
-Puedes verificar fácilmente los enlaces de confianza utilizando metasploit.
+Puedes verificar fácilmente los enlaces de confianza usando metasploit.
 ```bash
 #Set username, password, windows auth (if using AD), IP...
 msf> use exploit/windows/mssql/mssql_linkcrawler
 [msf> set DEPLOY true] #Set DEPLOY to true if you want to abuse the privileges to obtain a meterpreter session
 ```
-Notice que metasploit intentará abusar solo de la función `openquery()` en MSSQL (así que, si no puedes ejecutar comandos con `openquery()`, necesitarás intentar el método `EXECUTE` **manualmente** para ejecutar comandos, ver más abajo.)
+Nota que metasploit intentará abusar solo de la función `openquery()` en MSSQL (así que, si no puedes ejecutar comandos con `openquery()`, necesitarás intentar el método `EXECUTE` **manualmente** para ejecutar comandos, ver más abajo).
 
 ### Manual - Openquery()
 
@@ -238,7 +238,7 @@ _Inicia sesión usando autenticación de Windows:_
 
 ![](<../../images/image (808).png>)
 
-#### Encontrar enlaces confiables
+#### Encontrar Enlaces Confiables
 ```sql
 select * from master..sysservers;
 EXEC sp_linkedservers;

@@ -4,7 +4,7 @@
 
 ## **Enumeración de GUI**
 
-D-Bus se utiliza como el mediador de comunicaciones entre procesos (IPC) en entornos de escritorio de Ubuntu. En Ubuntu, se observa la operación concurrente de varios buses de mensajes: el bus del sistema, utilizado principalmente por **servicios privilegiados para exponer servicios relevantes en todo el sistema**, y un bus de sesión para cada usuario conectado, exponiendo servicios relevantes solo para ese usuario específico. El enfoque aquí está principalmente en el bus del sistema debido a su asociación con servicios que se ejecutan con privilegios más altos (por ejemplo, root) ya que nuestro objetivo es elevar privilegios. Se observa que la arquitectura de D-Bus emplea un 'enrutador' por bus de sesión, que es responsable de redirigir los mensajes de los clientes a los servicios apropiados según la dirección especificada por los clientes para el servicio con el que desean comunicarse.
+D-Bus se utiliza como el mediador de comunicaciones entre procesos (IPC) en entornos de escritorio de Ubuntu. En Ubuntu, se observa la operación concurrente de varios buses de mensajes: el bus del sistema, utilizado principalmente por **servicios privilegiados para exponer servicios relevantes en todo el sistema**, y un bus de sesión para cada usuario conectado, exponiendo servicios relevantes solo para ese usuario específico. El enfoque aquí está principalmente en el bus del sistema debido a su asociación con servicios que se ejecutan con privilegios más altos (por ejemplo, root) ya que nuestro objetivo es elevar privilegios. Se observa que la arquitectura de D-Bus emplea un 'router' por bus de sesión, que es responsable de redirigir los mensajes de los clientes a los servicios apropiados según la dirección especificada por los clientes para el servicio con el que desean comunicarse.
 
 Los servicios en D-Bus se definen por los **objetos** y **interfaces** que exponen. Los objetos pueden compararse con instancias de clase en lenguajes OOP estándar, con cada instancia identificada de manera única por una **ruta de objeto**. Esta ruta, similar a una ruta de sistema de archivos, identifica de manera única cada objeto expuesto por el servicio. Una interfaz clave para fines de investigación es la interfaz **org.freedesktop.DBus.Introspectable**, que presenta un único método, Introspect. Este método devuelve una representación XML de los métodos, señales y propiedades soportados por el objeto, con un enfoque aquí en los métodos mientras se omiten propiedades y señales.
 
@@ -132,7 +132,7 @@ busctl tree htb.oouch.Block #Get Interfaces of the service object
 ```
 ### Introspect Interface of a Service Object
 
-Note how in this example it was selected the latest interface discovered using the `tree` parameter (_ver sección anterior_):
+Note cómo en este ejemplo se seleccionó la última interfaz descubierta utilizando el parámetro `tree` (_ver sección anterior_):
 ```bash
 busctl introspect htb.oouch.Block /htb/oouch/Block #Get methods of the interface
 
@@ -233,7 +233,7 @@ Como usuario **qtc dentro del host "oouch" de HTB**, puedes encontrar un **archi
 ```
 Nota de la configuración anterior que **necesitarás ser el usuario `root` o `www-data` para enviar y recibir información** a través de esta comunicación D-BUS.
 
-Como usuario **qtc** dentro del contenedor docker **aeb4525789d8**, puedes encontrar algo de código relacionado con dbus en el archivo _/code/oouch/routes.py._ Este es el código interesante:
+Como usuario **qtc** dentro del contenedor docker **aeb4525789d8** puedes encontrar algo de código relacionado con dbus en el archivo _/code/oouch/routes.py._ Este es el código interesante:
 ```python
 if primitive_xss.search(form.textfield.data):
 bus = dbus.SystemBus()
@@ -252,7 +252,7 @@ En el otro lado de la conexión D-Bus hay un binario compilado en C en ejecució
 
 ### Explotarlo
 
-Al final de esta página puedes encontrar el **código C completo de la aplicación D-Bus**. Dentro de él puedes encontrar entre las líneas 91-97 **cómo se registran el `D-Bus object path`** **y el `interface name`**. Esta información será necesaria para enviar información a la conexión D-Bus:
+Al final de esta página puedes encontrar el **código C completo de la aplicación D-Bus**. Dentro de él puedes encontrar entre las líneas 91-97 **cómo se registra el `D-Bus object path`** **y el `interface name`**. Esta información será necesaria para enviar información a la conexión D-Bus:
 ```c
 /* Install the object */
 r = sd_bus_add_object_vtable(bus,
@@ -283,11 +283,11 @@ bus.close()
 dbus-send --system --print-reply --dest=htb.oouch.Block /htb/oouch/Block htb.oouch.Block.Block string:';pring -c 1 10.10.14.44 #'
 ```
 - `dbus-send` es una herramienta utilizada para enviar mensajes al “Message Bus”
-- Message Bus – Un software utilizado por los sistemas para facilitar la comunicación entre aplicaciones. Está relacionado con Message Queue (los mensajes están ordenados en secuencia), pero en Message Bus los mensajes se envían en un modelo de suscripción y también son muy rápidos.
+- Message Bus – Un software utilizado por los sistemas para facilitar la comunicación entre aplicaciones. Está relacionado con Message Queue (los mensajes se ordenan en secuencia), pero en Message Bus los mensajes se envían en un modelo de suscripción y también de manera muy rápida.
 - La etiqueta “-system” se utiliza para mencionar que es un mensaje del sistema, no un mensaje de sesión (por defecto).
 - La etiqueta “–print-reply” se utiliza para imprimir nuestro mensaje adecuadamente y recibir cualquier respuesta en un formato legible por humanos.
 - “–dest=Dbus-Interface-Block” La dirección de la interfaz Dbus.
-- “–string:” – Tipo de mensaje que nos gustaría enviar a la interfaz. Hay varios formatos para enviar mensajes como double, bytes, booleans, int, objpath. De estos, el “object path” es útil cuando queremos enviar una ruta de un archivo a la interfaz Dbus. Podemos usar un archivo especial (FIFO) en este caso para pasar un comando a la interfaz en nombre de un archivo. “string:;” – Esto es para llamar nuevamente a la ruta del objeto donde colocamos el archivo/comando de shell inverso FIFO.
+- “–string:” – Tipo de mensaje que nos gustaría enviar a la interfaz. Hay varios formatos para enviar mensajes como double, bytes, booleans, int, objpath. De estos, el “object path” es útil cuando queremos enviar una ruta de un archivo a la interfaz Dbus. Podemos usar un archivo especial (FIFO) en este caso para pasar un comando a la interfaz en nombre de un archivo. “string:;” – Esto es para llamar nuevamente al object path donde colocamos el archivo/comando de shell inverso FIFO.
 
 _Tenga en cuenta que en `htb.oouch.Block.Block`, la primera parte (`htb.oouch.Block`) hace referencia al objeto del servicio y la última parte (`.Block`) hace referencia al nombre del método._
 
@@ -441,7 +441,7 @@ La enumeración de una gran superficie de ataque de D-Bus manualmente con `busct
 * Escrito en C; un solo binario estático (<50 kB) que recorre cada ruta de objeto, extrae el XML de `Introspect` y lo mapea al PID/UID propietario.
 * Flags útiles:
 ```bash
-# Lista todos los servicios en el bus *del sistema* y volcar todos los métodos llamables
+# Lista cada servicio en el bus *del sistema* y volcar todos los métodos llamables
 sudo dbus-map --dump-methods
 
 # Sondea activamente métodos/propiedades que puedes alcanzar sin solicitudes de Polkit
@@ -489,9 +489,9 @@ Usa `dbusmap --enable-probes` o `busctl call` manual para confirmar si un parche
 grep -R --color -nE '<allow (own|send_destination|receive_sender)="[^"]*"' /etc/dbus-1/system.d /usr/share/dbus-1/system.d
 ```
 * Requiere Polkit para métodos peligrosos – incluso los proxies *root* deberían pasar el PID del *llamador* a `polkit_authority_check_authorization_sync()` en lugar de su propio PID.
-* Reduce privilegios en ayudantes de larga duración (usa `sd_pid_get_owner_uid()` para cambiar espacios de nombres después de conectarte al bus).
+* Reduce privilegios en ayudantes de larga duración (usa `sd_pid_get_owner_uid()` para cambiar de espacio de nombres después de conectarte al bus).
 * Si no puedes eliminar un servicio, al menos *limítalo* a un grupo Unix dedicado y restringe el acceso en su política XML.
-* Equipo azul: habilita la captura persistente del bus del sistema con `busctl capture --output=/var/log/dbus_$(date +%F).pcap` e impórtalo a Wireshark para detección de anomalías.
+* Blue-team: habilita la captura persistente del bus del sistema con `busctl capture --output=/var/log/dbus_$(date +%F).pcap` e impórtalo en Wireshark para detección de anomalías.
 
 ---
 

