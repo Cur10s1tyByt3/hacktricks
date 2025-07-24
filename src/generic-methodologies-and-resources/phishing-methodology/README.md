@@ -51,7 +51,7 @@ Hay una **posibilidad de que uno de algunos bits almacenados o en comunicación 
 
 Cuando este concepto se **aplica a las solicitudes DNS**, es posible que el **dominio recibido por el servidor DNS** no sea el mismo que el dominio solicitado inicialmente.
 
-Por ejemplo, una modificación de un solo bit en el dominio "windows.com" puede cambiarlo a "windnws.com".
+Por ejemplo, una modificación de un solo bit en el dominio "windows.com" puede cambiarlo a "windnws.com."
 
 Los atacantes pueden **aprovechar esto registrando múltiples dominios de bit-flipping** que son similares al dominio de la víctima. Su intención es redirigir a los usuarios legítimos a su propia infraestructura.
 
@@ -161,7 +161,7 @@ Modifica `/opt/gophish/config.json` a lo siguiente (nota el uso de https):
 ```
 **Configurar el servicio gophish**
 
-Para crear el servicio gophish de modo que se inicie automáticamente y se gestione como un servicio, puedes crear el archivo `/etc/init.d/gophish` con el siguiente contenido:
+Para crear el servicio gophish de modo que se pueda iniciar automáticamente y gestionar como un servicio, puedes crear el archivo `/etc/init.d/gophish` con el siguiente contenido:
 ```bash
 #!/bin/bash
 # /etc/init.d/gophish
@@ -223,7 +223,7 @@ service gophish stop
 
 ### Espera y sé legítimo
 
-Cuanto más antiguo sea un dominio, menos probable es que sea detectado como spam. Por lo tanto, deberías esperar el mayor tiempo posible (al menos 1 semana) antes de la evaluación de phishing. Además, si pones una página sobre un sector reputacional, la reputación obtenida será mejor.
+Cuanto más antiguo sea un dominio, menos probable es que sea detectado como spam. Por lo tanto, debes esperar el mayor tiempo posible (al menos 1 semana) antes de la evaluación de phishing. Además, si pones una página sobre un sector reputacional, la reputación obtenida será mejor.
 
 Ten en cuenta que incluso si tienes que esperar una semana, puedes terminar de configurar todo ahora.
 
@@ -243,7 +243,7 @@ Este es el contenido que debe establecerse dentro de un registro TXT dentro del 
 ```bash
 v=spf1 mx a ip4:ip.ip.ip.ip ?all
 ```
-### Registro de Autenticación, Informe y Conformidad de Mensajes Basado en Dominio (DMARC)
+### Registro de Autenticación de Mensajes Basado en Dominio, Informes y Conformidad (DMARC)
 
 Debes **configurar un registro DMARC para el nuevo dominio**. Si no sabes qué es un registro DMARC [**lee esta página**](../../network-services-pentesting/pentesting-smtp/index.html#dmarc).
 
@@ -267,7 +267,7 @@ Este tutorial se basa en: [https://www.digitalocean.com/community/tutorials/how-
 ### Prueba tu puntuación de configuración de correo electrónico
 
 Puedes hacerlo usando [https://www.mail-tester.com/](https://www.mail-tester.com)\
-Solo accede a la página y envía un correo electrónico a la dirección que te den:
+Simplemente accede a la página y envía un correo electrónico a la dirección que te den:
 ```bash
 echo "This is the body of the email" | mail -s "This is the subject line" test-iimosa79z@srv1.mail-tester.com
 ```
@@ -297,7 +297,7 @@ La página [www.mail-tester.com](https://www.mail-tester.com) puede indicarte si
 
 ​​Puedes solicitar la eliminación de tu dominio/IP en [https://sender.office.com/](https://sender.office.com).
 
-## Crear y lanzar campaña GoPhish
+## Crear y lanzar campaña de GoPhish
 
 ### Perfil de envío
 
@@ -309,7 +309,7 @@ La página [www.mail-tester.com](https://www.mail-tester.com) puede indicarte si
 
 > [!TIP]
 > Se recomienda utilizar la funcionalidad "**Enviar correo de prueba**" para comprobar que todo está funcionando.\
-> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser incluido en la lista negra durante las pruebas.
+> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser incluido en la lista negra al realizar pruebas.
 
 ### Plantilla de correo electrónico
 
@@ -356,7 +356,7 @@ Nota que **para aumentar la credibilidad del correo electrónico**, se recomiend
 ![](<../../images/image (826).png>)
 
 > [!TIP]
-> Usualmente necesitarás modificar el código HTML de la página y hacer algunas pruebas en local (quizás usando algún servidor Apache) **hasta que te gusten los resultados.** Luego, escribe ese código HTML en el cuadro.\
+> Generalmente necesitarás modificar el código HTML de la página y hacer algunas pruebas en local (quizás usando algún servidor Apache) **hasta que te gusten los resultados.** Luego, escribe ese código HTML en el cuadro.\
 > Nota que si necesitas **usar algunos recursos estáticos** para el HTML (quizás algunas páginas CSS y JS) puedes guardarlos en _**/opt/gophish/static/endpoint**_ y luego acceder a ellos desde _**/static/\<filename>**_
 
 > [!TIP]
@@ -422,7 +422,7 @@ Puedes hacer esto con [**EvilnVNC**](https://github.com/JoelGMSec/EvilnoVNC)
 Obviamente, una de las mejores maneras de saber si te han descubierto es **buscar tu dominio en listas negras**. Si aparece listado, de alguna manera tu dominio fue detectado como sospechoso.\
 Una forma fácil de verificar si tu dominio aparece en alguna lista negra es usar [https://malwareworld.com/](https://malwareworld.com)
 
-Sin embargo, hay otras formas de saber si la víctima está **buscando activamente actividad sospechosa de phishing en la red**, como se explica en:
+Sin embargo, hay otras formas de saber si la víctima está **buscando activamente actividad sospechosa de phishing en la red** como se explica en:
 
 {{#ref}}
 detecting-phising.md
@@ -440,6 +440,12 @@ Los atacantes pueden copiar silenciosamente comandos maliciosos en el portapapel
 
 {{#ref}}
 clipboard-hijacking.md
+{{#endref}}
+
+## Phishing Móvil y Distribución de Aplicaciones Maliciosas (Android e iOS)
+
+{{#ref}}
+mobile-phishing-malicious-apps.md
 {{#endref}}
 
 ## Referencias
