@@ -25,6 +25,10 @@
 - **subdominio con guion**: Cambiar el **punto por un guion** de un subdominio (por ejemplo, www-zelster.com).
 - **Nuevo TLD**: Mismo dominio usando un **nuevo TLD** (por ejemplo, zelster.org).
 - **Homoglyph**: **Reemplaza** una letra en el nombre de dominio con **letras que se ven similares** (por ejemplo, zelfser.com).
+
+{{#ref}}
+homograph-attacks.md
+{{#endref}}
 - **Transposición:** **Intercambia dos letras** dentro del nombre de dominio (por ejemplo, zelsetr.com).
 - **Singularización/Pluralización**: Agrega o quita “s” al final del nombre de dominio (por ejemplo, zeltsers.com).
 - **Omisión**: **Elimina una** de las letras del nombre de dominio (por ejemplo, zelser.com).
@@ -51,7 +55,7 @@ Hay una **posibilidad de que uno de algunos bits almacenados o en comunicación 
 
 Cuando este concepto se **aplica a las solicitudes DNS**, es posible que el **dominio recibido por el servidor DNS** no sea el mismo que el dominio solicitado inicialmente.
 
-Por ejemplo, una modificación de un solo bit en el dominio "windows.com" puede cambiarlo a "windnws.com."
+Por ejemplo, una modificación de un solo bit en el dominio "windows.com" puede cambiarlo a "windnws.com".
 
 Los atacantes pueden **aprovechar esto registrando múltiples dominios de bit-flipping** que son similares al dominio de la víctima. Su intención es redirigir a los usuarios legítimos a su propia infraestructura.
 
@@ -73,7 +77,7 @@ Para asegurarte de que el dominio expirado que vas a comprar **ya tiene un buen 
 - [https://hunter.io/](https://hunter.io)
 - [https://anymailfinder.com/](https://anymailfinder.com)
 
-Para **descubrir más** direcciones de correo electrónico válidas o **verificar las que ya** has descubierto, puedes comprobar si puedes forzar por fuerza bruta los servidores smtp de la víctima. [Aprende cómo verificar/descubrir direcciones de correo electrónico aquí](../../network-services-pentesting/pentesting-smtp/index.html#username-bruteforce-enumeration).\
+Para **descubrir más** direcciones de correo electrónico válidas o **verificar las que ya has descubierto**, puedes comprobar si puedes forzar por fuerza bruta los servidores smtp de la víctima. [Aprende cómo verificar/descubrir direcciones de correo electrónico aquí](../../network-services-pentesting/pentesting-smtp/index.html#username-bruteforce-enumeration).\
 Además, no olvides que si los usuarios utilizan **cualquier portal web para acceder a sus correos**, puedes comprobar si es vulnerable a **fuerza bruta de nombres de usuario**, y explotar la vulnerabilidad si es posible.
 
 ## Configurando GoPhish
@@ -161,7 +165,7 @@ Modifica `/opt/gophish/config.json` a lo siguiente (nota el uso de https):
 ```
 **Configurar el servicio gophish**
 
-Para crear el servicio gophish de modo que se pueda iniciar automáticamente y gestionar como un servicio, puedes crear el archivo `/etc/init.d/gophish` con el siguiente contenido:
+Para crear el servicio gophish de modo que se inicie automáticamente y se gestione como un servicio, puedes crear el archivo `/etc/init.d/gophish` con el siguiente contenido:
 ```bash
 #!/bin/bash
 # /etc/init.d/gophish
@@ -309,7 +313,7 @@ La página [www.mail-tester.com](https://www.mail-tester.com) puede indicarte si
 
 > [!TIP]
 > Se recomienda utilizar la funcionalidad "**Enviar correo de prueba**" para comprobar que todo está funcionando.\
-> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser incluido en la lista negra al realizar pruebas.
+> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser incluido en la lista negra durante las pruebas.
 
 ### Plantilla de correo electrónico
 
@@ -378,7 +382,7 @@ Nota que el **Perfil de Envío permite enviar un correo de prueba para ver cómo
 ![](<../../images/image (192).png>)
 
 > [!TIP]
-> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser bloqueado al hacer pruebas.
+> Recomendaría **enviar los correos de prueba a direcciones de 10min mails** para evitar ser bloqueado al hacer pruebas.
 
 Una vez que todo esté listo, ¡simplemente lanza la campaña!
 
@@ -407,9 +411,9 @@ El ataque anterior es bastante ingenioso ya que estás falsificando un sitio web
 
 Aquí es donde herramientas como [**evilginx2**](https://github.com/kgretzky/evilginx2)**,** [**CredSniper**](https://github.com/ustayready/CredSniper) y [**muraena**](https://github.com/muraenateam/muraena) son útiles. Esta herramienta te permitirá generar un ataque tipo MitM. Básicamente, los ataques funcionan de la siguiente manera:
 
-1. **Suplantas el formulario de inicio de sesión** de la página web real.
+1. Tú **suplantas el formulario de inicio de sesión** de la página web real.
 2. El usuario **envía** sus **credenciales** a tu página falsa y la herramienta envía esas credenciales a la página web real, **verificando si las credenciales funcionan**.
-3. Si la cuenta está configurada con **2FA**, la página MitM lo pedirá y una vez que el **usuario lo introduzca**, la herramienta lo enviará a la página web real.
+3. Si la cuenta está configurada con **2FA**, la página MitM lo pedirá y una vez que el **usuario lo introduce**, la herramienta lo enviará a la página web real.
 4. Una vez que el usuario esté autenticado, tú (como atacante) habrás **capturado las credenciales, el 2FA, la cookie y cualquier información** de cada interacción mientras la herramienta está realizando un MitM.
 
 ### A través de VNC
@@ -419,10 +423,10 @@ Puedes hacer esto con [**EvilnVNC**](https://github.com/JoelGMSec/EvilnoVNC)
 
 ## Detectando la detección
 
-Obviamente, una de las mejores maneras de saber si te han descubierto es **buscar tu dominio en listas negras**. Si aparece listado, de alguna manera tu dominio fue detectado como sospechoso.\
+Obviamente, una de las mejores maneras de saber si te han descubierto es **buscar tu dominio dentro de listas negras**. Si aparece listado, de alguna manera tu dominio fue detectado como sospechoso.\
 Una forma fácil de verificar si tu dominio aparece en alguna lista negra es usar [https://malwareworld.com/](https://malwareworld.com)
 
-Sin embargo, hay otras formas de saber si la víctima está **buscando activamente actividad sospechosa de phishing en la red** como se explica en:
+Sin embargo, hay otras formas de saber si la víctima está **buscando activamente actividad sospechosa de phishing en la naturaleza** como se explica en:
 
 {{#ref}}
 detecting-phising.md
