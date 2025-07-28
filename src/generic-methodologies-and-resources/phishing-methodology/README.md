@@ -25,10 +25,14 @@
 - **sous-domaine hyphéné** : Changer le **point par un tiret** d'un sous-domaine (par exemple, www-zelster.com).
 - **Nouveau TLD** : Même domaine utilisant un **nouveau TLD** (par exemple, zelster.org).
 - **Homoglyph** : Il **remplace** une lettre dans le nom de domaine par **des lettres qui se ressemblent** (par exemple, zelfser.com).
-- **Transposition** : Il **échange deux lettres** dans le nom de domaine (par exemple, zelsetr.com).
+
+{{#ref}}
+homograph-attacks.md
+{{#endref}}
+- **Transposition :** Il **échange deux lettres** dans le nom de domaine (par exemple, zelsetr.com).
 - **Singularisation/Pluralisation** : Ajoute ou enlève un “s” à la fin du nom de domaine (par exemple, zeltsers.com).
 - **Omission** : Il **supprime une** des lettres du nom de domaine (par exemple, zelser.com).
-- **Répétition** : Il **répète une** des lettres dans le nom de domaine (par exemple, zeltsser.com).
+- **Répétition :** Il **répète une** des lettres dans le nom de domaine (par exemple, zeltsser.com).
 - **Remplacement** : Comme homoglyph mais moins furtif. Il remplace une des lettres dans le nom de domaine, peut-être par une lettre proche de la lettre originale sur le clavier (par exemple, zektser.com).
 - **Sous-domaine** : Introduire un **point** à l'intérieur du nom de domaine (par exemple, ze.lster.com).
 - **Insertion** : Il **insère une lettre** dans le nom de domaine (par exemple, zerltser.com).
@@ -51,9 +55,9 @@ Il y a une **possibilité qu'un des bits stockés ou en communication puisse êt
 
 Lorsque ce concept est **appliqué aux requêtes DNS**, il est possible que le **domaine reçu par le serveur DNS** ne soit pas le même que le domaine initialement demandé.
 
-Par exemple, une seule modification de bit dans le domaine "windows.com" peut le changer en "windnws.com".
+Par exemple, une seule modification de bit dans le domaine "windows.com" peut le changer en "windnws.com."
 
-Les attaquants peuvent **profiter de cela en enregistrant plusieurs domaines de bit-flipping** qui sont similaires au domaine de la victime. Leur intention est de rediriger les utilisateurs légitimes vers leur propre infrastructure.
+Les attaquants peuvent **profiter de cela en enregistrant plusieurs domaines à inversion de bits** qui sont similaires au domaine de la victime. Leur intention est de rediriger les utilisateurs légitimes vers leur propre infrastructure.
 
 Pour plus d'informations, lisez [https://www.bleepingcomputer.com/news/security/hijacking-traffic-to-microsoft-s-windowscom-with-bitflipping/](https://www.bleepingcomputer.com/news/security/hijacking-traffic-to-microsoft-s-windowscom-with-bitflipping/)
 
@@ -74,7 +78,7 @@ Pour vous assurer que le domaine expiré que vous allez acheter **a déjà un bo
 - [https://anymailfinder.com/](https://anymailfinder.com)
 
 Pour **découvrir plus** d'adresses email valides ou **vérifier celles** que vous avez déjà découvertes, vous pouvez vérifier si vous pouvez forcer les serveurs smtp de la victime. [Apprenez à vérifier/découvrir une adresse email ici](../../network-services-pentesting/pentesting-smtp/index.html#username-bruteforce-enumeration).\
-De plus, n'oubliez pas que si les utilisateurs utilisent **un portail web pour accéder à leurs mails**, vous pouvez vérifier s'il est vulnérable à **la force brute sur le nom d'utilisateur**, et exploiter la vulnérabilité si possible.
+De plus, n'oubliez pas que si les utilisateurs utilisent **un portail web pour accéder à leurs mails**, vous pouvez vérifier s'il est vulnérable à **la force brute sur les noms d'utilisateur**, et exploiter la vulnérabilité si possible.
 
 ## Configuration de GoPhish
 
@@ -82,7 +86,7 @@ De plus, n'oubliez pas que si les utilisateurs utilisent **un portail web pour a
 
 Vous pouvez le télécharger depuis [https://github.com/gophish/gophish/releases/tag/v0.11.0](https://github.com/gophish/gophish/releases/tag/v0.11.0)
 
-Téléchargez-le et décompressez-le dans `/opt/gophish` et exécutez `/opt/gophish/gophish`\
+Téléchargez et décompressez-le dans `/opt/gophish` et exécutez `/opt/gophish/gophish`\
 Un mot de passe pour l'utilisateur admin sera donné sur le port 3333 dans la sortie. Par conséquent, accédez à ce port et utilisez ces identifiants pour changer le mot de passe admin. Vous devrez peut-être faire un tunnel de ce port vers local :
 ```bash
 ssh -L 3333:127.0.0.1:3333 <user>@<ip>
@@ -124,7 +128,7 @@ Ajoutez ensuite le domaine aux fichiers suivants :
 
 Enfin, modifiez les fichiers **`/etc/hostname`** et **`/etc/mailname`** avec votre nom de domaine et **redémarrez votre VPS.**
 
-Maintenant, créez un **enregistrement DNS A** de `mail.<domain>` pointant vers l'**adresse IP** du VPS et un **enregistrement DNS MX** pointant vers `mail.<domain>`
+Maintenant, créez un **enregistrement DNS A** de `mail.<domain>` pointant vers l'**adresse IP** du VPS et un enregistrement **DNS MX** pointant vers `mail.<domain>`
 
 Maintenant, testons l'envoi d'un email :
 ```bash
@@ -223,7 +227,7 @@ service gophish stop
 
 ### Attendre et être légitime
 
-Plus un domaine est ancien, moins il est probable qu'il soit considéré comme du spam. Vous devriez donc attendre le plus longtemps possible (au moins 1 semaine) avant l'évaluation de phishing. De plus, si vous mettez en place une page sur un secteur réputé, la réputation obtenue sera meilleure.
+Plus un domaine est ancien, moins il est probable qu'il soit considéré comme du spam. Vous devriez donc attendre le plus longtemps possible (au moins 1 semaine) avant l'évaluation de phishing. De plus, si vous mettez en place une page sur un secteur de réputation, la réputation obtenue sera meilleure.
 
 Notez que même si vous devez attendre une semaine, vous pouvez terminer la configuration de tout maintenant.
 
@@ -305,7 +309,7 @@ La page [www.mail-tester.com](https://www.mail-tester.com) peut vous indiquer si
 - Décidez de quel compte vous allez envoyer les emails de phishing. Suggestions : _noreply, support, servicedesk, salesforce..._
 - Vous pouvez laisser le nom d'utilisateur et le mot de passe vides, mais assurez-vous de cocher l'option Ignorer les erreurs de certificat
 
-![](<../../images/image (253) (1) (2) (1) (1) (2) (2) (3) (3) (5) (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (10) (15) (2).png>)
+![](<../../images/image (253) (1) (2) (1) (1) (2) (2) (3) (3) (5) (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (10) (15) (2).png>)
 
 > [!TIP]
 > Il est recommandé d'utiliser la fonctionnalité "**Envoyer un email de test**" pour vérifier que tout fonctionne.\
@@ -357,10 +361,10 @@ Notez que **pour augmenter la crédibilité de l'email**, il est recommandé d'u
 
 > [!TIP]
 > En général, vous devrez modifier le code HTML de la page et faire quelques tests en local (peut-être en utilisant un serveur Apache) **jusqu'à ce que vous soyez satisfait des résultats.** Ensuite, écrivez ce code HTML dans la boîte.\
-> Notez que si vous devez **utiliser des ressources statiques** pour le HTML (peut-être des pages CSS et JS), vous pouvez les enregistrer dans _**/opt/gophish/static/endpoint**_ et ensuite y accéder depuis _**/static/\<filename>**_
+> Notez que si vous avez besoin d'**utiliser des ressources statiques** pour le HTML (peut-être des pages CSS et JS), vous pouvez les enregistrer dans _**/opt/gophish/static/endpoint**_ et ensuite y accéder depuis _**/static/\<filename>**_
 
 > [!TIP]
-> Pour la redirection, vous pourriez **rediriger les utilisateurs vers la vraie page web principale** de la victime, ou les rediriger vers _/static/migration.html_ par exemple, mettre une **roue qui tourne** (**[**https://loading.io/**](https://loading.io)**) pendant 5 secondes et ensuite indiquer que le processus a été réussi**.
+> Pour la redirection, vous pourriez **rediriger les utilisateurs vers la vraie page web principale** de la victime, ou les rediriger vers _/static/migration.html_ par exemple, mettre une **roue tournante (**[**https://loading.io/**](https://loading.io)**) pendant 5 secondes et ensuite indiquer que le processus a réussi**.
 
 ### Utilisateurs & Groupes
 
@@ -373,12 +377,12 @@ Notez que **pour augmenter la crédibilité de l'email**, il est recommandé d'u
 
 Enfin, créez une campagne en sélectionnant un nom, le modèle d'email, la page de destination, l'URL, le profil d'envoi et le groupe. Notez que l'URL sera le lien envoyé aux victimes.
 
-Notez que le **profil d'envoi permet d'envoyer un email test pour voir à quoi ressemblera le phishing final** :
+Notez que le **Profil d'envoi permet d'envoyer un email de test pour voir à quoi ressemblera le phishing final** :
 
 ![](<../../images/image (192).png>)
 
 > [!TIP]
-> Je vous recommande d'**envoyer les emails tests à des adresses de 10min mails** afin d'éviter d'être blacklisté lors des tests.
+> Je vous recommande d'**envoyer les emails de test à des adresses de 10min mails** afin d'éviter d'être blacklisté lors des tests.
 
 Une fois que tout est prêt, lancez simplement la campagne !
 
@@ -405,11 +409,11 @@ phishing-documents.md
 
 L'attaque précédente est assez astucieuse car vous simulez un vrai site web et collectez les informations fournies par l'utilisateur. Malheureusement, si l'utilisateur n'a pas saisi le bon mot de passe ou si l'application que vous avez simulée est configurée avec 2FA, **ces informations ne vous permettront pas d'usurper l'utilisateur trompé**.
 
-C'est là que des outils comme [**evilginx2**](https://github.com/kgretzky/evilginx2)**,** [**CredSniper**](https://github.com/ustayready/CredSniper) et [**muraena**](https://github.com/muraenateam/muraena) sont utiles. Cet outil vous permettra de générer une attaque de type MitM. En gros, l'attaque fonctionne de la manière suivante :
+C'est là que des outils comme [**evilginx2**](https://github.com/kgretzky/evilginx2)**,** [**CredSniper**](https://github.com/ustayready/CredSniper) et [**muraena**](https://github.com/muraenateam/muraena) sont utiles. Cet outil vous permettra de générer une attaque de type MitM. En gros, les attaques fonctionnent de la manière suivante :
 
 1. Vous **usurpez le formulaire de connexion** de la vraie page web.
-2. L'utilisateur **envoie** ses **identifiants** à votre page factice et l'outil les envoie à la vraie page web, **vérifiant si les identifiants fonctionnent**.
-3. Si le compte est configuré avec **2FA**, la page MitM le demandera et une fois que l'**utilisateur l'introduit**, l'outil l'enverra à la vraie page web.
+2. L'utilisateur **envoie** ses **identifiants** à votre page factice et l'outil envoie ceux-ci à la vraie page web, **vérifiant si les identifiants fonctionnent**.
+3. Si le compte est configuré avec **2FA**, la page MitM demandera cela et une fois que l'**utilisateur l'introduit**, l'outil l'enverra à la vraie page web.
 4. Une fois que l'utilisateur est authentifié, vous (en tant qu'attaquant) aurez **capturé les identifiants, le 2FA, le cookie et toute information** de chaque interaction pendant que l'outil effectue un MitM.
 
 ### Via VNC
@@ -436,7 +440,7 @@ Utilisez [**Phishious** ](https://github.com/Rices/Phishious) pour évaluer si v
 
 ## Détournement du presse-papiers / Pastejacking
 
-Les attaquants peuvent silencieusement copier des commandes malveillantes dans le presse-papiers de la victime à partir d'une page web compromise ou mal orthographiée, puis tromper l'utilisateur pour qu'il les colle dans **Win + R**, **Win + X** ou une fenêtre de terminal, exécutant du code arbitraire sans aucun téléchargement ou pièce jointe.
+Les attaquants peuvent silencieusement copier des commandes malveillantes dans le presse-papiers de la victime à partir d'une page web compromise ou typographiquement similaire, puis tromper l'utilisateur pour qu'il les colle dans **Win + R**, **Win + X** ou une fenêtre de terminal, exécutant du code arbitraire sans aucun téléchargement ou pièce jointe.
 
 {{#ref}}
 clipboard-hijacking.md
