@@ -2,7 +2,7 @@
 
 {{#include ../../../../banners/hacktricks-training.md}}
 
-La exposición de `/proc`, `/sys` y `/var` sin un aislamiento adecuado de namespaces introduce riesgos de seguridad significativos, incluyendo la ampliación de la superficie de ataque y la divulgación de información. Estos directorios contienen archivos sensibles que, si están mal configurados o son accedidos por un usuario no autorizado, pueden llevar a la fuga de contenedores, modificación del host o proporcionar información que ayude a ataques adicionales. Por ejemplo, montar incorrectamente `-v /proc:/host/proc` puede eludir la protección de AppArmor debido a su naturaleza basada en rutas, dejando `/host/proc` desprotegido.
+La exposición de `/proc`, `/sys` y `/var` sin un aislamiento adecuado de namespaces introduce riesgos de seguridad significativos, incluyendo la ampliación de la superficie de ataque y la divulgación de información. Estos directorios contienen archivos sensibles que, si están mal configurados o son accedidos por un usuario no autorizado, pueden llevar a la fuga de contenedores, modificación del host o proporcionar información que ayude a ataques posteriores. Por ejemplo, montar incorrectamente `-v /proc:/host/proc` puede eludir la protección de AppArmor debido a su naturaleza basada en rutas, dejando `/host/proc` desprotegido.
 
 **Puedes encontrar más detalles de cada posible vulnerabilidad en** [**https://0xn3va.gitbook.io/cheat-sheets/container/escaping/sensitive-mounts**](https://0xn3va.gitbook.io/cheat-sheets/container/escaping/sensitive-mounts)**.**
 
@@ -16,7 +16,7 @@ Este directorio permite el acceso para modificar variables del kernel, generalme
 
 - Descrito en [core(5)](https://man7.org/linux/man-pages/man5/core.5.html).
 - Si puedes escribir dentro de este archivo, es posible escribir un pipe `|` seguido de la ruta a un programa o script que se ejecutará después de que ocurra un fallo.
-- Un atacante puede encontrar la ruta dentro del host a su contenedor ejecutando `mount` y escribir la ruta a un binario dentro de su sistema de archivos de contenedor. Luego, hacer que un programa falle para que el kernel ejecute el binario fuera del contenedor.
+- Un atacante puede encontrar la ruta dentro del host a su contenedor ejecutando `mount` y escribir la ruta a un binario dentro de su sistema de archivos del contenedor. Luego, hacer que un programa falle para que el kernel ejecute el binario fuera del contenedor.
 
 - **Ejemplo de Prueba y Explotación**:
 ```bash
@@ -50,7 +50,7 @@ ls -l $(cat /proc/sys/kernel/modprobe) # Verificar acceso a modprobe
 #### **`/proc/sys/vm/panic_on_oom`**
 
 - Referenciado en [proc(5)](https://man7.org/linux/man-pages/man5/proc.5.html).
-- Una bandera global que controla si el kernel entra en pánico o invoca al OOM killer cuando ocurre una condición de OOM.
+- Una bandera global que controla si el kernel entra en pánico o invoca al OOM killer cuando ocurre una condición OOM.
 
 #### **`/proc/sys/fs`**
 
@@ -95,7 +95,7 @@ echo b > /proc/sysrq-trigger # Reinicia el host
 
 #### **`/proc/[pid]/mem`**
 
-- Interfaz con el dispositivo de memoria del kernel `/dev/mem`.
+- Interactúa con el dispositivo de memoria del kernel `/dev/mem`.
 - Históricamente vulnerable a ataques de escalada de privilegios.
 - Más sobre [proc(5)](https://man7.org/linux/man-pages/man5/proc.5.html).
 
@@ -103,18 +103,18 @@ echo b > /proc/sysrq-trigger # Reinicia el host
 
 - Representa la memoria física del sistema en formato ELF core.
 - La lectura puede filtrar el contenido de la memoria del sistema host y otros contenedores.
-- El gran tamaño del archivo puede llevar a problemas de lectura o fallos de software.
+- Un tamaño de archivo grande puede llevar a problemas de lectura o fallos de software.
 - Uso detallado en [Dumping /proc/kcore in 2019](https://schlafwandler.github.io/posts/dumping-/proc/kcore/).
 
 #### **`/proc/kmem`**
 
 - Interfaz alternativa para `/dev/kmem`, representando la memoria virtual del kernel.
-- Permite la lectura y escritura, por lo tanto, la modificación directa de la memoria del kernel.
+- Permite lectura y escritura, por lo tanto, modificación directa de la memoria del kernel.
 
 #### **`/proc/mem`**
 
 - Interfaz alternativa para `/dev/mem`, representando la memoria física.
-- Permite la lectura y escritura, la modificación de toda la memoria requiere resolver direcciones virtuales a físicas.
+- Permite lectura y escritura, la modificación de toda la memoria requiere resolver direcciones virtuales a físicas.
 
 #### **`/proc/sched_debug`**
 
@@ -291,11 +291,12 @@ locate the other containers' filesystems and SA / web identity tokens
 Mounting certain host Unix sockets or writable pseudo-filesystems is equivalent to giving the container full root on the node. **Treat the following paths as highly sensitive and never expose them to untrusted workloads**:
 
 ```text
-/ run/containerd/containerd.sock     # socket CRI de containerd  
-/ var/run/crio/crio.sock             # socket de tiempo de ejecución CRI-O  
-/ run/podman/podman.sock             # API de Podman (con privilegios o sin privilegios)  
-/ var/run/kubelet.sock               # API de Kubelet en nodos de Kubernetes  
-/ run/firecracker-containerd.sock    # Kata / Firecracker
+/run/containerd/containerd.sock     # socket CRI de containerd  
+/var/run/crio/crio.sock             # socket de tiempo de ejecución CRI-O  
+/run/podman/podman.sock             # API de Podman (con privilegios o sin privilegios)  
+/run/buildkit/buildkitd.sock        # demonio de BuildKit (con privilegios)  
+/var/run/kubelet.sock               # API de Kubelet en nodos de Kubernetes  
+/run/firecracker-containerd.sock    # Kata / Firecracker
 ```
 
 Attack example abusing a mounted **containerd** socket:
@@ -327,7 +328,7 @@ When the last process leaves the cgroup, `/tmp/pwn` runs **as root on the host**
 ### Mount-Related Escape CVEs (2023-2025)
 
 * **CVE-2024-21626 – runc “Leaky Vessels” file-descriptor leak**
-runc ≤1.1.11 leaked an open directory file descriptor that could point to the host root. A malicious image or `docker exec` could start a container whose *working directory* is already on the host filesystem, enabling arbitrary file read/write and privilege escalation. Fixed in runc 1.1.12 (Docker ≥25.0.3, containerd ≥1.7.14).
+runc ≤ 1.1.11 leaked an open directory file descriptor that could point to the host root. A malicious image or `docker exec` could start a container whose *working directory* is already on the host filesystem, enabling arbitrary file read/write and privilege escalation. Fixed in runc 1.1.12 (Docker ≥ 25.0.3, containerd ≥ 1.7.14).
 
 ```Dockerfile
 FROM scratch
@@ -338,11 +339,17 @@ CMD ["/bin/sh"]
 * **CVE-2024-23651 / 23653 – BuildKit OverlayFS copy-up TOCTOU**
 A race condition in the BuildKit snapshotter let an attacker replace a file that was about to be *copy-up* into the container’s rootfs with a symlink to an arbitrary path on the host, gaining write access outside the build context. Fixed in BuildKit v0.12.5 / Buildx 0.12.0. Exploitation requires an untrusted `docker build` on a vulnerable daemon.
 
+* **CVE-2024-1753 – Buildah / Podman bind-mount breakout during `build`**
+Buildah ≤ 1.35.0 (and Podman ≤ 4.9.3) incorrectly resolved absolute paths passed to `--mount=type=bind` in a *Containerfile*. A crafted build stage could mount `/` from the host **read-write** inside the build container when SELinux was disabled or in permissive mode, leading to full escape at build time. Patched in Buildah 1.35.1 and the corresponding Podman 4.9.4 back-port series.
+
+* **CVE-2024-40635 – containerd UID integer overflow**
+Supplying a `User` value larger than `2147483647` in an image config overflowed the 32-bit signed integer and started the process as UID 0 inside the host user namespace. Workloads expected to run as non-root could therefore obtain root privileges. Fixed in containerd 1.6.38 / 1.7.27 / 2.0.4.
+
 ### Hardening Reminders (2025)
 
 1. Bind-mount host paths **read-only** whenever possible and add `nosuid,nodev,noexec` mount options.
 2. Prefer dedicated side-car proxies or rootless clients instead of exposing the runtime socket directly.
-3. Keep the container runtime up-to-date (runc ≥1.1.12, BuildKit ≥0.12.5, containerd ≥1.7.14).
+3. Keep the container runtime up-to-date (runc ≥ 1.1.12, BuildKit ≥ 0.12.5, Buildah ≥ 1.35.1 / Podman ≥ 4.9.4, containerd ≥ 1.7.27).
 4. In Kubernetes, use `securityContext.readOnlyRootFilesystem: true`, the *restricted* PodSecurity profile and avoid `hostPath` volumes pointing to the paths listed above.
 
 ### References
@@ -352,5 +359,7 @@ A race condition in the BuildKit snapshotter let an attacker replace a file that
 - [https://0xn3va.gitbook.io/cheat-sheets/container/escaping/sensitive-mounts](https://0xn3va.gitbook.io/cheat-sheets/container/escaping/sensitive-mounts)
 - [Understanding and Hardening Linux Containers](https://research.nccgroup.com/wp-content/uploads/2020/07/ncc_group_understanding_hardening_linux_containers-1-1.pdf)
 - [Abusing Privileged and Unprivileged Linux Containers](https://www.nccgroup.com/globalassets/our-research/us/whitepapers/2016/june/container_whitepaper.pdf)
+- [Buildah CVE-2024-1753 advisory](https://github.com/containers/buildah/security/advisories/GHSA-pmf3-c36m-g5cf)
+- [containerd CVE-2024-40635 advisory](https://github.com/containerd/containerd/security/advisories/GHSA-265r-hfxg-fhmg)
 
 {{#include ../../../../banners/hacktricks-training.md}}
