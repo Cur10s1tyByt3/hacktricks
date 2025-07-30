@@ -10,7 +10,7 @@ El aprendizaje no supervisado se utiliza a menudo para tareas como agrupamiento,
 ### Agrupamiento K-Means
 
 K-Means es un algoritmo de agrupamiento basado en centroides que particiona los datos en K grupos asignando cada punto al centroide del grupo más cercano. El algoritmo funciona de la siguiente manera:
-1. **Inicialización**: Elegir K centros de grupo iniciales (centroides), a menudo de forma aleatoria o mediante métodos más inteligentes como k-means++.
+1. **Inicialización**: Elegir K centros de grupo iniciales (centroides), a menudo aleatoriamente o mediante métodos más inteligentes como k-means++.
 2. **Asignación**: Asignar cada punto de datos al centroide más cercano basado en una métrica de distancia (por ejemplo, distancia euclidiana).
 3. **Actualización**: Recalcular los centroides tomando la media de todos los puntos de datos asignados a cada grupo.
 4. **Repetir**: Los pasos 2–3 se repiten hasta que las asignaciones de grupos se estabilizan (los centroides ya no se mueven significativamente).
@@ -194,11 +194,11 @@ Vamos a explicar esto con un ejemplo. Imagina que tienes un conjunto de datos co
 4. **Seleccionar Componentes Principales**: Ordenar los eigenvalores en orden descendente y seleccionar los K eigenvectores superiores correspondientes a los eigenvalores más grandes. Estos eigenvectores representan las direcciones de máxima varianza en los datos.
 
 > [!TIP]
-> *Casos de uso en ciberseguridad:* Un uso común de PCA en seguridad es la reducción de características para la detección de anomalías. Por ejemplo, un sistema de detección de intrusiones con más de 40 métricas de red (como características de NSL-KDD) puede usar PCA para reducir a un puñado de componentes, resumiendo los datos para visualización o alimentando algoritmos de agrupamiento. Los analistas podrían trazar el tráfico de red en el espacio de los dos primeros componentes principales para ver si los ataques se separan del tráfico normal. PCA también puede ayudar a eliminar características redundantes (como bytes enviados vs. bytes recibidos si están correlacionados) para hacer que los algoritmos de detección sean más robustos y rápidos.
+> *Casos de uso en ciberseguridad:* Un uso común de PCA en seguridad es la reducción de características para la detección de anomalías. Por ejemplo, un sistema de detección de intrusiones con más de 40 métricas de red (como características de NSL-KDD) puede usar PCA para reducir a un puñado de componentes, resumiendo los datos para visualización o alimentando algoritmos de agrupamiento. Los analistas podrían trazar el tráfico de red en el espacio de los dos primeros componentes principales para ver si los ataques se separan del tráfico normal. PCA también puede ayudar a eliminar características redundantes (como bytes enviados frente a bytes recibidos si están correlacionados) para hacer que los algoritmos de detección sean más robustos y rápidos.
 
 #### Suposiciones y Limitaciones
 
-PCA asume que **los ejes principales de varianza son significativos**; es un método lineal, por lo que captura correlaciones lineales en los datos. Es no supervisado ya que utiliza solo la covarianza de las características. Las ventajas de PCA incluyen la reducción de ruido (los componentes de pequeña varianza a menudo corresponden a ruido) y la decorrelación de características. Es computacionalmente eficiente para dimensiones moderadamente altas y a menudo es un paso de preprocesamiento útil para otros algoritmos (para mitigar la maldición de la dimensionalidad). Una limitación es que PCA está limitado a relaciones lineales; no capturará estructuras no lineales complejas (mientras que los autoencoders o t-SNE podrían). Además, los componentes de PCA pueden ser difíciles de interpretar en términos de características originales (son combinaciones de características originales). En ciberseguridad, uno debe ser cauteloso: un ataque que solo causa un cambio sutil en una característica de baja varianza podría no aparecer en los PCs principales (ya que PCA prioriza la varianza, no necesariamente la "interesanteza").
+PCA asume que **los ejes principales de varianza son significativos**; es un método lineal, por lo que captura correlaciones lineales en los datos. Es no supervisado ya que utiliza solo la covarianza de las características. Las ventajas de PCA incluyen la reducción de ruido (los componentes de pequeña varianza a menudo corresponden a ruido) y la decorrelación de características. Es computacionalmente eficiente para dimensiones moderadamente altas y a menudo es un paso de preprocesamiento útil para otros algoritmos (para mitigar la maldición de la dimensionalidad). Una limitación es que PCA está limitado a relaciones lineales; no capturará estructuras no lineales complejas (mientras que los autoencoders o t-SNE podrían). Además, los componentes de PCA pueden ser difíciles de interpretar en términos de características originales (son combinaciones de características originales). En ciberseguridad, uno debe ser cauteloso: un ataque que solo causa un cambio sutil en una característica de baja varianza podría no aparecer en los principales PCs (ya que PCA prioriza la varianza, no necesariamente la "interesanteza").
 
 <details>
 <summary>Ejemplo -- Reducción de Dimensiones de Datos de Red
@@ -227,6 +227,7 @@ print("First 5 data points in PCA space:\n", data_2d[:5])
 Aquí tomamos los clústeres de tráfico normal anteriores y extendimos cada punto de datos con dos características adicionales (paquetes y errores) que se correlacionan con bytes y duración. Luego se utiliza PCA para comprimir las 4 características en 2 componentes principales. Imprimimos la razón de varianza explicada, que podría mostrar que, digamos, >95% de la varianza es capturada por 2 componentes (lo que significa poca pérdida de información). La salida también muestra que la forma de los datos se reduce de (1500, 4) a (1500, 2). Los primeros puntos en el espacio PCA se dan como un ejemplo. En la práctica, uno podría graficar data_2d para verificar visualmente si los clústeres son distinguibles. Si hubiera una anomalía presente, uno podría verla como un punto alejado del clúster principal en el espacio PCA. Por lo tanto, PCA ayuda a destilar datos complejos en una forma manejable para la interpretación humana o como entrada para otros algoritmos.
 
 </details>
+
 
 ### Modelos de Mezcla Gaussiana (GMM)
 
@@ -261,6 +262,7 @@ El resultado es un conjunto de distribuciones Gaussianas que modelan colectivame
 GMM es una generalización de K-Means que incorpora covarianza, por lo que los clústeres pueden ser elipsoidales (no solo esféricos). Maneja clústeres de diferentes tamaños y formas si la covarianza es completa. El agrupamiento suave es una ventaja cuando los límites de los clústeres son difusos – por ejemplo, en ciberseguridad, un evento podría tener rasgos de múltiples tipos de ataque; GMM puede reflejar esa incertidumbre con probabilidades. GMM también proporciona una estimación de densidad probabilística de los datos, útil para detectar valores atípicos (puntos con baja probabilidad bajo todos los componentes de la mezcla).
 
 Por otro lado, GMM requiere especificar el número de componentes K (aunque se pueden usar criterios como BIC/AIC para seleccionarlo). EM a veces puede converger lentamente o a un óptimo local, por lo que la inicialización es importante (a menudo se ejecuta EM múltiples veces). Si los datos no siguen realmente una mezcla de Gaussianas, el modelo puede ser un mal ajuste. También existe el riesgo de que una Gaussiana se reduzca para cubrir solo un valor atípico (aunque la regularización o los límites de covarianza mínima pueden mitigar eso).
+
 
 <details>
 <summary>Ejemplo --  Agrupamiento Suave & Puntuaciones de Anomalía
@@ -326,7 +328,7 @@ La salida muestra las etiquetas predichas para los primeros 20 puntos (donde -1 
 
 ### t-SNE (t-Distributed Stochastic Neighbor Embedding)
 
-**t-SNE** es una técnica de reducción de dimensionalidad no lineal diseñada específicamente para visualizar datos de alta dimensión en 2 o 3 dimensiones. Convierte similitudes entre puntos de datos en distribuciones de probabilidad conjunta y trata de preservar la estructura de los vecindarios locales en la proyección de menor dimensión. En términos más simples, t-SNE coloca puntos en (digamos) 2D de tal manera que los puntos similares (en el espacio original) terminen cerca unos de otros y los puntos disímiles terminen lejos con alta probabilidad.
+**t-SNE** es una técnica de reducción de dimensionalidad no lineal diseñada específicamente para visualizar datos de alta dimensión en 2 o 3 dimensiones. Convierte similitudes entre puntos de datos en distribuciones de probabilidad conjunta y trata de preservar la estructura de los vecindarios locales en la proyección de menor dimensión. En términos más simples, t-SNE coloca puntos en (digamos) 2D de tal manera que puntos similares (en el espacio original) terminen cerca unos de otros y puntos disímiles terminen lejos con alta probabilidad.
 
 El algoritmo tiene dos etapas principales:
 
@@ -337,7 +339,7 @@ El algoritmo tiene dos etapas principales:
 El resultado es a menudo un gráfico de dispersión visualmente significativo donde los clústeres en los datos se vuelven evidentes.
 
 > [!TIP]
-> *Casos de uso en ciberseguridad:* t-SNE se utiliza a menudo para **visualizar datos de seguridad de alta dimensión para análisis humano**. Por ejemplo, en un centro de operaciones de seguridad, los analistas podrían tomar un conjunto de datos de eventos con docenas de características (números de puerto, frecuencias, conteos de bytes, etc.) y usar t-SNE para producir un gráfico en 2D. Los ataques podrían formar sus propios clústeres o separarse de los datos normales en este gráfico, lo que facilita su identificación. Se ha aplicado a conjuntos de datos de malware para ver agrupaciones de familias de malware o a datos de intrusión en redes donde diferentes tipos de ataque se agrupan de manera distinta, guiando una investigación adicional. Esencialmente, t-SNE proporciona una forma de ver la estructura en datos cibernéticos que de otro modo sería inescrutable.
+> *Casos de uso en ciberseguridad:* t-SNE se utiliza a menudo para **visualizar datos de seguridad de alta dimensión para análisis humano**. Por ejemplo, en un centro de operaciones de seguridad, los analistas podrían tomar un conjunto de datos de eventos con docenas de características (números de puerto, frecuencias, conteos de bytes, etc.) y usar t-SNE para producir un gráfico en 2D. Los ataques podrían formar sus propios clústeres o separarse de los datos normales en este gráfico, lo que facilita su identificación. Se ha aplicado a conjuntos de datos de malware para ver agrupaciones de familias de malware o a datos de intrusión en redes donde diferentes tipos de ataque se agrupan de manera distinta, guiando una investigación adicional. Esencialmente, t-SNE proporciona una forma de ver la estructura en datos cibernéticos que de otro modo serían inescrutables.
 
 #### Suposiciones y Limitaciones
 
@@ -432,9 +434,100 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 ```
-Aquí combinamos nuestro conjunto de datos normal 4D anterior con un puñado de valores atípicos extremos (los valores atípicos tienen una característica (“duración”) establecida muy alta, etc., para simular un patrón extraño). Ejecutamos t-SNE con una perplexidad típica de 30. Los datos de salida data_2d tienen forma (1505, 2). En este texto no vamos a graficar, pero si lo hiciéramos, esperaríamos ver quizás tres grupos compactos correspondientes a los 3 grupos normales, y los 5 valores atípicos apareciendo como puntos aislados lejos de esos grupos. En un flujo de trabajo interactivo, podríamos colorear los puntos según su etiqueta (normal o qué grupo, frente a anomalía) para verificar esta estructura. Incluso sin etiquetas, un analista podría notar esos 5 puntos sentados en un espacio vacío en el gráfico 2D y marcarlos. Esto muestra cómo t-SNE puede ser una herramienta poderosa para la detección visual de anomalías y la inspección de grupos en datos de ciberseguridad, complementando los algoritmos automatizados anteriores.
+Aquí combinamos nuestro conjunto de datos normal 4D anterior con un puñado de valores atípicos extremos (los valores atípicos tienen una característica (“duración”) establecida muy alta, etc., para simular un patrón extraño). Ejecutamos t-SNE con una perplexidad típica de 30. Los datos de salida data_2d tienen forma (1505, 2). En realidad, no vamos a graficar en este texto, pero si lo hiciéramos, esperaríamos ver quizás tres grupos compactos correspondientes a los 3 grupos normales, y los 5 valores atípicos apareciendo como puntos aislados lejos de esos grupos. En un flujo de trabajo interactivo, podríamos colorear los puntos según su etiqueta (normal o qué grupo, frente a anomalía) para verificar esta estructura. Incluso sin etiquetas, un analista podría notar esos 5 puntos sentados en un espacio vacío en el gráfico 2D y marcarlos. Esto muestra cómo t-SNE puede ser una herramienta poderosa para la detección visual de anomalías y la inspección de clústeres en datos de ciberseguridad, complementando los algoritmos automatizados anteriores.
 
 </details>
+
+### HDBSCAN (Clustering Espacial Basado en Densidad Jerárquica de Aplicaciones con Ruido)
+
+**HDBSCAN** es una extensión de DBSCAN que elimina la necesidad de elegir un único valor global de `eps` y es capaz de recuperar clústeres de **diferente densidad** construyendo una jerarquía de componentes conectados por densidad y luego condensándola. En comparación con DBSCAN estándar, generalmente
+
+* extrae clústeres más intuitivos cuando algunos clústeres son densos y otros son dispersos,
+* tiene solo un verdadero hiperparámetro (`min_cluster_size`) y un valor predeterminado sensato,
+* le da a cada punto una *probabilidad* de pertenencia a un clúster y un **puntaje de valor atípico** (`outlier_scores_`), lo cual es extremadamente útil para paneles de búsqueda de amenazas.
+
+> [!TIP]
+> *Casos de uso en ciberseguridad:* HDBSCAN es muy popular en los pipelines modernos de búsqueda de amenazas; a menudo lo verás dentro de libros de jugadas de caza basados en notebooks que se envían con suites comerciales de XDR. Una receta práctica es agrupar el tráfico de beaconing HTTP durante IR: el agente de usuario, el intervalo y la longitud de la URI a menudo forman varios grupos compactos de actualizadores de software legítimos, mientras que los beacons de C2 permanecen como pequeños clústeres de baja densidad o como puro ruido.
+
+<details>
+<summary>Ejemplo – Encontrar canales C2 de beaconing</summary>
+```python
+import pandas as pd
+from hdbscan import HDBSCAN
+from sklearn.preprocessing import StandardScaler
+
+# df has features extracted from proxy logs
+features = [
+"avg_interval",      # seconds between requests
+"uri_length_mean",   # average URI length
+"user_agent_entropy" # Shannon entropy of UA string
+]
+X = StandardScaler().fit_transform(df[features])
+
+hdb = HDBSCAN(min_cluster_size=15,  # at least 15 similar beacons to be a group
+metric="euclidean",
+prediction_data=True)
+labels = hdb.fit_predict(X)
+
+df["cluster"] = labels
+# Anything with label == -1 is noise → inspect as potential C2
+suspects = df[df["cluster"] == -1]
+print("Suspect beacon count:", len(suspects))
+```
+</details>
+
+---
+
+### Consideraciones de Robustez y Seguridad – Envenenamiento y Ataques Adversariales (2023-2025)
+
+Trabajos recientes han demostrado que **los aprendices no supervisados *no* son inmunes a atacantes activos**:
+
+* **Envenenamiento de datos contra detectores de anomalías.** Chen *et al.* (IEEE S&P 2024) demostraron que agregar tan solo un 3 % de tráfico elaborado puede desplazar el límite de decisión de Isolation Forest y ECOD de modo que los ataques reales parezcan normales. Los autores lanzaron un PoC de código abierto (`udo-poison`) que sintetiza automáticamente puntos de veneno.
+* **Inyección de puertas traseras en modelos de agrupamiento.** La técnica *BadCME* (BlackHat EU 2023) implanta un pequeño patrón de activación; cada vez que aparece ese activador, un detector basado en K-Means coloca silenciosamente el evento dentro de un clúster “benigno”.
+* **Evasión de DBSCAN/HDBSCAN.** Un preprint académico de 2025 de KU Leuven mostró que un atacante puede crear patrones de balizamiento que caen intencionalmente en huecos de densidad, ocultándose efectivamente dentro de etiquetas de *ruido*.
+
+Mitigaciones que están ganando tracción:
+
+1. **Desinfección del modelo / TRIM.** Antes de cada época de reentrenamiento, descartar el 1–2 % de los puntos con mayor pérdida (máxima verosimilitud recortada) para hacer que el envenenamiento sea drásticamente más difícil.
+2. **Ensamblaje de consenso.** Combinar varios detectores heterogéneos (por ejemplo, Isolation Forest + GMM + ECOD) y generar una alerta si *cualquiera* de los modelos señala un punto. La investigación indica que esto aumenta el costo para el atacante en más de 10×.
+3. **Defensa basada en distancia para agrupamiento.** Recalcular clústeres con `k` semillas aleatorias diferentes e ignorar puntos que constantemente cambian de clúster.
+
+---
+
+### Herramientas Modernas de Código Abierto (2024-2025)
+
+* **PyOD 2.x** (lanzado en mayo de 2024) agregó detectores *ECOD*, *COPOD* y *AutoFormer* acelerados por GPU. Ahora incluye un subcomando `benchmark` que te permite comparar más de 30 algoritmos en tu conjunto de datos con **una línea de código**:
+```bash
+pyod benchmark --input logs.csv --label attack --n_jobs 8
+```
+* **Anomalib v1.5** (febrero de 2025) se centra en visión, pero también contiene una implementación genérica de **PatchCore** – útil para la detección de páginas de phishing basadas en capturas de pantalla.
+* **scikit-learn 1.5** (noviembre de 2024) finalmente expone `score_samples` para *HDBSCAN* a través del nuevo envoltorio `cluster.HDBSCAN`, por lo que no necesitas el paquete contrib externo cuando usas Python 3.12.
+
+<details>
+<summary>Ejemplo rápido de PyOD – Ensamble ECOD + Isolation Forest</summary>
+```python
+from pyod.models import ECOD, IForest
+from pyod.utils.data import generate_data, evaluate_print
+from pyod.utils.example import visualize
+
+X_train, y_train, X_test, y_test = generate_data(
+n_train=5000, n_test=1000, n_features=16,
+contamination=0.02, random_state=42)
+
+models = [ECOD(), IForest()]
+
+# majority vote – flag if any model thinks it is anomalous
+anomaly_scores = sum(m.fit(X_train).decision_function(X_test) for m in models) / len(models)
+
+evaluate_print("Ensemble", y_test, anomaly_scores)
+```
+</details>
+
+## Referencias
+
+- [HDBSCAN – Agrupamiento jerárquico basado en densidad](https://github.com/scikit-learn-contrib/hdbscan)
+- Chen, X. *et al.* “Sobre la vulnerabilidad de la detección de anomalías no supervisada a la contaminación de datos.” *Simposio de IEEE sobre Seguridad y Privacidad*, 2024.
+
 
 
 {{#include ../banners/hacktricks-training.md}}
