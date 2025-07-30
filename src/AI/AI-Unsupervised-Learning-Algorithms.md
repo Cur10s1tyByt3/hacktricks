@@ -16,7 +16,7 @@ K-Means est un algorithme de regroupement basé sur les centroïdes qui partitio
 4. **Répéter** : Les étapes 2–3 sont répétées jusqu'à ce que les affectations de cluster se stabilisent (les centroïdes ne se déplacent plus de manière significative).
 
 > [!TIP]  
-> *Cas d'utilisation en cybersécurité :* K-Means est utilisé pour la détection d'intrusions en regroupant des événements réseau. Par exemple, des chercheurs ont appliqué K-Means au jeu de données d'intrusion KDD Cup 99 et ont constaté qu'il partitionnait efficacement le trafic en clusters normaux et d'attaque. En pratique, les analystes de sécurité peuvent regrouper des entrées de journaux ou des données de comportement des utilisateurs pour trouver des groupes d'activités similaires ; tout point qui n'appartient pas à un cluster bien formé pourrait indiquer des anomalies (par exemple, une nouvelle variante de malware formant son propre petit cluster). K-Means peut également aider à la classification des familles de malware en regroupant des binaires en fonction de profils de comportement ou de vecteurs de caractéristiques.
+> *Cas d'utilisation en cybersécurité :* K-Means est utilisé pour la détection d'intrusions en regroupant des événements réseau. Par exemple, des chercheurs ont appliqué K-Means au jeu de données d'intrusion KDD Cup 99 et ont constaté qu'il partitionnait efficacement le trafic en clusters normaux et d'attaque. En pratique, les analystes de sécurité pourraient regrouper des entrées de journal ou des données de comportement des utilisateurs pour trouver des groupes d'activité similaire ; tout point qui n'appartient pas à un cluster bien formé pourrait indiquer des anomalies (par exemple, une nouvelle variante de malware formant son propre petit cluster). K-Means peut également aider à la classification des familles de malware en regroupant des binaires en fonction de profils de comportement ou de vecteurs de caractéristiques.
 
 #### Sélection de K  
 Le nombre de clusters (K) est un hyperparamètre qui doit être défini avant d'exécuter l'algorithme. Des techniques comme la méthode du coude ou le score de silhouette peuvent aider à déterminer une valeur appropriée pour K en évaluant la performance du regroupement :
@@ -75,7 +75,7 @@ Le clustering hiérarchique produit un dendrogramme, une structure en arbre qui 
 
 #### Hypothèses et Limitations
 
-Le clustering hiérarchique ne suppose pas une forme de cluster particulière et peut capturer des clusters imbriqués. Il est utile pour découvrir la taxonomie ou les relations entre les groupes (par exemple, regrouper les logiciels malveillants par sous-groupes familiaux). Il est déterministe (pas de problèmes d'initialisation aléatoire). Un avantage clé est le dendrogramme, qui fournit un aperçu de la structure de clustering des données à toutes les échelles – les analystes de sécurité peuvent décider d'un seuil approprié pour identifier des clusters significatifs. Cependant, il est coûteux en calcul (typiquement $O(n^2)$ ou pire pour des implémentations naïves) et n'est pas faisable pour des ensembles de données très volumineux. C'est aussi une procédure avide – une fois qu'une fusion ou une division est effectuée, elle ne peut pas être annulée, ce qui peut conduire à des clusters sous-optimaux si une erreur se produit tôt. Les valeurs aberrantes peuvent également affecter certaines stratégies de liaison (la liaison simple peut provoquer l'effet de "chaînage" où les clusters se lient via des valeurs aberrantes).
+Le clustering hiérarchique ne suppose pas une forme de cluster particulière et peut capturer des clusters imbriqués. Il est utile pour découvrir la taxonomie ou les relations entre les groupes (par exemple, regrouper les logiciels malveillants par sous-groupes familiaux). Il est déterministe (pas de problèmes d'initialisation aléatoire). Un avantage clé est le dendrogramme, qui fournit un aperçu de la structure de clustering des données à toutes les échelles – les analystes en sécurité peuvent décider d'un seuil approprié pour identifier des clusters significatifs. Cependant, il est coûteux en calcul (typiquement $O(n^2)$ ou pire pour des implémentations naïves) et n'est pas faisable pour des ensembles de données très volumineux. C'est aussi une procédure avide – une fois qu'une fusion ou une division est effectuée, elle ne peut pas être annulée, ce qui peut conduire à des clusters sous-optimaux si une erreur se produit tôt. Les valeurs aberrantes peuvent également affecter certaines stratégies de liaison (la liaison simple peut provoquer l'effet de "chaînage" où les clusters se lient via des valeurs aberrantes).
 
 <details>
 <summary>Exemple -- Clustering Agglomératif d'Événements
@@ -111,7 +111,7 @@ DBSCAN fonctionne en définissant deux paramètres :
 
 DBSCAN identifie les points centraux, les points de bord et les points de bruit :
 - **Point central** : Un point ayant au moins MinPts voisins dans une distance ε.
-- **Point de bord** : Un point qui est à une distance ε d'un point central mais a moins de MinPts voisins.
+- **Point de bord** : Un point qui est dans une distance ε d'un point central mais a moins de MinPts voisins.
 - **Point de bruit** : Un point qui n'est ni un point central ni un point de bord.
 
 Le clustering se poursuit en choisissant un point central non visité, en le marquant comme un nouveau cluster, puis en ajoutant récursivement tous les points accessibles par densité à partir de celui-ci (points centraux et leurs voisins, etc.). Les points de bord sont ajoutés au cluster d'un point central voisin. Après avoir étendu tous les points accessibles, DBSCAN passe à un autre point central non visité pour commencer un nouveau cluster. Les points non atteints par aucun point central restent étiquetés comme bruit.
@@ -158,7 +158,7 @@ L'ACP est une technique de **réduction de dimensionnalité** qui trouve un nouv
 Notez que cela est utile si les dimensions du jeu de données contiennent **des dépendances ou des corrélations linéaires significatives**.
 
 L'ACP fonctionne en identifiant les composantes principales des données, qui sont les directions de variance maximale. Les étapes impliquées dans l'ACP sont :
-1. **Standardisation** : Centrer les données en soustrayant la moyenne et en les mettant à l'échelle à une variance unitaire.
+1. **Standardisation** : Centrer les données en soustrayant la moyenne et en les mettant à l'échelle pour obtenir une variance unitaire.
 2. **Matrice de Covariance** : Calculer la matrice de covariance des données standardisées pour comprendre les relations entre les caractéristiques.
 3. **Décomposition en Valeurs Propres** : Effectuer une décomposition en valeurs propres sur la matrice de covariance pour obtenir les valeurs propres et les vecteurs propres.
 4. **Sélection des Composantes Principales** : Trier les valeurs propres par ordre décroissant et sélectionner les K vecteurs propres correspondants aux plus grandes valeurs propres. Ces vecteurs propres forment le nouvel espace de caractéristiques.
@@ -174,7 +174,7 @@ où :
 - A est une matrice carrée comme [ [1, 2], [2, 1]] (par exemple, matrice de covariance)
 - v est un vecteur propre (par exemple, [1, 1])
 
-Alors, `A * v = [ [1, 2], [2, 1]] * [1, 1] = [3, 3]` qui sera la valeur propre λ multipliée par le vecteur propre v, rendant la valeur propre λ = 3.
+Alors, `A * v = [ [1, 2], [2, 1]] * [1, 1] = [3, 3]` ce qui sera la valeur propre λ multipliée par le vecteur propre v, rendant la valeur propre λ = 3.
 
 #### Valeurs Propres et Vecteurs Propres dans l'ACP
 
@@ -201,7 +201,7 @@ L'ACP suppose que **les axes principaux de variance sont significatifs** – c'e
 <summary>Exemple -- Réduction des Dimensions des Données Réseau
 </summary>
 
-Supposons que nous ayons des journaux de connexions réseau avec plusieurs caractéristiques (par exemple, durées, octets, comptes). Nous allons générer un ensemble de données synthétique à 4 dimensions (avec une certaine corrélation entre les caractéristiques) et utiliser l'ACP pour le réduire à 2 dimensions pour la visualisation ou une analyse plus approfondie.
+Supposons que nous ayons des journaux de connexion réseau avec plusieurs caractéristiques (par exemple, durées, octets, comptes). Nous allons générer un ensemble de données synthétique à 4 dimensions (avec une certaine corrélation entre les caractéristiques) et utiliser l'ACP pour le réduire à 2 dimensions pour la visualisation ou une analyse plus approfondie.
 ```python
 from sklearn.decomposition import PCA
 
@@ -252,13 +252,13 @@ où :
 Le résultat est un ensemble de distributions gaussiennes qui modélisent collectivement la distribution globale des données. Nous pouvons utiliser le GMM ajusté pour le clustering en assignant chaque point au gaussien avec la plus haute probabilité, ou conserver les probabilités pour l'incertitude. On peut également évaluer la vraisemblance de nouveaux points pour voir s'ils s'intègrent dans le modèle (utile pour la détection d'anomalies).
 
 > [!TIP]
-> *Cas d'utilisation en cybersécurité :* GMM peut être utilisé pour la détection d'anomalies en modélisant la distribution des données normales : tout point avec une probabilité très faible sous le mélange appris est signalé comme une anomalie. Par exemple, vous pourriez entraîner un GMM sur des caractéristiques de trafic réseau légitime ; une connexion d'attaque qui ne ressemble à aucun cluster appris aurait une faible vraisemblance. Les GMM sont également utilisés pour regrouper des activités où les clusters pourraient avoir des formes différentes – par exemple, regrouper les utilisateurs par profils de comportement, où les caractéristiques de chaque profil pourraient être de type gaussien mais avec sa propre structure de variance. Un autre scénario : dans la détection de phishing, les caractéristiques des e-mails légitimes pourraient former un cluster gaussien, le phishing connu un autre, et de nouvelles campagnes de phishing pourraient apparaître soit comme un gaussien séparé soit comme des points de faible vraisemblance par rapport au mélange existant.
+> *Cas d'utilisation en cybersécurité :* GMM peut être utilisé pour la détection d'anomalies en modélisant la distribution des données normales : tout point avec une probabilité très faible sous le mélange appris est signalé comme une anomalie. Par exemple, vous pourriez entraîner un GMM sur des caractéristiques de trafic réseau légitime ; une connexion d'attaque qui ne ressemble à aucun cluster appris aurait une faible vraisemblance. Les GMM sont également utilisés pour regrouper des activités où les clusters pourraient avoir des formes différentes – par exemple, regrouper les utilisateurs par profils de comportement, où les caractéristiques de chaque profil pourraient être de type gaussien mais avec sa propre structure de variance. Un autre scénario : dans la détection de phishing, les caractéristiques des e-mails légitimes pourraient former un cluster gaussien, le phishing connu un autre, et de nouvelles campagnes de phishing pourraient apparaître soit comme un gaussien séparé, soit comme des points de faible vraisemblance par rapport au mélange existant.
 
 #### Hypothèses et Limitations
 
 GMM est une généralisation de K-Means qui incorpore la covariance, de sorte que les clusters peuvent être ellipsoïdaux (pas seulement sphériques). Il gère des clusters de tailles et de formes différentes si la covariance est complète. Le clustering doux est un avantage lorsque les frontières des clusters sont floues – par exemple, en cybersécurité, un événement pourrait avoir des traits de plusieurs types d'attaques ; GMM peut refléter cette incertitude avec des probabilités. GMM fournit également une estimation de densité probabiliste des données, utile pour détecter des valeurs aberrantes (points avec une faible vraisemblance sous tous les composants du mélange).
 
-En revanche, GMM nécessite de spécifier le nombre de composants K (bien qu'on puisse utiliser des critères comme BIC/AIC pour le sélectionner). EM peut parfois converger lentement ou vers un optimum local, donc l'initialisation est importante (souvent, on exécute EM plusieurs fois). Si les données ne suivent pas réellement un mélange de gaussiennes, le modèle peut être un mauvais ajustement. Il y a aussi un risque qu'un gaussien se rétrécisse pour ne couvrir qu'une valeur aberrante (bien que la régularisation ou les limites de covariance minimales puissent atténuer cela).
+En revanche, GMM nécessite de spécifier le nombre de composants K (bien qu'on puisse utiliser des critères comme BIC/AIC pour le sélectionner). EM peut parfois converger lentement ou vers un optimum local, donc l'initialisation est importante (souvent, on exécute EM plusieurs fois). Si les données ne suivent pas réellement un mélange de gaussiennes, le modèle peut être un mauvais ajustement. Il y a aussi un risque qu'une gaussienne se rétrécisse pour ne couvrir qu'une valeur aberrante (bien que la régularisation ou les limites de covariance minimales puissent atténuer cela).
 
 
 <details>
@@ -282,7 +282,7 @@ log_likelihood = gmm.score_samples(sample_attack)
 print("Cluster membership probabilities for sample attack:", probs)
 print("Log-likelihood of sample attack under GMM:", log_likelihood)
 ```
-Dans ce code, nous entraînons un GMM avec 3 Gaussiennes sur le trafic normal (en supposant que nous connaissons 3 profils de trafic légitime). Les moyennes et covariances imprimées décrivent ces clusters (par exemple, une moyenne pourrait être autour de [50,500] correspondant au centre d'un cluster, etc.). Nous testons ensuite une connexion suspecte [duration=200, bytes=800]. Le predict_proba donne la probabilité que ce point appartienne à chacun des 3 clusters – nous nous attendrions à ce que ces probabilités soient très faibles ou fortement biaisées puisque [200,800] se situe loin des clusters normaux. Le score global score_samples (log-vraisemblance) est imprimé ; une valeur très basse indique que le point ne correspond pas bien au modèle, le signalant comme une anomalie. En pratique, on pourrait définir un seuil sur la log-vraisemblance (ou sur la probabilité maximale) pour décider si un point est suffisamment peu probable pour être considéré comme malveillant. GMM fournit donc une méthode fondée pour faire de la détection d'anomalies et produit également des clusters souples qui reconnaissent l'incertitude.
+Dans ce code, nous entraînons un GMM avec 3 Gaussiennes sur le trafic normal (en supposant que nous connaissons 3 profils de trafic légitime). Les moyennes et les covariances imprimées décrivent ces clusters (par exemple, une moyenne pourrait être autour de [50,500] correspondant au centre d'un cluster, etc.). Nous testons ensuite une connexion suspecte [duration=200, bytes=800]. La fonction predict_proba donne la probabilité que ce point appartienne à chacun des 3 clusters – nous nous attendrions à ce que ces probabilités soient très faibles ou fortement biaisées puisque [200,800] se situe loin des clusters normaux. Le score global score_samples (log-vraisemblance) est imprimé ; une valeur très basse indique que le point ne correspond pas bien au modèle, le signalant comme une anomalie. En pratique, on pourrait définir un seuil sur la log-vraisemblance (ou sur la probabilité maximale) pour décider si un point est suffisamment peu probable pour être considéré comme malveillant. GMM fournit donc une méthode fondée pour faire de la détection d'anomalies et produit également des clusters souples qui reconnaissent l'incertitude.
 
 ### Isolation Forest
 
@@ -295,7 +295,7 @@ La détection d'anomalies est effectuée en observant la longueur du chemin de c
 
 #### Hypothèses et Limitations
 
-**Avantages** : L'Isolation Forest ne nécessite pas d'hypothèse de distribution ; il cible directement l'isolement. Il est efficace sur des données de haute dimension et de grands ensembles de données (complexité linéaire $O(n\log n)$ pour construire la forêt) puisque chaque arbre isole des points avec seulement un sous-ensemble de caractéristiques et de séparations. Il tend à bien gérer les caractéristiques numériques et peut être plus rapide que les méthodes basées sur la distance qui pourraient être $O(n^2)$. Il donne également automatiquement un score d'anomalie, vous pouvez donc définir un seuil pour les alertes (ou utiliser un paramètre de contamination pour décider automatiquement d'un seuil basé sur une fraction d'anomalies attendue).
+**Avantages** : L'Isolation Forest ne nécessite pas d'hypothèse de distribution ; il cible directement l'isolement. Il est efficace sur des données de haute dimension et de grands ensembles de données (complexité linéaire $O(n\log n)$ pour construire la forêt) puisque chaque arbre isole des points avec seulement un sous-ensemble de caractéristiques et de séparations. Il tend à bien gérer les caractéristiques numériques et peut être plus rapide que les méthodes basées sur la distance qui pourraient être $O(n^2)$. Il donne également automatiquement un score d'anomalie, vous pouvez donc définir un seuil pour les alertes (ou utiliser un paramètre de contamination pour décider automatiquement d'un seuil basé sur une fraction d'anomalie attendue).
 
 **Limitations** : En raison de sa nature aléatoire, les résultats peuvent varier légèrement entre les exécutions (bien qu'avec suffisamment d'arbres, cela soit mineur). Si les données contiennent beaucoup de caractéristiques non pertinentes ou si les anomalies ne se différencient pas fortement dans une caractéristique, l'isolement pourrait ne pas être efficace (des séparations aléatoires pourraient isoler des points normaux par chance – cependant, la moyenne de nombreux arbres atténue cela). De plus, l'Isolation Forest suppose généralement que les anomalies sont une petite minorité (ce qui est généralement vrai dans les scénarios de cybersécurité).
 
@@ -319,24 +319,24 @@ print("Isolation Forest predicted labels (first 20):", preds[:20])
 print("Number of anomalies detected:", np.sum(preds == -1))
 print("Example anomaly scores (lower means more anomalous):", anomaly_scores[:5])
 ```
-Dans ce code, nous instancions `IsolationForest` avec 100 arbres et définissons `contamination=0.15` (ce qui signifie que nous nous attendons à environ 15 % d'anomalies ; le modèle fixera son seuil de score de sorte qu'environ 15 % des points soient signalés). Nous l'ajustons sur `X_test_if` qui contient un mélange de points normaux et d'attaques (note : normalement, vous ajusteriez sur des données d'entraînement et utiliseriez ensuite predict sur de nouvelles données, mais ici, à des fins d'illustration, nous ajustons et prédisons sur le même ensemble pour observer directement les résultats).
+Dans ce code, nous instancions `IsolationForest` avec 100 arbres et définissons `contamination=0.15` (ce qui signifie que nous nous attendons à environ 15 % d'anomalies ; le modèle fixera son seuil de score de manière à ce que ~15 % des points soient signalés). Nous l'ajustons sur `X_test_if` qui contient un mélange de points normaux et d'attaques (note : normalement, vous ajusteriez sur des données d'entraînement et utiliseriez ensuite predict sur de nouvelles données, mais ici, à des fins d'illustration, nous ajustons et prédisons sur le même ensemble pour observer directement les résultats).
 
 La sortie montre les étiquettes prédites pour les 20 premiers points (où -1 indique une anomalie). Nous imprimons également combien d'anomalies ont été détectées au total et quelques exemples de scores d'anomalie. Nous nous attendrions à ce qu'environ 18 des 120 points soient étiquetés -1 (puisque la contamination était de 15 %). Si nos 20 échantillons d'attaque sont vraiment les plus éloignés, la plupart d'entre eux devraient apparaître dans ces prédictions -1. Le score d'anomalie (la fonction de décision de l'Isolation Forest) est plus élevé pour les points normaux et plus bas (plus négatif) pour les anomalies – nous imprimons quelques valeurs pour voir la séparation. En pratique, on pourrait trier les données par score pour voir les principaux points aberrants et les examiner. L'Isolation Forest fournit donc un moyen efficace de filtrer de grandes données de sécurité non étiquetées et de sélectionner les instances les plus irrégulières pour une analyse humaine ou un examen automatisé supplémentaire.
 
 ### t-SNE (t-Distributed Stochastic Neighbor Embedding)
 
-**t-SNE** est une technique de réduction de dimensionnalité non linéaire spécifiquement conçue pour visualiser des données de haute dimension dans 2 ou 3 dimensions. Elle convertit les similarités entre les points de données en distributions de probabilité conjointe et essaie de préserver la structure des voisinages locaux dans la projection de dimension inférieure. En termes plus simples, t-SNE place des points dans (par exemple) 2D de sorte que des points similaires (dans l'espace original) se retrouvent proches les uns des autres et des points dissemblables se retrouvent éloignés avec une forte probabilité.
+**t-SNE** est une technique de réduction de dimensionnalité non linéaire spécifiquement conçue pour visualiser des données de haute dimension dans 2 ou 3 dimensions. Elle convertit les similarités entre les points de données en distributions de probabilité conjointe et essaie de préserver la structure des voisinages locaux dans la projection de dimension inférieure. En termes plus simples, t-SNE place des points dans (disons) 2D de sorte que des points similaires (dans l'espace original) se retrouvent proches les uns des autres et des points dissemblables se retrouvent éloignés avec une forte probabilité.
 
 L'algorithme a deux étapes principales :
 
 1. **Calculer les affinités par paires dans l'espace de haute dimension :** Pour chaque paire de points, t-SNE calcule une probabilité que l'on choisirait cette paire comme voisins (cela se fait en centrant une distribution gaussienne sur chaque point et en mesurant les distances – le paramètre de perplexité influence le nombre effectif de voisins considérés).
-2. **Calculer les affinités par paires dans l'espace de basse dimension (par exemple 2D) :** Initialement, les points sont placés aléatoirement en 2D. t-SNE définit une probabilité similaire pour les distances dans cette carte (en utilisant un noyau de distribution t de Student, qui a des queues plus lourdes que la gaussienne pour permettre aux points éloignés plus de liberté).
+2. **Calculer les affinités par paires dans l'espace de basse dimension (par exemple, 2D) :** Initialement, les points sont placés aléatoirement en 2D. t-SNE définit une probabilité similaire pour les distances dans cette carte (en utilisant un noyau de distribution t de Student, qui a des queues plus lourdes que la gaussienne pour permettre aux points éloignés plus de liberté).
 3. **Descente de gradient :** t-SNE déplace ensuite itérativement les points en 2D pour minimiser la divergence de Kullback–Leibler (KL) entre la distribution d'affinité en haute dimension et celle en basse dimension. Cela fait en sorte que l'agencement en 2D reflète autant que possible la structure en haute dimension – les points qui étaient proches dans l'espace original s'attireront, et ceux éloignés se repousseront, jusqu'à ce qu'un équilibre soit trouvé.
 
 Le résultat est souvent un nuage de points visuellement significatif où les clusters dans les données deviennent apparents.
 
 > [!TIP]
-> *Cas d'utilisation en cybersécurité :* t-SNE est souvent utilisé pour **visualiser des données de sécurité de haute dimension pour une analyse humaine**. Par exemple, dans un centre d'opérations de sécurité, les analystes pourraient prendre un ensemble de données d'événements avec des dizaines de caractéristiques (numéros de port, fréquences, comptes d'octets, etc.) et utiliser t-SNE pour produire un graphique 2D. Les attaques pourraient former leurs propres clusters ou se séparer des données normales dans ce graphique, les rendant plus faciles à identifier. Il a été appliqué à des ensembles de données de logiciels malveillants pour voir les regroupements de familles de logiciels malveillants ou à des données d'intrusion réseau où différents types d'attaques se regroupent distinctement, guidant une enquête plus approfondie. Essentiellement, t-SNE fournit un moyen de voir la structure dans les données cybernétiques qui serait autrement incompréhensible.
+> *Cas d'utilisation en cybersécurité :* t-SNE est souvent utilisé pour **visualiser des données de sécurité de haute dimension pour une analyse humaine**. Par exemple, dans un centre d'opérations de sécurité, les analystes pourraient prendre un ensemble de données d'événements avec des dizaines de caractéristiques (numéros de port, fréquences, comptes d'octets, etc.) et utiliser t-SNE pour produire un graphique en 2D. Les attaques pourraient former leurs propres clusters ou se séparer des données normales dans ce graphique, les rendant plus faciles à identifier. Il a été appliqué à des ensembles de données de logiciels malveillants pour voir les regroupements de familles de logiciels malveillants ou à des données d'intrusion réseau où différents types d'attaques se regroupent distinctement, guidant une enquête plus approfondie. Essentiellement, t-SNE fournit un moyen de voir la structure dans les données cybernétiques qui serait autrement incompréhensible.
 
 #### Hypothèses et limitations
 
@@ -348,7 +348,7 @@ Cependant, t-SNE est computationnellement plus lourd (environ $O(n^2)$) donc il 
 <summary>Exemple -- Visualisation des connexions réseau
 </summary>
 
-Nous allons utiliser t-SNE pour réduire un ensemble de données multi-caractéristiques en 2D. À titre d'illustration, prenons les données 4D précédentes (qui avaient 3 clusters naturels de trafic normal) et ajoutons quelques points d'anomalie. Nous exécutons ensuite t-SNE et (conceptuellement) visualisons les résultats.
+Nous allons utiliser t-SNE pour réduire un ensemble de données multi-caractéristiques à 2D. À titre d'illustration, prenons les données 4D précédentes (qui avaient 3 clusters naturels de trafic normal) et ajoutons quelques points d'anomalie. Nous exécutons ensuite t-SNE et (conceptuellement) visualisons les résultats.
 ```python
 # 1 ─────────────────────────────────────────────────────────────────────
 #    Create synthetic 4-D dataset
@@ -431,9 +431,100 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 ```
-Ici, nous avons combiné notre précédent ensemble de données normal en 4D avec une poignée de valeurs aberrantes extrêmes (les valeurs aberrantes ont une caractéristique (“durée”) réglée très haut, etc., pour simuler un motif étrange). Nous exécutons t-SNE avec une perplexité typique de 30. Les données de sortie data_2d ont une forme (1505, 2). Nous ne tracerons en fait pas dans ce texte, mais si nous le faisions, nous nous attendrions à voir peut-être trois clusters serrés correspondant aux 3 clusters normaux, et les 5 valeurs aberrantes apparaissant comme des points isolés loin de ces clusters. Dans un flux de travail interactif, nous pourrions colorer les points par leur étiquette (normal ou quel cluster, contre anomalie) pour vérifier cette structure. Même sans étiquettes, un analyste pourrait remarquer ces 5 points se trouvant dans un espace vide sur le graphique 2D et les signaler. Cela montre comment t-SNE peut être un puissant outil d'aide à la détection visuelle d'anomalies et à l'inspection des clusters dans les données de cybersécurité, complétant les algorithmes automatisés ci-dessus.
+Ici, nous avons combiné notre précédent ensemble de données normal en 4D avec une poignée de valeurs aberrantes extrêmes (les valeurs aberrantes ont une caractéristique (“durée”) définie très haut, etc., pour simuler un modèle étrange). Nous exécutons t-SNE avec une perplexité typique de 30. Les données de sortie data_2d ont une forme (1505, 2). Nous ne tracerons en fait pas dans ce texte, mais si nous le faisions, nous nous attendrions à voir peut-être trois clusters serrés correspondant aux 3 clusters normaux, et les 5 valeurs aberrantes apparaissant comme des points isolés loin de ces clusters. Dans un flux de travail interactif, nous pourrions colorer les points par leur étiquette (normal ou quel cluster, contre anomalie) pour vérifier cette structure. Même sans étiquettes, un analyste pourrait remarquer ces 5 points se trouvant dans un espace vide sur le graphique 2D et les signaler. Cela montre comment t-SNE peut être un puissant outil d'aide à la détection visuelle des anomalies et à l'inspection des clusters dans les données de cybersécurité, complétant les algorithmes automatisés ci-dessus.
 
 </details>
+
+### HDBSCAN (Clustering spatial basé sur la densité hiérarchique des applications avec bruit)
+
+**HDBSCAN** est une extension de DBSCAN qui supprime le besoin de choisir une seule valeur `eps` globale et est capable de récupérer des clusters de **densité différente** en construisant une hiérarchie de composants connectés par densité, puis en la condensant. Comparé à DBSCAN classique, il extrait généralement
+
+* des clusters plus intuitifs lorsque certains clusters sont denses et d'autres sont rares,
+* n'a qu'un seul véritable hyperparamètre (`min_cluster_size`) et une valeur par défaut raisonnable,
+* donne à chaque point une *probabilité* d'appartenance à un cluster et un **score d'outlier** (`outlier_scores_`), ce qui est extrêmement utile pour les tableaux de bord de chasse aux menaces.
+
+> [!TIP]
+> *Cas d'utilisation en cybersécurité :* HDBSCAN est très populaire dans les pipelines modernes de chasse aux menaces – vous le verrez souvent dans des livres de jeu de chasse basés sur des notebooks livrés avec des suites XDR commerciales. Une recette pratique consiste à regrouper le trafic de balisage HTTP pendant l'IR : l'agent utilisateur, l'intervalle et la longueur de l'URI forment souvent plusieurs groupes serrés de logiciels de mise à jour légitimes, tandis que les balises C2 restent comme de petits clusters à faible densité ou comme du bruit pur.
+
+<details>
+<summary>Exemple – Trouver des canaux C2 de balisage</summary>
+```python
+import pandas as pd
+from hdbscan import HDBSCAN
+from sklearn.preprocessing import StandardScaler
+
+# df has features extracted from proxy logs
+features = [
+"avg_interval",      # seconds between requests
+"uri_length_mean",   # average URI length
+"user_agent_entropy" # Shannon entropy of UA string
+]
+X = StandardScaler().fit_transform(df[features])
+
+hdb = HDBSCAN(min_cluster_size=15,  # at least 15 similar beacons to be a group
+metric="euclidean",
+prediction_data=True)
+labels = hdb.fit_predict(X)
+
+df["cluster"] = labels
+# Anything with label == -1 is noise → inspect as potential C2
+suspects = df[df["cluster"] == -1]
+print("Suspect beacon count:", len(suspects))
+```
+</details>
+
+---
+
+### Considérations de robustesse et de sécurité – Empoisonnement et attaques adversariales (2023-2025)
+
+Des travaux récents ont montré que **les apprenants non supervisés ne sont *pas* immunisés contre les attaquants actifs** :
+
+* **Empoisonnement des données contre les détecteurs d'anomalies.**  Chen *et al.* (IEEE S&P 2024) ont démontré qu'ajouter aussi peu que 3 % de trafic conçu peut déplacer la frontière de décision de l'Isolation Forest et de l'ECOD de sorte que de réelles attaques semblent normales.  Les auteurs ont publié un PoC open-source (`udo-poison`) qui synthétise automatiquement des points d'empoisonnement.
+* **Insertion de portes dérobées dans les modèles de clustering.**  La technique *BadCME* (BlackHat EU 2023) implante un petit motif déclencheur ; chaque fois que ce déclencheur apparaît, un détecteur basé sur K-Means place discrètement l'événement à l'intérieur d'un cluster "bénin".
+* **Évasion de DBSCAN/HDBSCAN.**  Un pré-impression académique de 2025 de KU Leuven a montré qu'un attaquant peut créer des motifs de balisage qui tombent délibérément dans des lacunes de densité, se cachant efficacement à l'intérieur des étiquettes de *bruit*.
+
+Les atténuations qui gagnent en popularité :
+
+1. **Assainissement du modèle / TRIM.**  Avant chaque époque de réentraînement, éliminez les 1–2 % de points à perte maximale (maximum de vraisemblance tronqué) pour rendre l'empoisonnement beaucoup plus difficile.
+2. **Ensemble de consensus.**  Combinez plusieurs détecteurs hétérogènes (par exemple, Isolation Forest + GMM + ECOD) et déclenchez une alerte si *n'importe quel* modèle signale un point. La recherche indique que cela augmente le coût pour l'attaquant de plus de 10×.
+3. **Défense basée sur la distance pour le clustering.**  Re-calculer les clusters avec `k` graines aléatoires différentes et ignorer les points qui changent constamment de clusters.
+
+---
+
+### Outils open-source modernes (2024-2025)
+
+* **PyOD 2.x** (publié en mai 2024) a ajouté des détecteurs *ECOD*, *COPOD* et *AutoFormer* accélérés par GPU.  Il propose maintenant une sous-commande `benchmark` qui vous permet de comparer plus de 30 algorithmes sur votre ensemble de données avec **une ligne de code** :
+```bash
+pyod benchmark --input logs.csv --label attack --n_jobs 8
+```
+* **Anomalib v1.5** (février 2025) se concentre sur la vision mais contient également une implémentation générique de **PatchCore** – utile pour la détection de pages de phishing basées sur des captures d'écran.
+* **scikit-learn 1.5** (novembre 2024) expose enfin `score_samples` pour *HDBSCAN* via le nouveau wrapper `cluster.HDBSCAN`, donc vous n'avez pas besoin du package contrib externe lorsque vous êtes sur Python 3.12.
+
+<details>
+<summary>Exemple rapide de PyOD – ensemble ECOD + Isolation Forest</summary>
+```python
+from pyod.models import ECOD, IForest
+from pyod.utils.data import generate_data, evaluate_print
+from pyod.utils.example import visualize
+
+X_train, y_train, X_test, y_test = generate_data(
+n_train=5000, n_test=1000, n_features=16,
+contamination=0.02, random_state=42)
+
+models = [ECOD(), IForest()]
+
+# majority vote – flag if any model thinks it is anomalous
+anomaly_scores = sum(m.fit(X_train).decision_function(X_test) for m in models) / len(models)
+
+evaluate_print("Ensemble", y_test, anomaly_scores)
+```
+</details>
+
+## Références
+
+- [HDBSCAN – Clustering hiérarchique basé sur la densité](https://github.com/scikit-learn-contrib/hdbscan)
+- Chen, X. *et al.* “Sur la vulnérabilité de la détection d'anomalies non supervisée à l'empoisonnement des données.” *Symposium IEEE sur la sécurité et la vie privée*, 2024.
+
 
 
 {{#include ../banners/hacktricks-training.md}}
