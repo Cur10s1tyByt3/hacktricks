@@ -37,7 +37,7 @@ sudo perl -d /usr/bin/some_admin_script.pl   # abrirá un shell antes de ejecuta
 
 * **`PERL5SHELL`** – en Windows, esta variable controla qué ejecutable de shell usará Perl cuando necesite crear un shell. Se menciona aquí solo por completitud, ya que no es relevante en macOS.
 
-Aunque `PERL5DB` requiere el interruptor `-d`, es común encontrar scripts de mantenimiento o instalación que se ejecutan como *root* con esta bandera habilitada para una solución de problemas detallada, lo que convierte a la variable en un vector de escalación válido.
+Aunque `PERL5DB` requiere el interruptor `-d`, es común encontrar scripts de mantenimiento o instalación que se ejecutan como *root* con esta bandera habilitada para la solución de problemas detallada, lo que convierte a la variable en un vector de escalación válido.
 
 ## A través de dependencias (abuso de @INC)
 
@@ -57,7 +57,7 @@ La salida típica en macOS 13/14 se ve así:
 /System/Library/Perl/Extras/5.30/darwin-thread-multi-2level
 /System/Library/Perl/Extras/5.30
 ```
-Algunas de las carpetas devueltas ni siquiera existen, sin embargo **`/Library/Perl/5.30`** sí existe, *no* está protegida por SIP y está *antes* de las carpetas protegidas por SIP. Por lo tanto, si puedes escribir como *root*, puedes dejar un módulo malicioso (por ejemplo, `File/Basename.pm`) que será *cargado preferentemente* por cualquier script privilegiado que importe ese módulo.
+Algunas de las carpetas devueltas ni siquiera existen, sin embargo **`/Library/Perl/5.30`** sí existe, *no* está protegida por SIP y está *antes* de las carpetas protegidas por SIP. Por lo tanto, si puedes escribir como *root*, puedes colocar un módulo malicioso (por ejemplo, `File/Basename.pm`) que será *cargado preferentemente* por cualquier script privilegiado que importe ese módulo.
 
 > [!WARNING]
 > Aún necesitas **root** para escribir dentro de `/Library/Perl` y macOS mostrará un aviso de **TCC** pidiendo *Acceso Completo al Disco* para el proceso que realiza la operación de escritura.
@@ -67,7 +67,7 @@ Por ejemplo, si un script está importando **`use File::Basename;`**, sería pos
 ## Bypass de SIP a través del Asistente de Migración (CVE-2023-32369 “Migraine”)
 
 En mayo de 2023, Microsoft divulgó **CVE-2023-32369**, apodado **Migraine**, una técnica de post-explotación que permite a un atacante *root* **eludir completamente la Protección de Integridad del Sistema (SIP)**. 
-El componente vulnerable es **`systemmigrationd`**, un demonio con el derecho **`com.apple.rootless.install.heritable`**. Cualquier proceso hijo generado por este demonio hereda el derecho y, por lo tanto, se ejecuta **fuera** de las restricciones de SIP.
+El componente vulnerable es **`systemmigrationd`**, un daemon con el derecho **`com.apple.rootless.install.heritable`**. Cualquier proceso hijo generado por este daemon hereda el derecho y, por lo tanto, se ejecuta **fuera** de las restricciones de SIP.
 
 Entre los hijos identificados por los investigadores se encuentra el intérprete firmado por Apple:
 ```
@@ -87,7 +87,7 @@ Apple solucionó el problema en macOS **Ventura 13.4**, **Monterey 12.6.6** y **
 
 ## Recomendaciones de endurecimiento
 
-1. **Limpiar variables peligrosas** – los launchdaemons o trabajos cron privilegiados deben iniciarse con un entorno limpio (`launchctl unsetenv PERL5OPT`, `env -i`, etc.).
+1. **Limpiar variables peligrosas** – los launchdaemons o trabajos cron privilegiados deben comenzar con un entorno limpio (`launchctl unsetenv PERL5OPT`, `env -i`, etc.).
 2. **Evitar ejecutar intérpretes como root** a menos que sea estrictamente necesario. Utiliza binarios compilados o reduce privilegios temprano.
 3. **Proveer scripts con `-T` (modo de contaminación)** para que Perl ignore `PERL5OPT` y otros interruptores inseguros cuando la verificación de contaminación está habilitada.
 4. **Mantener macOS actualizado** – “Migraine” está completamente parcheado en las versiones actuales.

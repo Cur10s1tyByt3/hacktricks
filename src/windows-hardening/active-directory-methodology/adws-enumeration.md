@@ -44,7 +44,7 @@ soapy ludus.domain/jdoe:'P@ssw0rd'@10.2.10.10 \
 -q '(objectClass=domain)' \
 | tee data/domain.log
 ```
-3. **Recopilar objetos relacionados con ADCS de la NC de Configuración:**
+3. **Recopilar objetos relacionados con ADCS del NC de Configuración:**
 ```bash
 soapy ludus.domain/jdoe:'P@ssw0rd'@10.2.10.10 \
 -dn 'CN=Configuration,DC=ludus,DC=domain' \
@@ -64,13 +64,13 @@ soapy ludus.domain/jdoe:'P@ssw0rd'@dc.ludus.domain \
 --set 'CN=Victim,OU=Servers,DC=ludus,DC=domain' \
 msDs-AllowedToActOnBehalfOfOtherIdentity 'B:32:01....'
 ```
-Combina esto con `s4u2proxy`/`Rubeus /getticket` para una cadena completa de **Delegación Constrainida Basada en Recursos**.
+Combine esto con `s4u2proxy`/`Rubeus /getticket` para una cadena completa de **Delegación Constrainida Basada en Recursos**.
 
 ## Detección y Fortalecimiento
 
 ### Registro Verboso de ADDS
 
-Habilita las siguientes claves de registro en los Controladores de Dominio para mostrar búsquedas costosas / ineficientes provenientes de ADWS (y LDAP):
+Habilite las siguientes claves de registro en los Controladores de Dominio para mostrar búsquedas costosas / ineficientes provenientes de ADWS (y LDAP):
 ```powershell
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Diagnostics' -Name '15 Field Engineering' -Value 5 -Type DWORD
 New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters' -Name 'Expensive Search Results Threshold' -Value 1 -Type DWORD
@@ -98,7 +98,7 @@ Ejemplo de regla predefinida de Elastic:
 
 ## Referencias
 
-* [SpecterOps – Asegúrate de usar SOAP(y) – Una guía para operadores sobre la recolección sigilosa de AD usando ADWS](https://specterops.io/blog/2025/07/25/make-sure-to-use-soapy-an-operators-guide-to-stealthy-ad-collection-using-adws/)
+* [SpecterOps – Asegúrate de Usar SOAP(y) – Una Guía para Operadores sobre la Recolección Sigilosa de AD Usando ADWS](https://specterops.io/blog/2025/07/25/make-sure-to-use-soapy-an-operators-guide-to-stealthy-ad-collection-using-adws/)
 * [SoaPy GitHub](https://github.com/logangoins/soapy)
 * [BOFHound GitHub](https://github.com/bohops/BOFHound)
 * [Microsoft – Especificaciones MC-NBFX, MC-NBFSE, MS-NNS, MC-NMF](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-nbfx/)

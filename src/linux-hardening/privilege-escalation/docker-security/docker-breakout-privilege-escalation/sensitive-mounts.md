@@ -10,13 +10,13 @@ La exposición de `/proc`, `/sys` y `/var` sin un aislamiento adecuado de namesp
 
 ### `/proc/sys`
 
-Este directorio permite el acceso para modificar variables del kernel, generalmente a través de `sysctl(2)`, y contiene varias subcarpetas de interés:
+Este directorio permite el acceso para modificar variables del kernel, generalmente a través de `sysctl(2)`, y contiene varios subdirectorios de preocupación:
 
 #### **`/proc/sys/kernel/core_pattern`**
 
 - Descrito en [core(5)](https://man7.org/linux/man-pages/man5/core.5.html).
 - Si puedes escribir dentro de este archivo, es posible escribir un pipe `|` seguido de la ruta a un programa o script que se ejecutará después de que ocurra un fallo.
-- Un atacante puede encontrar la ruta dentro del host a su contenedor ejecutando `mount` y escribir la ruta a un binario dentro de su sistema de archivos del contenedor. Luego, hacer que un programa falle para que el kernel ejecute el binario fuera del contenedor.
+- Un atacante puede encontrar la ruta dentro del host a su contenedor ejecutando `mount` y escribir la ruta a un binario dentro de su sistema de archivos de contenedor. Luego, hacer que un programa falle para que el kernel ejecute el binario fuera del contenedor.
 
 - **Ejemplo de Prueba y Explotación**:
 ```bash
@@ -50,7 +50,7 @@ ls -l $(cat /proc/sys/kernel/modprobe) # Verificar acceso a modprobe
 #### **`/proc/sys/vm/panic_on_oom`**
 
 - Referenciado en [proc(5)](https://man7.org/linux/man-pages/man5/proc.5.html).
-- Una bandera global que controla si el kernel entra en pánico o invoca al OOM killer cuando ocurre una condición OOM.
+- Una bandera global que controla si el kernel entra en pánico o invoca al OOM killer cuando ocurre una condición de OOM.
 
 #### **`/proc/sys/fs`**
 
@@ -126,7 +126,7 @@ echo b > /proc/sysrq-trigger # Reinicia el host
 - Proporciona información sobre los puntos de montaje en el espacio de nombres de montaje del proceso.
 - Expone la ubicación del `rootfs` o imagen del contenedor.
 
-### Vulnerabilidades en `/sys`
+### Vulnerabilidades de `/sys`
 
 #### **`/sys/kernel/uevent_helper`**
 
@@ -272,10 +272,10 @@ So the filesystems are under `/var/lib/docker/overlay2/`:
 ```bash
 $ sudo ls -la /var/lib/docker/overlay2
 
-drwx--x---  4 root root  4096 9 de enero 22:14 00762bca8ea040b1bb28b61baed5704e013ab23a196f5fe4758dafb79dfafd5d  
-drwx--x---  4 root root  4096 11 de enero 17:00 03cdf4db9a6cc9f187cca6e98cd877d581f16b62d073010571e752c305719496  
-drwx--x---  4 root root  4096 9 de enero 21:23 049e02afb3f8dec80cb229719d9484aead269ae05afe81ee5880ccde2426ef4f  
-drwx--x---  4 root root  4096 9 de enero 21:22 062f14e5adbedce75cea699828e22657c8044cd22b68ff1bb152f1a3c8a377f2  
+drwx--x---  4 root root  4096 Ene  9 22:14 00762bca8ea040b1bb28b61baed5704e013ab23a196f5fe4758dafb79dfafd5d  
+drwx--x---  4 root root  4096 Ene 11 17:00 03cdf4db9a6cc9f187cca6e98cd877d581f16b62d073010571e752c305719496  
+drwx--x---  4 root root  4096 Ene  9 21:23 049e02afb3f8dec80cb229719d9484aead269ae05afe81ee5880ccde2426ef4f  
+drwx--x---  4 root root  4096 Ene  9 21:22 062f14e5adbedce75cea699828e22657c8044cd22b68ff1bb152f1a3c8a377f2  
 <SNIP>
 ```
 

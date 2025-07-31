@@ -1,4 +1,4 @@
-# Servicios y Protocolos de Red de macOS
+# macOS Servicios de Red y Protocolos
 
 {{#include ../../banners/hacktricks-training.md}}
 
@@ -68,9 +68,9 @@ La Red de Configuración Cero, proporcionada por Bonjour, asegura que los dispos
 
 Los dispositivos que utilizan Bonjour se asignarán a sí mismos una **dirección IP del rango 169.254/16** y verificarán su unicidad en la red. Los Macs mantienen una entrada en la tabla de enrutamiento para esta subred, verificable a través de `netstat -rn | grep 169`.
 
-Para DNS, Bonjour utiliza el **protocolo Multicast DNS (mDNS)**. mDNS opera sobre **puerto 5353/UDP**, empleando **consultas DNS estándar** pero dirigiéndose a la **dirección de multidifusión 224.0.0.251**. Este enfoque asegura que todos los dispositivos escuchando en la red puedan recibir y responder a las consultas, facilitando la actualización de sus registros.
+Para DNS, Bonjour utiliza el **protocolo Multicast DNS (mDNS)**. mDNS opera sobre **puerto 5353/UDP**, empleando **consultas DNS estándar** pero dirigiéndose a la **dirección de multidifusión 224.0.0.251**. Este enfoque asegura que todos los dispositivos que escuchan en la red puedan recibir y responder a las consultas, facilitando la actualización de sus registros.
 
-Al unirse a la red, cada dispositivo selecciona un nombre, que generalmente termina en **.local**, el cual puede derivarse del nombre del host o ser generado aleatoriamente.
+Al unirse a la red, cada dispositivo selecciona un nombre, que generalmente termina en **.local**, que puede derivarse del nombre del host o ser generado aleatoriamente.
 
 El descubrimiento de servicios dentro de la red es facilitado por **DNS Service Discovery (DNS-SD)**. Aprovechando el formato de los registros DNS SRV, DNS-SD utiliza **registros DNS PTR** para permitir la enumeración de múltiples servicios. Un cliente que busca un servicio específico solicitará un registro PTR para `<Service>.<Domain>`, recibiendo a cambio una lista de registros PTR formateados como `<Instance>.<Service>.<Domain>` si el servicio está disponible desde múltiples hosts.
 
@@ -131,7 +131,7 @@ nmap -sU -p 5353 --script=dns-service-discovery <target>
 
 El script `dns-service-discovery` envía una consulta `_services._dns-sd._udp.local` y luego enumera cada tipo de servicio anunciado.
 
-* **mdns_recon** – herramienta de Python que escanea rangos enteros en busca de *respondedores* mDNS *mal configurados* que responden a consultas unicast (útil para encontrar dispositivos accesibles a través de subredes/WAN):
+* **mdns_recon** – herramienta de Python que escanea rangos enteros en busca de *mDNS* respondedores *mal configurados* que responden a consultas unicast (útil para encontrar dispositivos accesibles a través de subredes/WAN):
 
 ```bash
 git clone https://github.com/chadillac/mdns_recon && cd mdns_recon
@@ -156,7 +156,7 @@ Esto devolverá hosts que exponen SSH a través de Bonjour fuera del enlace loca
 sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.mDNSResponder.plist
 ```
 3. Para entornos donde Bonjour es necesario internamente pero nunca debe cruzar fronteras de red, usar restricciones de perfil de *AirPlay Receiver* (MDM) o un proxy mDNS.
-4. Habilitar **Protección de Integridad del Sistema (SIP)** y mantener macOS actualizado – ambas vulnerabilidades anteriores fueron parcheadas rápidamente pero dependían de que SIP estuviera habilitado para una protección completa.
+4. Habilitar **System Integrity Protection (SIP)** y mantener macOS actualizado – ambas vulnerabilidades anteriores fueron parcheadas rápidamente pero dependían de que SIP estuviera habilitado para una protección completa.
 
 ### Deshabilitando Bonjour
 

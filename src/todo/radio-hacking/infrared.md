@@ -26,7 +26,7 @@ Los bits se codifican modulando la duración del espacio entre pulsos. El ancho 
 
 **2. Codificación por Ancho de Pulso**
 
-Los bits se codifican mediante la modulación del ancho del pulso. El ancho del espacio después de la ráfaga de pulsos es constante.
+Los bits se codifican mediante la modulación del ancho del pulso. El ancho del espacio después de la ráfaga de pulso es constante.
 
 <figure><img src="../../images/image (282).png" alt=""><figcaption></figcaption></figure>
 
@@ -39,7 +39,7 @@ También se conoce como codificación Manchester. El valor lógico se define por
 **4. Combinación de las anteriores y otras exóticas**
 
 > [!TIP]
-> Hay protocolos IR que **intentan volverse universales** para varios tipos de dispositivos. Los más famosos son RC5 y NEC. Desafortunadamente, lo más famoso **no significa lo más común**. En mi entorno, solo encontré dos controles remotos NEC y ninguno RC5.
+> Hay protocolos IR que **intentan volverse universales** para varios tipos de dispositivos. Los más famosos son RC5 y NEC. Desafortunadamente, lo más famoso **no significa lo más común**. En mi entorno, conocí solo dos controles remotos NEC y ninguno RC5.
 >
 > A los fabricantes les encanta usar sus propios protocolos IR únicos, incluso dentro de la misma gama de dispositivos (por ejemplo, cajas de TV). Por lo tanto, los controles remotos de diferentes empresas y a veces de diferentes modelos de la misma empresa, no pueden trabajar con otros dispositivos del mismo tipo.
 
@@ -64,7 +64,7 @@ Para **lógica "0" y "1"** NEC utiliza Codificación por Distancia de Pulso: pri
 ### Aires Acondicionados
 
 A diferencia de otros controles remotos, **los aires acondicionados no transmiten solo el código del botón presionado**. También **transmiten toda la información** cuando se presiona un botón para asegurar que la **máquina de aire acondicionado y el control remoto estén sincronizados**.\
-Esto evitará que una máquina configurada a 20ºC se aumente a 21ºC con un control remoto, y luego, cuando se use otro control remoto, que aún tiene la temperatura en 20ºC, se aumente más la temperatura, se "aumente" a 21ºC (y no a 22ºC pensando que está en 21ºC).
+Esto evitará que una máquina configurada a 20ºC se aumente a 21ºC con un control remoto, y luego, cuando se use otro control remoto, que aún tiene la temperatura en 20ºC, se aumente más la temperatura, se "aumentará" a 21ºC (y no a 22ºC pensando que está en 21ºC).
 
 ---
 
@@ -78,17 +78,17 @@ flipper-zero/fz-infrared.md
 
 ### Toma de Control de Smart-TV / Set-top Box (EvilScreen)
 
-Un trabajo académico reciente (EvilScreen, 2022) demostró que **los controles remotos multicanal que combinan Infrarrojo con Bluetooth o Wi-Fi pueden ser abusados para secuestrar completamente los smart-TVs modernos**. El ataque encadena códigos de servicio IR de alto privilegio junto con paquetes de Bluetooth autenticados, eludiendo la aislamiento de canales y permitiendo lanzamientos arbitrarios de aplicaciones, activación de micrófonos o reinicio de fábrica sin acceso físico. Ocho televisores de diferentes proveedores — incluido un modelo de Samsung que afirma cumplir con ISO/IEC 27001 — fueron confirmados como vulnerables. La mitigación requiere correcciones de firmware del proveedor o deshabilitar completamente los receptores IR no utilizados.
+Un trabajo académico reciente (EvilScreen, 2022) demostró que **los controles remotos multicanal que combinan Infrarrojo con Bluetooth o Wi-Fi pueden ser abusados para secuestrar completamente los smart-TVs modernos**. El ataque encadena códigos de servicio IR de alto privilegio junto con paquetes Bluetooth autenticados, eludiendo la aislamiento de canales y permitiendo lanzamientos arbitrarios de aplicaciones, activación de micrófonos o reinicio de fábrica sin acceso físico. Ocho televisores de diferentes proveedores — incluyendo un modelo de Samsung que afirma cumplir con ISO/IEC 27001 — fueron confirmados como vulnerables. La mitigación requiere correcciones de firmware del proveedor o deshabilitar completamente los receptores IR no utilizados.
 
-### Exfiltración de Datos en Redes Aisladas a través de LEDs IR (familia aIR-Jumper)
+### Exfiltración de Datos Air-Gapped a través de LEDs IR (familia aIR-Jumper)
 
 Las cámaras de seguridad, enrutadores o incluso unidades USB maliciosas a menudo incluyen **LEDs IR de visión nocturna**. La investigación muestra que el malware puede modular estos LEDs (<10–20 kbit/s con OOK simple) para **exfiltrar secretos a través de paredes y ventanas** a una cámara externa colocada a decenas de metros de distancia. Debido a que la luz está fuera del espectro visible, los operadores rara vez lo notan. Medidas de contrarresto:
 
 * Proteger físicamente o eliminar LEDs IR en áreas sensibles
 * Monitorear el ciclo de trabajo de los LEDs de la cámara y la integridad del firmware
-* Desplegar filtros IR-cut en ventanas y cámaras de vigilancia
+* Desplegar filtros de corte IR en ventanas y cámaras de vigilancia
 
-Un atacante también puede usar proyectores IR potentes para **infiltrar** comandos en la red al parpadear datos de vuelta a cámaras inseguras.
+Un atacante también puede usar proyectores IR fuertes para **infiltrar** comandos en la red al parpadear datos de vuelta a cámaras inseguras.
 
 ### Fuerza Bruta de Largo Alcance y Protocolos Extendidos con Flipper Zero 1.0
 
@@ -103,7 +103,7 @@ El firmware 1.0 (septiembre de 2024) agregó **docenas de protocolos IR adiciona
 * **Flipper Zero** – transceptor portátil con modos de aprendizaje, repetición y fuerza bruta de diccionario (ver arriba).
 * **Arduino / ESP32** + LED IR / receptor TSOP38xx – analizador/transmisor DIY barato. Combinar con la biblioteca `Arduino-IRremote` (v4.x soporta >40 protocolos).
 * **Analizadores lógicos** (Saleae/FX2) – capturar tiempos en bruto cuando el protocolo es desconocido.
-* **Smartphones con IR-blaster** (por ejemplo, Xiaomi) – prueba rápida de campo pero con rango limitado.
+* **Smartphones con blaster IR** (por ejemplo, Xiaomi) – prueba rápida de campo pero con rango limitado.
 
 ### Software
 
@@ -129,8 +129,8 @@ irsend SEND_ONCE samsung KEY_POWER
 ## Medidas Defensivas <a href="#defense" id="defense"></a>
 
 * Desactivar o cubrir los receptores IR en dispositivos desplegados en espacios públicos cuando no sean necesarios.
-* Hacer cumplir *el emparejamiento* o verificaciones criptográficas entre smart-TVs y controles remotos; aislar códigos de "servicio" privilegiados.
-* Desplegar filtros IR-cut o detectores de onda continua alrededor de áreas clasificadas para romper canales ópticos encubiertos.
+* Hacer cumplir *emparejamiento* o verificaciones criptográficas entre smart-TVs y controles remotos; aislar códigos de “servicio” privilegiados.
+* Desplegar filtros de corte IR o detectores de onda continua alrededor de áreas clasificadas para romper canales ópticos encubiertos.
 * Monitorear la integridad del firmware de cámaras/aparatos IoT que expongan LEDs IR controlables.
 
 ## Referencias
