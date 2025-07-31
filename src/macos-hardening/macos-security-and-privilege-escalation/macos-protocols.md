@@ -32,14 +32,14 @@ Pour activer ARD pour diverses tâches administratives comme l'escalade de privi
 ```bash
 sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -allowAccessFor -allUsers -privs -all -clientopts -setmenuextra -menuextra yes
 ```
-ARD fournit des niveaux de contrôle polyvalents, y compris l'observation, le contrôle partagé et le contrôle total, avec des sessions persistant même après des changements de mot de passe utilisateur. Il permet d'envoyer des commandes Unix directement, les exécutant en tant que root pour les utilisateurs administratifs. La planification des tâches et la recherche Spotlight à distance sont des fonctionnalités notables, facilitant des recherches à distance et à faible impact pour des fichiers sensibles sur plusieurs machines.
+ARD offre des niveaux de contrôle polyvalents, y compris l'observation, le contrôle partagé et le contrôle total, avec des sessions persistant même après des changements de mot de passe utilisateur. Il permet d'envoyer des commandes Unix directement, les exécutant en tant que root pour les utilisateurs administratifs. La planification des tâches et la recherche Spotlight à distance sont des fonctionnalités notables, facilitant des recherches à distance et à faible impact pour des fichiers sensibles sur plusieurs machines.
 
 #### Vulnérabilités récentes de partage d'écran / ARD (2023-2025)
 
 | Année | CVE | Composant | Impact | Corrigé dans |
 |------|-----|-----------|--------|----------|
 |2023|CVE-2023-42940|Partage d'écran|Le rendu incorrect de la session pourrait entraîner la transmission du *mauvais* bureau ou fenêtre, entraînant une fuite d'informations sensibles|macOS Sonoma 14.2.1 (Déc 2023) |
-|2024|CVE-2024-23296|launchservicesd / login|Contournement de la protection de la mémoire du noyau pouvant être enchaîné après une connexion distante réussie (exploité activement dans la nature)|macOS Ventura 13.6.4 / Sonoma 14.4 (Mar 2024) |
+|2024|CVE-2024-23296|launchservicesd / login|Contournement de la protection de la mémoire du noyau pouvant être enchaîné après une connexion à distance réussie (exploité activement dans la nature)|macOS Ventura 13.6.4 / Sonoma 14.4 (Mar 2024) |
 
 **Conseils de durcissement**
 
@@ -72,7 +72,7 @@ Pour le DNS, Bonjour utilise le **protocole Multicast DNS (mDNS)**. mDNS fonctio
 
 Lorsqu'un appareil rejoint le réseau, il se sélectionne un nom, se terminant généralement par **.local**, qui peut être dérivé du nom d'hôte ou généré aléatoirement.
 
-La découverte de services au sein du réseau est facilitée par **DNS Service Discovery (DNS-SD)**. Tirant parti du format des enregistrements DNS SRV, DNS-SD utilise des **enregistrements DNS PTR** pour permettre la liste de plusieurs services. Un client recherchant un service spécifique demandera un enregistrement PTR pour `<Service>.<Domain>`, recevant en retour une liste d'enregistrements PTR formatés comme `<Instance>.<Service>.<Domain>` si le service est disponible depuis plusieurs hôtes.
+La découverte de services au sein du réseau est facilitée par **DNS Service Discovery (DNS-SD)**. Tirant parti du format des enregistrements DNS SRV, DNS-SD utilise des **enregistrements DNS PTR** pour permettre la liste de plusieurs services. Un client cherchant un service spécifique demandera un enregistrement PTR pour `<Service>.<Domain>`, recevant en retour une liste d'enregistrements PTR formatés comme `<Instance>.<Service>.<Domain>` si le service est disponible depuis plusieurs hôtes.
 
 L'utilitaire `dns-sd` peut être utilisé pour **découvrir et annoncer des services réseau**. Voici quelques exemples de son utilisation :
 
@@ -82,7 +82,7 @@ Pour rechercher des services SSH sur le réseau, la commande suivante est utilis
 ```bash
 dns-sd -B _ssh._tcp
 ```
-Cette commande initie la recherche des services \_ssh.\_tcp et affiche des détails tels que l'horodatage, les indicateurs, l'interface, le domaine, le type de service et le nom de l'instance.
+Cette commande initie la recherche de services \_ssh.\_tcp et affiche des détails tels que l'horodatage, les indicateurs, l'interface, le domaine, le type de service et le nom de l'instance.
 
 ### Annonce d'un service HTTP
 
@@ -96,9 +96,9 @@ Pour ensuite rechercher des services HTTP sur le réseau :
 ```bash
 dns-sd -B _http._tcp
 ```
-Lorsque un service démarre, il annonce sa disponibilité à tous les appareils sur le sous-réseau en diffusant sa présence. Les appareils intéressés par ces services n'ont pas besoin d'envoyer de demandes, mais écoutent simplement ces annonces.
+Lorsque un service démarre, il annonce sa disponibilité à tous les appareils sur le sous-réseau en diffusant sa présence. Les appareils intéressés par ces services n'ont pas besoin d'envoyer de demandes mais écoutent simplement ces annonces.
 
-Pour une interface plus conviviale, l'application **Discovery - DNS-SD Browser** disponible sur l'App Store d'Apple peut visualiser les services offerts sur votre réseau local.
+Pour une interface plus conviviale, l'application **Discovery - DNS-SD Browser** disponible sur l'Apple App Store peut visualiser les services offerts sur votre réseau local.
 
 Alternativement, des scripts personnalisés peuvent être écrits pour parcourir et découvrir des services en utilisant la bibliothèque `python-zeroconf`. Le script [**python-zeroconf**](https://github.com/jstasiak/python-zeroconf) démontre la création d'un navigateur de services pour les services `_http._tcp.local.`, imprimant les services ajoutés ou supprimés :
 ```python
@@ -144,10 +144,10 @@ Cela renverra des hôtes exposant SSH via Bonjour en dehors du lien local.
 
 | Année | CVE | Gravité | Problème | Corrigé dans |
 |------|-----|----------|-------|------------|
-|2024|CVE-2024-44183|Moyenne|Une erreur logique dans *mDNSResponder* permettait à un paquet conçu de déclencher un **déni de service**|macOS Ventura 13.7 / Sonoma 14.7 / Sequoia 15.0 (Sep 2024) |
-|2025|CVE-2025-31222|Élevée|Un problème de correction dans *mDNSResponder* pouvait être exploité pour une **élévation de privilèges locale**|macOS Ventura 13.7.6 / Sonoma 14.7.6 / Sequoia 15.5 (Mai 2025) |
+|2024|CVE-2024-44183|Moyenne|Une erreur logique dans *mDNSResponder* a permis à un paquet conçu de déclencher un **déni de service**|macOS Ventura 13.7 / Sonoma 14.7 / Sequoia 15.0 (Sep 2024) |
+|2025|CVE-2025-31222|Élevée|Un problème de correction dans *mDNSResponder* pourrait être exploité pour une **élévation de privilèges locale**|macOS Ventura 13.7.6 / Sonoma 14.7.6 / Sequoia 15.5 (Mai 2025) |
 
-**Conseils de mitigation**
+**Conseils d'atténuation**
 
 1. Restreindre l'UDP 5353 à la portée *link-local* – bloquer ou limiter le débit sur les contrôleurs sans fil, les routeurs et les pare-feu basés sur l'hôte.
 2. Désactiver complètement Bonjour sur les systèmes qui ne nécessitent pas la découverte de services :

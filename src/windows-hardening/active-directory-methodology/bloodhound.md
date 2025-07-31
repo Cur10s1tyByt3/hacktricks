@@ -22,7 +22,7 @@ adws-enumeration.md
 
 1. Démarrez l'outil et connectez-vous à `dc01.corp.local` avec des identifiants de domaine.
 2. Créez un snapshot hors ligne via `Fichier ➜ Créer un snapshot`.
-3. Comparez deux snapshots avec `Fichier ➜ Comparer` pour repérer les dérives de permission.
+3. Comparez deux snapshots avec `Fichier ➜ Comparer` pour repérer les dérives de permissions.
 
 ---
 
@@ -44,7 +44,7 @@ PS C:\> .\ADRecon.ps1 -OutputDir C:\Temp\ADRecon
 curl -L https://ghst.ly/getbhce | docker compose -f - up
 # Web UI ➜ http://localhost:8080  (user: admin / password from logs)
 ```
-### Collecteurs
+### Collectors
 
 * `SharpHound.exe` / `Invoke-BloodHound` – variante native ou PowerShell
 * `AzureHound` – énumération Azure AD

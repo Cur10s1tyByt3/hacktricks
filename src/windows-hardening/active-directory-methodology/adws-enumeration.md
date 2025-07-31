@@ -11,14 +11,14 @@ Les services Web Active Directory (ADWS) sont **activés par défaut sur chaque 
 Parce que le trafic est encapsulé à l'intérieur de ces trames SOAP binaires et circule sur un port peu commun, **l'énumération via ADWS est beaucoup moins susceptible d'être inspectée, filtrée ou signée que le trafic classique LDAP/389 & 636**. Pour les opérateurs, cela signifie :
 
 * Reconnaissance plus discrète – Les équipes bleues se concentrent souvent sur les requêtes LDAP.
-* Liberté de collecter à partir de **hôtes non-Windows (Linux, macOS)** en tunnelisant 9389/TCP via un proxy SOCKS.
+* Liberté de collecter à partir de **hôtes non-Windows (Linux, macOS)** en tunnelisant 9389/TCP à travers un proxy SOCKS.
 * Les mêmes données que vous obtiendriez via LDAP (utilisateurs, groupes, ACL, schéma, etc.) et la capacité d'effectuer des **écritures** (par exemple, `msDs-AllowedToActOnBehalfOfOtherIdentity` pour **RBCD**).
 
 > REMARQUE : ADWS est également utilisé par de nombreux outils RSAT GUI/PowerShell, donc le trafic peut se mélanger avec l'activité administrative légitime.
 
 ## SoaPy – Client Python natif
 
-[SoaPy](https://github.com/logangoins/soapy) est une **réimplémentation complète de la pile de protocoles ADWS en Python pur**. Il crée les trames NBFX/NBFSE/NNS/NMF octet par octet, permettant la collecte à partir de systèmes de type Unix sans toucher à l'exécution .NET.
+[SoaPy](https://github.com/logangoins/soapy) est une **réimplémentation complète de la pile de protocoles ADWS en pur Python**. Il crée les trames NBFX/NBFSE/NNS/NMF octet par octet, permettant la collecte à partir de systèmes de type Unix sans toucher à l'exécution .NET.
 
 ### Caractéristiques clés
 

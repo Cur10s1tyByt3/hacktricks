@@ -63,7 +63,7 @@ ls -l $(cat /proc/sys/kernel/modprobe) # Vérifier l'accès à modprobe
 - Peut conduire à une élévation de privilèges ou à un accès shell root si `/proc/sys/fs/binfmt_misc/register` est accessible en écriture.
 - Exploit pertinent et explication :
 - [Poor man's rootkit via binfmt_misc](https://github.com/toffan/binfmt_misc)
-- Tutoriel approfondi : [Lien vidéo](https://www.youtube.com/watch?v=WBC7hhgMvQQ)
+- Tutoriel approfondi : [Video link](https://www.youtube.com/watch?v=WBC7hhgMvQQ)
 
 ### Autres dans `/proc`
 

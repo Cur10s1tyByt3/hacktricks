@@ -39,13 +39,13 @@ Il est également connu sous le nom d'encodage Manchester. La valeur logique est
 **4. Combinaison des précédents et autres exotiques**
 
 > [!TIP]
-> Il existe des protocoles IR qui **essaient de devenir universels** pour plusieurs types d'appareils. Les plus connus sont RC5 et NEC. Malheureusement, le plus connu **ne signifie pas le plus courant**. Dans mon environnement, j'ai rencontré seulement deux télécommandes NEC et aucune RC5.
+> Il existe des protocoles IR qui **essaient de devenir universels** pour plusieurs types d'appareils. Les plus connus sont RC5 et NEC. Malheureusement, le plus célèbre **ne signifie pas le plus courant**. Dans mon environnement, j'ai rencontré seulement deux télécommandes NEC et aucune RC5.
 >
 > Les fabricants aiment utiliser leurs propres protocoles IR uniques, même au sein de la même gamme d'appareils (par exemple, les décodeurs TV). Par conséquent, les télécommandes de différentes entreprises et parfois de différents modèles de la même entreprise, ne peuvent pas fonctionner avec d'autres appareils du même type.
 
 ### Exploration d'un signal IR
 
-Le moyen le plus fiable de voir à quoi ressemble le signal IR de la télécommande est d'utiliser un oscilloscope. Il ne démodule ni n'inverse le signal reçu, il est simplement affiché "tel quel". Cela est utile pour les tests et le débogage. Je vais montrer le signal attendu à l'exemple du protocole IR NEC.
+Le moyen le plus fiable de voir à quoi ressemble le signal IR de la télécommande est d'utiliser un oscilloscope. Il ne démodule pas ou n'inverse pas le signal reçu, il est simplement affiché "tel quel". Cela est utile pour les tests et le débogage. Je vais montrer le signal attendu à l'exemple du protocole IR NEC.
 
 <figure><img src="../../images/image (235).png" alt=""><figcaption></figcaption></figure>
 
@@ -61,7 +61,7 @@ Le **code de répétition** a un "1" après le préambule, qui est un bit d'arr�
 
 Pour **la logique "0" et "1"**, NEC utilise l'encodage par distance d'impulsion : d'abord, une explosion d'impulsion est transmise après laquelle il y a une pause, sa longueur détermine la valeur du bit.
 
-### Climatiseurs
+### Climatisations
 
 Contrairement à d'autres télécommandes, **les climatiseurs ne transmettent pas seulement le code du bouton enfoncé**. Ils **transmettent également toutes les informations** lorsqu'un bouton est enfoncé pour s'assurer que la **machine à air conditionné et la télécommande sont synchronisées**.\
 Cela évitera qu'une machine réglée à 20ºC soit augmentée à 21ºC avec une télécommande, et ensuite, lorsqu'une autre télécommande, qui a toujours la température à 20ºC, est utilisée pour augmenter encore la température, elle "l'augmentera" à 21ºC (et non à 22ºC en pensant qu'elle est à 21ºC).
@@ -78,17 +78,17 @@ flipper-zero/fz-infrared.md
 
 ### Prise de contrôle de Smart-TV / Set-top Box (EvilScreen)
 
-Des travaux académiques récents (EvilScreen, 2022) ont démontré que **les télécommandes multi-canaux qui combinent l'infrarouge avec Bluetooth ou Wi-Fi peuvent être abusées pour prendre complètement le contrôle des smart-TVs modernes**. L'attaque enchaîne des codes de service IR à privilèges élevés avec des paquets Bluetooth authentifiés, contournant l'isolation des canaux et permettant le lancement d'applications arbitraires, l'activation du microphone ou la réinitialisation d'usine sans accès physique. Huit téléviseurs grand public de différents fournisseurs — y compris un modèle Samsung prétendant être conforme à l'ISO/IEC 27001 — ont été confirmés vulnérables. L'atténuation nécessite des correctifs de firmware du fournisseur ou la désactivation complète des récepteurs IR inutilisés.
+Des travaux académiques récents (EvilScreen, 2022) ont démontré que **les télécommandes multi-canaux qui combinent l'infrarouge avec Bluetooth ou Wi-Fi peuvent être abusées pour prendre complètement le contrôle des smart-TVs modernes**. L'attaque enchaîne des codes de service IR à privilèges élevés avec des paquets Bluetooth authentifiés, contournant l'isolation des canaux et permettant le lancement d'applications arbitraires, l'activation du microphone ou la réinitialisation d'usine sans accès physique. Huit téléviseurs grand public de différents fournisseurs — y compris un modèle Samsung prétendant être conforme à l'ISO/IEC 27001 — ont été confirmés vulnérables. L'atténuation nécessite des correctifs de firmware du fournisseur ou la désactivation complète des récepteurs IR inutilisés.
 
 ### Exfiltration de données air-gapped via des LED IR (famille aIR-Jumper)
 
-Les caméras de sécurité, les routeurs ou même les clés USB malveillantes incluent souvent des **LED IR de vision nocturne**. Des recherches montrent que des logiciels malveillants peuvent moduler ces LED (<10–20 kbit/s avec OOK simple) pour **exfiltrer des secrets à travers des murs et des fenêtres** vers une caméra externe placée à des dizaines de mètres. Comme la lumière est en dehors du spectre visible, les opérateurs remarquent rarement. Contre-mesures :
+Les caméras de sécurité, les routeurs ou même les clés USB malveillantes incluent souvent des **LED IR de vision nocturne**. Des recherches montrent que des logiciels malveillants peuvent moduler ces LED (<10–20 kbit/s avec OOK simple) pour **exfiltrer des secrets à travers les murs et les fenêtres** vers une caméra externe placée à des dizaines de mètres. Comme la lumière est en dehors du spectre visible, les opérateurs remarquent rarement. Contre-mesures :
 
 * Protéger physiquement ou retirer les LED IR dans les zones sensibles
 * Surveiller le cycle de service des LED de la caméra et l'intégrité du firmware
 * Déployer des filtres IR-cut sur les fenêtres et les caméras de surveillance
 
-Un attaquant peut également utiliser de puissants projecteurs IR pour **infiltrer** des commandes dans le réseau en renvoyant des données vers des caméras non sécurisées.
+Un attaquant peut également utiliser de puissants projecteurs IR pour **infiltrer** des commandes dans le réseau en flashant des données vers des caméras non sécurisées.
 
 ### Brute-Force à Longue Portée & Protocoles Étendus avec Flipper Zero 1.0
 
@@ -120,7 +120,7 @@ delay(5000);
 * **IRscrutinizer / AnalysIR** – décodeurs GUI qui importent des captures brutes et identifient automatiquement le protocole + génèrent du code Pronto/Arduino.
 * **LIRC / ir-keytable (Linux)** – recevoir et injecter IR depuis la ligne de commande :
 ```bash
-sudo ir-keytable -p nec,rc5 -t   # live-dump decoded scancodes
+sudo ir-keytable -p nec,rc5 -t   # dump en direct des codes scannés décodés
 irsend SEND_ONCE samsung KEY_POWER
 ```
 

@@ -4,7 +4,7 @@
 
 ## Via la variable d'environnement `PERL5OPT` & `PERL5LIB`
 
-En utilisant la variable d'environnement **`PERL5OPT`**, il est possible de faire en sorte que **Perl** exécute des commandes arbitraires lorsque l'interpréteur démarre (même **avant** que la première ligne du script cible ne soit analysée). Par exemple, créez ce script :
+En utilisant la variable d'environnement **`PERL5OPT`**, il est possible de faire en sorte que **Perl** exécute des commandes arbitraires lorsque l'interpréteur démarre (même **avant** que la première ligne du script cible soit analysée). Par exemple, créez ce script :
 ```perl:test.pl
 #!/usr/bin/perl
 print "Hello from the Perl script!\n";
@@ -27,7 +27,7 @@ PERL5LIB=/tmp/ PERL5OPT=-Mpmod perl victim.pl
 ```
 ### Autres variables d'environnement intéressantes
 
-* **`PERL5DB`** – lorsque l'interpréteur est démarré avec le **`-d`** (débbugueur), le contenu de `PERL5DB` est exécuté comme du code Perl *dans* le contexte du débbugueur. Si vous pouvez influencer à la fois l'environnement **et** les options de ligne de commande d'un processus Perl privilégié, vous pouvez faire quelque chose comme :
+* **`PERL5DB`** – lorsque l'interpréteur est démarré avec le **`-d`** (débbugueur), le contenu de `PERL5DB` est exécuté comme code Perl *dans* le contexte du débogueur. Si vous pouvez influencer à la fois l'environnement **et** les options de ligne de commande d'un processus Perl privilégié, vous pouvez faire quelque chose comme :
 
 ```bash
 export PERL5DB='system("/bin/zsh")'

