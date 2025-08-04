@@ -34,7 +34,7 @@ Une fois que vous **avez trouvé** où se trouve la **valeur** que vous **cherch
 
 ![](<../../images/image (563).png>)
 
-Et enfin, **cochez la case** pour effectuer la modification dans la mémoire :
+Et enfin, **en cochant la case** pour effectuer la modification dans la mémoire :
 
 ![](<../../images/image (385).png>)
 
@@ -59,7 +59,7 @@ _Si vous avez encore plusieurs valeurs, faites quelque chose pour modifier à no
 
 ### Valeur inconnue, changement connu
 
-Dans le scénario où vous **ne connaissez pas la valeur** mais que vous savez **comment la faire changer** (et même la valeur du changement), vous pouvez chercher votre nombre.
+Dans le scénario où vous **ne connaissez pas la valeur** mais vous savez **comment la faire changer** (et même la valeur du changement), vous pouvez chercher votre nombre.
 
 Donc, commencez par effectuer un scan de type "**Valeur initiale inconnue**" :
 
@@ -110,7 +110,7 @@ Ensuite, effectuez un nouveau scan **à la recherche de la valeur hexadécimale 
 
 ![](<../../images/image (994).png>)
 
-(_Si plusieurs apparaissent, vous avez généralement besoin de la plus petite adresse_)\
+(_Si plusieurs apparaissent, vous avez généralement besoin de l'adresse la plus petite_)\
 Maintenant, nous avons **trouvé le pointeur qui modifiera la valeur qui nous intéresse**.
 
 Cliquez sur "**Ajouter l'adresse manuellement**" :
@@ -150,14 +150,68 @@ Un modèle sera généré :
 
 ![](<../../images/image (944).png>)
 
-Ainsi, insérez votre nouveau code d'assemblage dans la section "**newmem**" et retirez le code original de la section "**originalcode**" si vous ne souhaitez pas qu'il soit exécuté. Dans cet exemple, le code injecté ajoutera 2 points au lieu de soustraire 1 :
+Ainsi, insérez votre nouveau code d'assemblage dans la section "**newmem**" et supprimez le code original de la section "**originalcode**" si vous ne souhaitez pas qu'il soit exécuté. Dans cet exemple, le code injecté ajoutera 2 points au lieu de soustraire 1 :
 
 ![](<../../images/image (521).png>)
 
 **Cliquez sur exécuter et ainsi de suite et votre code devrait être injecté dans le programme, changeant le comportement de la fonctionnalité !**
 
+## Fonctionnalités avancées dans Cheat Engine 7.x (2023-2025)
+
+Cheat Engine a continué à évoluer depuis la version 7.0 et plusieurs fonctionnalités d'amélioration de la qualité de vie et *d'inversion offensive* ont été ajoutées, qui sont extrêmement pratiques lors de l'analyse de logiciels modernes (et pas seulement des jeux !). Ci-dessous se trouve un **guide de terrain très condensé** sur les ajouts que vous utiliserez très probablement lors de travaux de red-team/CTF.
+
+### Améliorations du scanner de pointeurs 2
+* `Les pointeurs doivent se terminer par des décalages spécifiques` et le nouveau curseur **Écart** (≥7.4) réduisent considérablement les faux positifs lorsque vous rescannez après une mise à jour. Utilisez-le avec la comparaison multi-cartes (`.PTR` → *Comparer les résultats avec d'autres cartes de pointeurs enregistrées*) pour obtenir un **pointeur de base résilient unique** en quelques minutes.
+* Raccourci de filtrage en masse : après le premier scan, appuyez sur `Ctrl+A → Espace` pour tout marquer, puis `Ctrl+I` (inverser) pour désélectionner les adresses qui ont échoué au rescannage.
+
+### Ultimap 3 – Traçage Intel PT
+*Depuis 7.5, l'ancien Ultimap a été réimplémenté sur **Intel Processor-Trace (IPT)***. Cela signifie que vous pouvez maintenant enregistrer *chaque* branche que la cible prend **sans pas à pas** (mode utilisateur uniquement, cela ne déclenchera pas la plupart des gadgets anti-débogage).
+```
+Memory View → Tools → Ultimap 3 → check «Intel PT»
+Select number of buffers → Start
+```
+Après quelques secondes, arrêtez la capture et **clic droit → Enregistrer la liste d'exécution dans un fichier**. Combinez les adresses de branche avec une session `Find out what addresses this instruction accesses` pour localiser très rapidement les points chauds de la logique de jeu à haute fréquence.
+
+### Modèles de `jmp` / auto-patch de 1 octet
+La version 7.5 a introduit un *stub JMP d'un octet* (0xEB) qui installe un gestionnaire SEH et place un INT3 à l'emplacement d'origine. Il est généré automatiquement lorsque vous utilisez **Auto Assembler → Template → Code Injection** sur des instructions qui ne peuvent pas être patchées avec un saut relatif de 5 octets. Cela rend possibles des hooks "serrés" à l'intérieur de routines compressées ou à taille contrainte.
+
+### Stealth au niveau du noyau avec DBVM (AMD & Intel)
+*DBVM* est l'hyperviseur de type 2 intégré de CE. Les versions récentes ont enfin ajouté le **support AMD-V/SVM** afin que vous puissiez exécuter `Driver → Load DBVM` sur des hôtes Ryzen/EPYC. DBVM vous permet de :
+1. Créer des points d'arrêt matériels invisibles aux vérifications Ring-3/anti-debug.
+2. Lire/écrire dans des régions de mémoire du noyau paginables ou protégées même lorsque le pilote en mode utilisateur est désactivé.
+3. Effectuer des contournements d'attaque par temporisation sans VM-EXIT (par exemple, interroger `rdtsc` depuis l'hyperviseur).
+
+**Astuce :** DBVM refusera de se charger lorsque HVCI/Memory-Integrity est activé sur Windows 11 → désactivez-le ou démarrez un hôte VM dédié.
+
+### Débogage à distance / multiplateforme avec **ceserver**
+CE propose maintenant une réécriture complète de *ceserver* et peut se connecter via TCP à des cibles **Linux, Android, macOS & iOS**. Un fork populaire intègre *Frida* pour combiner l'instrumentation dynamique avec l'interface graphique de CE – idéal lorsque vous devez patcher des jeux Unity ou Unreal fonctionnant sur un téléphone :
+```
+# on the target (arm64)
+./ceserver_arm64 &
+# on the analyst workstation
+adb forward tcp:52736 tcp:52736   # (or ssh tunnel)
+Cheat Engine → "Network" icon → Host = localhost → Connect
+```
+Pour le pont Frida, voir `bb33bb/frida-ceserver` sur GitHub.
+
+### Autres bonnes choses à noter
+* **Patch Scanner** (MemView → Tools) – détecte les changements de code inattendus dans les sections exécutables ; pratique pour l'analyse de logiciels malveillants.
+* **Structure Dissector 2** – faites glisser une adresse → `Ctrl+D`, puis *Guess fields* pour évaluer automatiquement les structures C.
+* **.NET & Mono Dissector** – support amélioré pour les jeux Unity ; appelez des méthodes directement depuis la console Lua de CE.
+* **Types personnalisés Big-Endian** – analyse/édition de l'ordre des octets inversé (utile pour les émulateurs de console et les tampons de paquets réseau).
+* **Sauvegarde automatique & onglets** pour les fenêtres AutoAssembler/Lua, plus `reassemble()` pour la réécriture d'instructions multi-lignes.
+
+### Notes d'installation & OPSEC (2024-2025)
+* L'installateur officiel est enveloppé avec InnoSetup **offres publicitaires** (`RAV` etc.). **Cliquez toujours sur *Decline*** *ou compilez à partir de la source* pour éviter les PUP. Les AV signaleront toujours `cheatengine.exe` comme un *HackTool*, ce qui est attendu.
+* Les pilotes anti-triche modernes (EAC/Battleye, ACE-BASE.sys, mhyprot2.sys) détectent la classe de fenêtre de CE même lorsqu'elle est renommée. Exécutez votre copie de reverse **dans une VM jetable** ou après avoir désactivé le jeu en réseau.
+* Si vous avez seulement besoin d'un accès en mode utilisateur, choisissez **`Settings → Extra → Kernel mode debug = off`** pour éviter de charger le pilote non signé de CE qui peut provoquer un BSOD sur Windows 11 24H2 Secure-Boot.
+
+---
+
 ## **Références**
 
-- **Tutoriel Cheat Engine, complétez-le pour apprendre à commencer avec Cheat Engine**
+- [Cheat Engine 7.5 release notes (GitHub)](https://github.com/cheat-engine/cheat-engine/releases/tag/7.5)
+- [frida-ceserver cross-platform bridge](https://github.com/bb33bb/frida-ceserver-Mac-and-IOS)
+- **Tutoriel Cheat Engine, complétez-le pour apprendre à démarrer avec Cheat Engine**
 
 {{#include ../../banners/hacktricks-training.md}}
