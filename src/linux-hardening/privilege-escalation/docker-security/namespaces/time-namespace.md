@@ -59,4 +59,82 @@ sudo find /proc -maxdepth 3 -type l -name time -exec ls -l  {} \; 2>/dev/null | 
 ```bash
 nsenter -T TARGET_PID --pid /bin/bash
 ```
+## Manipulation des décalages temporels
+
+À partir de Linux 5.6, deux horloges peuvent être virtualisées par espace de noms temporel :
+
+* `CLOCK_MONOTONIC`
+* `CLOCK_BOOTTIME`
+
+Leurs deltas par espace de noms sont exposés (et peuvent être modifiés) via le fichier `/proc/<PID>/timens_offsets` :
+```
+$ sudo unshare -Tr --mount-proc bash   # -T creates a new timens, -r drops capabilities
+$ cat /proc/$$/timens_offsets
+monotonic 0
+boottime  0
+```
+Le fichier contient deux lignes - une par horloge - avec le décalage en **nanosecondes**. Les processus qui détiennent **CAP_SYS_TIME** _dans l'espace de noms temporel_ peuvent changer la valeur :
+```
+# advance CLOCK_MONOTONIC by two days (172 800 s)
+echo "monotonic 172800000000000" > /proc/$$/timens_offsets
+# verify
+$ cat /proc/$$/uptime   # first column uses CLOCK_MONOTONIC
+172801.37  13.57
+```
+Si vous avez besoin que l'horloge murale (`CLOCK_REALTIME`) change également, vous devez toujours vous fier aux mécanismes classiques (`date`, `hwclock`, `chronyd`, …) ; elle **n'est pas** dans un espace de noms.
+
+### `unshare(1)` flags d'aide (util-linux ≥ 2.38)
+```
+sudo unshare -T \
+--monotonic="+24h"  \
+--boottime="+7d"    \
+--mount-proc         \
+bash
+```
+Les options longues écrivent automatiquement les deltas choisis dans `timens_offsets` juste après la création de l'espace de noms, évitant un `echo` manuel.
+
+---
+
+## Support OCI & Runtime
+
+* La **Spécification de Runtime OCI v1.1** (Nov 2023) a ajouté un type d'espace de noms `time` dédié et le champ `linux.timeOffsets` afin que les moteurs de conteneurs puissent demander une virtualisation du temps de manière portable.
+* **runc >= 1.2.0** implémente cette partie de la spécification. Un fragment minimal de `config.json` ressemble à :
+```json
+{
+"linux": {
+"namespaces": [
+{"type": "time"}
+],
+"timeOffsets": {
+"monotonic": 86400,
+"boottime": 600
+}
+}
+}
+```
+Ensuite, exécutez le conteneur avec `runc run <id>`.
+
+>  REMARQUE : runc **1.2.6** (Fév 2025) a corrigé un bug "exec dans le conteneur avec timens privé" qui pouvait entraîner un blocage et un potentiel DoS. Assurez-vous d'être sur ≥ 1.2.6 en production.
+
+---
+
+## Considérations de sécurité
+
+1. **Capacité requise** – Un processus a besoin de **CAP_SYS_TIME** à l'intérieur de son espace de noms utilisateur/temps pour changer les offsets. Supprimer cette capacité dans le conteneur (par défaut dans Docker & Kubernetes) empêche toute manipulation.
+2. **Pas de changements d'horloge murale** – Parce que `CLOCK_REALTIME` est partagé avec l'hôte, les attaquants ne peuvent pas falsifier les durées de vie des certificats, l'expiration des JWT, etc. via timens seul.
+3. **Évasion des journaux / détection** – Les logiciels qui dépendent de `CLOCK_MONOTONIC` (par exemple, les limiteurs de débit basés sur le temps de disponibilité) peuvent être confus si l'utilisateur de l'espace de noms ajuste l'offset. Préférez `CLOCK_REALTIME` pour les horodatages pertinents en matière de sécurité.
+4. **Surface d'attaque du noyau** – Même avec `CAP_SYS_TIME` supprimé, le code du noyau reste accessible ; gardez l'hôte à jour. Linux 5.6 → 5.12 a reçu plusieurs corrections de bugs timens (NULL-deref, problèmes de signe).
+
+### Liste de contrôle de durcissement
+
+* Supprimez `CAP_SYS_TIME` dans le profil par défaut de votre runtime de conteneur.
+* Gardez les runtimes à jour (runc ≥ 1.2.6, crun ≥ 1.12).
+* Fixez util-linux ≥ 2.38 si vous dépendez des helpers `--monotonic/--boottime`.
+* Auditez le logiciel dans le conteneur qui lit **uptime** ou **CLOCK_MONOTONIC** pour une logique critique en matière de sécurité.
+
+## Références
+
+* man7.org – Page de manuel des espaces de noms temporels : <https://man7.org/linux/man-pages/man7/time_namespaces.7.html>
+* Blog OCI – "OCI v1.1 : nouveaux espaces de noms time et RDT" (15 nov 2023) : <https://opencontainers.org/blog/2023/11/15/oci-spec-v1.1>
+
 {{#include ../../../../banners/hacktricks-training.md}}
