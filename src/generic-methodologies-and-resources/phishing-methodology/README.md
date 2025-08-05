@@ -86,7 +86,7 @@ Además, no olvides que si los usuarios utilizan **cualquier portal web para acc
 
 Puedes descargarlo de [https://github.com/gophish/gophish/releases/tag/v0.11.0](https://github.com/gophish/gophish/releases/tag/v0.11.0)
 
-Descarga y descomprime dentro de `/opt/gophish` y ejecuta `/opt/gophish/gophish`\
+Descarga y descomprime en `/opt/gophish` y ejecuta `/opt/gophish/gophish`\
 Se te dará una contraseña para el usuario administrador en el puerto 3333 en la salida. Por lo tanto, accede a ese puerto y usa esas credenciales para cambiar la contraseña del administrador. Puede que necesites tunelizar ese puerto a local:
 ```bash
 ssh -L 3333:127.0.0.1:3333 <user>@<ip>
@@ -227,7 +227,7 @@ service gophish stop
 
 ### Espera y sé legítimo
 
-Cuanto más antiguo sea un dominio, menos probable es que sea detectado como spam. Por lo tanto, debes esperar el mayor tiempo posible (al menos 1 semana) antes de la evaluación de phishing. Además, si pones una página sobre un sector reputacional, la reputación obtenida será mejor.
+Cuanto más antiguo sea un dominio, menos probable es que sea detectado como spam. Por lo tanto, deberías esperar el mayor tiempo posible (al menos 1 semana) antes de la evaluación de phishing. Además, si pones una página sobre un sector reputacional, la reputación obtenida será mejor.
 
 Ten en cuenta que incluso si tienes que esperar una semana, puedes terminar de configurar todo ahora.
 
@@ -271,7 +271,7 @@ Este tutorial se basa en: [https://www.digitalocean.com/community/tutorials/how-
 ### Prueba tu puntuación de configuración de correo electrónico
 
 Puedes hacerlo usando [https://www.mail-tester.com/](https://www.mail-tester.com)\
-Simplemente accede a la página y envía un correo electrónico a la dirección que te den:
+Solo accede a la página y envía un correo electrónico a la dirección que te den:
 ```bash
 echo "This is the body of the email" | mail -s "This is the subject line" test-iimosa79z@srv1.mail-tester.com
 ```
@@ -313,7 +313,7 @@ La página [www.mail-tester.com](https://www.mail-tester.com) puede indicarte si
 
 > [!TIP]
 > Se recomienda utilizar la funcionalidad "**Enviar correo de prueba**" para comprobar que todo está funcionando.\
-> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser incluido en la lista negra durante las pruebas.
+> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser incluido en la lista negra al realizar pruebas.
 
 ### Plantilla de correo electrónico
 
@@ -348,20 +348,20 @@ Nota que **para aumentar la credibilidad del correo electrónico**, se recomiend
 ![](<../../images/image (80).png>)
 
 > [!TIP]
-> La plantilla de correo también permite **adjuntar archivos para enviar**. Si también deseas robar desafíos NTLM usando algunos archivos/documentos especialmente diseñados [lee esta página](../../windows-hardening/ntlm/places-to-steal-ntlm-creds.md).
+> La plantilla de correo electrónico también permite **adjuntar archivos para enviar**. Si también deseas robar desafíos NTLM usando algunos archivos/documentos especialmente diseñados [lee esta página](../../windows-hardening/ntlm/places-to-steal-ntlm-creds.md).
 
 ### Página de Aterrizaje
 
 - Escribe un **nombre**
-- **Escribe el código HTML** de la página web. Nota que puedes **importar** páginas web.
+- **Escribe el código HTML** de la página web. Ten en cuenta que puedes **importar** páginas web.
 - Marca **Capturar Datos Enviados** y **Capturar Contraseñas**
 - Establece una **redirección**
 
 ![](<../../images/image (826).png>)
 
 > [!TIP]
-> Generalmente necesitarás modificar el código HTML de la página y hacer algunas pruebas en local (quizás usando algún servidor Apache) **hasta que te gusten los resultados.** Luego, escribe ese código HTML en el cuadro.\
-> Nota que si necesitas **usar algunos recursos estáticos** para el HTML (quizás algunas páginas CSS y JS) puedes guardarlos en _**/opt/gophish/static/endpoint**_ y luego acceder a ellos desde _**/static/\<filename>**_
+> Normalmente necesitarás modificar el código HTML de la página y hacer algunas pruebas en local (quizás usando algún servidor Apache) **hasta que te gusten los resultados.** Luego, escribe ese código HTML en el cuadro.\
+> Ten en cuenta que si necesitas **usar algunos recursos estáticos** para el HTML (quizás algunas páginas CSS y JS) puedes guardarlos en _**/opt/gophish/static/endpoint**_ y luego acceder a ellos desde _**/static/\<filename>**_
 
 > [!TIP]
 > Para la redirección podrías **redirigir a los usuarios a la página web principal legítima** de la víctima, o redirigirlos a _/static/migration.html_ por ejemplo, poner alguna **rueda giratoria (**[**https://loading.io/**](https://loading.io)**) durante 5 segundos y luego indicar que el proceso fue exitoso**.
@@ -369,20 +369,20 @@ Nota que **para aumentar la credibilidad del correo electrónico**, se recomiend
 ### Usuarios y Grupos
 
 - Establece un nombre
-- **Importa los datos** (nota que para usar la plantilla del ejemplo necesitas el nombre, apellido y dirección de correo electrónico de cada usuario)
+- **Importa los datos** (ten en cuenta que para usar la plantilla del ejemplo necesitas el nombre, apellido y dirección de correo electrónico de cada usuario)
 
 ![](<../../images/image (163).png>)
 
 ### Campaña
 
-Finalmente, crea una campaña seleccionando un nombre, la plantilla de correo, la página de aterrizaje, la URL, el perfil de envío y el grupo. Nota que la URL será el enlace enviado a las víctimas.
+Finalmente, crea una campaña seleccionando un nombre, la plantilla de correo electrónico, la página de aterrizaje, la URL, el perfil de envío y el grupo. Ten en cuenta que la URL será el enlace enviado a las víctimas.
 
 Nota que el **Perfil de Envío permite enviar un correo de prueba para ver cómo se verá el correo de phishing final**:
 
 ![](<../../images/image (192).png>)
 
 > [!TIP]
-> Recomendaría **enviar los correos de prueba a direcciones de 10min mails** para evitar ser bloqueado al hacer pruebas.
+> Recomendaría **enviar los correos de prueba a direcciones de 10min** para evitar ser bloqueado al hacer pruebas.
 
 Una vez que todo esté listo, ¡simplemente lanza la campaña!
 
@@ -411,10 +411,10 @@ El ataque anterior es bastante ingenioso ya que estás falsificando un sitio web
 
 Aquí es donde herramientas como [**evilginx2**](https://github.com/kgretzky/evilginx2)**,** [**CredSniper**](https://github.com/ustayready/CredSniper) y [**muraena**](https://github.com/muraenateam/muraena) son útiles. Esta herramienta te permitirá generar un ataque tipo MitM. Básicamente, los ataques funcionan de la siguiente manera:
 
-1. Tú **suplantas el formulario de inicio de sesión** de la página web real.
-2. El usuario **envía** sus **credenciales** a tu página falsa y la herramienta envía esas credenciales a la página web real, **verificando si las credenciales funcionan**.
+1. **Suplantas el formulario de inicio de sesión** de la página web real.
+2. El usuario **envía** sus **credenciales** a tu página falsa y la herramienta las envía a la página web real, **verificando si las credenciales funcionan**.
 3. Si la cuenta está configurada con **2FA**, la página MitM lo pedirá y una vez que el **usuario lo introduce**, la herramienta lo enviará a la página web real.
-4. Una vez que el usuario esté autenticado, tú (como atacante) habrás **capturado las credenciales, el 2FA, la cookie y cualquier información** de cada interacción mientras la herramienta está realizando un MitM.
+4. Una vez que el usuario está autenticado, tú (como atacante) habrás **capturado las credenciales, el 2FA, la cookie y cualquier información** de cada interacción mientras la herramienta está realizando un MitM.
 
 ### A través de VNC
 
@@ -423,7 +423,7 @@ Puedes hacer esto con [**EvilnVNC**](https://github.com/JoelGMSec/EvilnoVNC)
 
 ## Detectando la detección
 
-Obviamente, una de las mejores maneras de saber si te han descubierto es **buscar tu dominio dentro de listas negras**. Si aparece listado, de alguna manera tu dominio fue detectado como sospechoso.\
+Obviamente, una de las mejores maneras de saber si te han descubierto es **buscar tu dominio en listas negras**. Si aparece listado, de alguna manera tu dominio fue detectado como sospechoso.\
 Una forma fácil de verificar si tu dominio aparece en alguna lista negra es usar [https://malwareworld.com/](https://malwareworld.com)
 
 Sin embargo, hay otras formas de saber si la víctima está **buscando activamente actividad sospechosa de phishing en la naturaleza** como se explica en:
@@ -438,7 +438,94 @@ Puedes **comprar un dominio con un nombre muy similar** al dominio de la víctim
 
 Usa [**Phishious** ](https://github.com/Rices/Phishious) para evaluar si tu correo va a terminar en la carpeta de spam o si va a ser bloqueado o exitoso.
 
-## Secuestro del Portapapeles / Pastejacking
+## Compromiso de Identidad de Alto Contacto (Restablecimiento de MFA del Help-Desk)
+
+Los conjuntos de intrusión modernos evitan cada vez más los señuelos de correo electrónico y **apuntan directamente al servicio de atención al cliente / flujo de recuperación de identidad** para derrotar el MFA. El ataque es completamente "vivir de la tierra": una vez que el operador posee credenciales válidas, se desplaza con herramientas administrativas integradas; no se requiere malware.
+
+### Flujo de ataque
+1. Reconocimiento de la víctima
+* Recopila detalles personales y corporativos de LinkedIn, filtraciones de datos, GitHub público, etc.
+* Identifica identidades de alto valor (ejecutivos, TI, finanzas) y enumera el **proceso exacto del help-desk** para restablecer la contraseña / MFA.
+2. Ingeniería social en tiempo real
+* Llama, usa Teams o chatea con el help-desk suplantando al objetivo (a menudo con **ID de llamada falsificada** o **voz clonada**).
+* Proporciona la PII recopilada previamente para pasar la verificación basada en el conocimiento.
+* Convence al agente para que **restablezca el secreto de MFA** o realice un **cambio de SIM** en un número de móvil registrado.
+3. Acciones inmediatas posteriores al acceso (≤60 min en casos reales)
+* Establece un punto de apoyo a través de cualquier portal SSO web.
+* Enumera AD / AzureAD con herramientas integradas (sin binarios descargados):
+```powershell
+# listar grupos de directorio y roles privilegiados
+Get-ADGroup -Filter * -Properties Members | ?{$_.Members -match $env:USERNAME}
+
+# AzureAD / Graph – listar roles de directorio
+Get-MgDirectoryRole | ft DisplayName,Id
+
+# Enumerar dispositivos a los que la cuenta puede iniciar sesión
+Get-MgUserRegisteredDevice -UserId <user@corp.local>
+```
+* Movimiento lateral con **WMI**, **PsExec**, o agentes legítimos de **RMM** ya autorizados en el entorno.
+
+### Detección y Mitigación
+* Trata la recuperación de identidad del help-desk como una **operación privilegiada** – requiere autenticación adicional y aprobación del gerente.
+* Despliega reglas de **Detección y Respuesta a Amenazas de Identidad (ITDR)** / **UEBA** que alerten sobre:
+* Método de MFA cambiado + autenticación desde un nuevo dispositivo / geo.
+* Elevación inmediata del mismo principal (usuario-→-administrador).
+* Graba las llamadas al help-desk y aplica un **callback a un número ya registrado** antes de cualquier restablecimiento.
+* Implementa **Just-In-Time (JIT) / Acceso Privilegiado** para que las cuentas recién restablecidas **no** hereden automáticamente tokens de alto privilegio.
+
+---
+
+## Decepción a Gran Escala – Envenenamiento SEO y Campañas “ClickFix”
+Los grupos de commodities compensan el costo de operaciones de alto contacto con ataques masivos que convierten **motores de búsqueda y redes publicitarias en el canal de entrega**.
+
+1. **El envenenamiento SEO / malvertising** empuja un resultado falso como `chromium-update[.]site` a los anuncios de búsqueda más altos.
+2. La víctima descarga un pequeño **cargador de primera etapa** (a menudo JS/HTA/ISO). Ejemplos vistos por Unit 42:
+* `RedLine stealer`
+* `Lumma stealer`
+* `Lampion Trojan`
+3. El cargador exfiltra cookies del navegador + bases de datos de credenciales, luego extrae un **cargador silencioso** que decide – *en tiempo real* – si desplegar:
+* RAT (por ejemplo, AsyncRAT, RustDesk)
+* ransomware / wiper
+* componente de persistencia (clave de ejecución del registro + tarea programada)
+
+### Consejos de endurecimiento
+* Bloquea dominios recién registrados y aplica **Filtrado DNS / URL Avanzado** en *anuncios de búsqueda* así como en correos electrónicos.
+* Restringe la instalación de software a paquetes MSI / Store firmados, niega la ejecución de `HTA`, `ISO`, `VBS` por política.
+* Monitorea los procesos secundarios de los navegadores que abren instaladores:
+```yaml
+- parent_image: /Program Files/Google/Chrome/*
+and child_image: *\\*.exe
+```
+* Busca LOLBins frecuentemente abusados por cargadores de primera etapa (por ejemplo, `regsvr32`, `curl`, `mshta`).
+
+---
+
+## Operaciones de Phishing Mejoradas por IA
+Los atacantes ahora encadenan **APIs de LLM y clonación de voz** para señuelos totalmente personalizados e interacción en tiempo real.
+
+| Capa | Ejemplo de uso por el actor de amenazas |
+|-------|-----------------------------|
+|Automatización|Generar y enviar >100 k correos / SMS con redacción aleatoria y enlaces de seguimiento.|
+|IA Generativa|Producir correos *únicos* que hacen referencia a M&A públicos, bromas internas de redes sociales; voz de CEO deep-fake en estafa de devolución de llamada.|
+|IA Agente|Registrar dominios de forma autónoma, raspar inteligencia de código abierto, elaborar correos de siguiente etapa cuando una víctima hace clic pero no envía credenciales.|
+
+**Defensa:**
+• Agrega **banners dinámicos** que resalten mensajes enviados desde automatización no confiable (a través de anomalías de ARC/DKIM).
+• Despliega **frases de desafío biométrico de voz** para solicitudes telefónicas de alto riesgo.
+• Simula continuamente señuelos generados por IA en programas de concienciación – las plantillas estáticas son obsoletas.
+
+---
+
+## Variante de Fatiga MFA / Bombardeo de Push – Restablecimiento Forzado
+Además del bombardeo clásico de push, los operadores simplemente **forzan un nuevo registro de MFA** durante la llamada al help-desk, anulando el token existente del usuario. Cualquier solicitud de inicio de sesión posterior parece legítima para la víctima.
+```text
+[Attacker]  →  Help-Desk:  “I lost my phone while travelling, can you unenrol it so I can add a new authenticator?”
+[Help-Desk] →  AzureAD: ‘Delete existing methods’ → sends registration e-mail
+[Attacker]  →  Completes new TOTP enrolment on their own device
+```
+Monitoree eventos de AzureAD/AWS/Okta donde **`deleteMFA` + `addMFA`** ocurren **dentro de minutos desde la misma IP**.
+
+## Secuestro de Portapapeles / Pastejacking
 
 Los atacantes pueden copiar silenciosamente comandos maliciosos en el portapapeles de la víctima desde una página web comprometida o con errores tipográficos y luego engañar al usuario para que los pegue dentro de **Win + R**, **Win + X** o una ventana de terminal, ejecutando código arbitrario sin ninguna descarga o archivo adjunto.
 
@@ -458,5 +545,6 @@ mobile-phishing-malicious-apps.md
 - [https://0xpatrik.com/phishing-domains/](https://0xpatrik.com/phishing-domains/)
 - [https://darkbyte.net/robando-sesiones-y-bypasseando-2fa-con-evilnovnc/](https://darkbyte.net/robando-sesiones-y-bypasseando-2fa-con-evilnovnc/)
 - [https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-dkim-with-postfix-on-debian-wheezy](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-dkim-with-postfix-on-debian-wheezy)
+- [2025 Unit 42 Global Incident Response Report – Social Engineering Edition](https://unit42.paloaltonetworks.com/2025-unit-42-global-incident-response-report-social-engineering-edition/)
 
 {{#include ../../banners/hacktricks-training.md}}
