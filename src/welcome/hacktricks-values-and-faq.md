@@ -1,4 +1,4 @@
-# HackTricks Valores y FAQ
+# HackTricks Valores & FAQ
 
 {{#include ../banners/hacktricks-training.md}}
 
@@ -13,9 +13,9 @@
 > - **ALMACENAR** técnicas de **hacking** increíbles que la comunidad publica dando a los **AUTORES** **ORIGINALES** todos los **créditos**.
 >  - **No queremos el crédito de otras personas**, solo queremos almacenar trucos geniales para todos.
 >  - También escribimos **nuestras propias investigaciones** en HackTricks.
->  - En varios casos, solo escribiremos **en HackTricks un resumen de las partes importantes** de la técnica y **alentaremos al lector a visitar la publicación original** para más detalles.
+>  - En varios casos, simplemente escribiremos **en HackTricks un resumen de las partes importantes** de la técnica y **alentaremos al lector a visitar la publicación original** para más detalles.
 > - **ORGANIZAR** todas las técnicas de hacking en el libro para que sea **MÁS ACCESIBLE**
->  - El equipo de HackTricks ha dedicado miles de horas de forma gratuita **solo para organizar el contenido** para que la gente pueda **aprender más rápido**
+>  - El equipo de HackTricks ha dedicado miles de horas de forma gratuita **solo para organizar el contenido** para que las personas puedan **aprender más rápido**
 
 <figure><img src="../images/hack tricks gif.gif" alt="" width="375"><figcaption></figcaption></figure>
 
