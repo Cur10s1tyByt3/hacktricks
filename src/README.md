@@ -111,7 +111,7 @@ Dołącz do serwera [**HackenProof Discord**](https://discord.com/invite/N3FrSbm
 **Znajdź i zgłoś krytyczne, wykorzystywalne luki z rzeczywistym wpływem na biznes.** Użyj naszych 20+ niestandardowych narzędzi, aby zmapować powierzchnię ataku, znaleźć problemy z bezpieczeństwem, które pozwalają na eskalację uprawnień, i użyj zautomatyzowanych exploitów, aby zebrać niezbędne dowody, przekształcając swoją ciężką pracę w przekonujące raporty.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Wyszukiwanie osób, wyszukiwanie AI, wyszukiwanie organizacji, dostęp do API (O
 **HackTricks nadal jest wspaniałą platformą edukacyjną dla nas wszystkich i jesteśmy dumni, że możemy ją sponsorować!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -192,7 +192,7 @@ zagrożenia. W przypadku zapytań dotyczących niestandardowego szkolenia, skont
 * Zaprojektowane i prowadzone przez praktyków
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -215,7 +215,7 @@ _„Jakościowa obrona wymaga znajomości ataku, zapewniamy bezpieczeństwo popr
 Bądź na bieżąco z najnowszymi informacjami w dziedzinie cyberbezpieczeństwa, odwiedzając nasz [**blog**](https://www.lasttowersolutions.com/blog).
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
