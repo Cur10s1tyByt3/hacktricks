@@ -7,7 +7,7 @@
 Go to the following link to learn **what is containerd** and `ctr`:
 
 {{#ref}}
-../../network-services-pentesting/2375-pentesting-docker.md
+container-security/runtimes-and-engines.md
 {{#endref}}
 
 ## PE 1
@@ -38,7 +38,7 @@ ctr run --privileged --net-host -t registry:5000/modified-ubuntu:latest ubuntu b
 Μπορείτε να χρησιμοποιήσετε μερικές από τις τεχνικές που αναφέρονται στην παρακάτω σελίδα για να **διαφύγετε από αυτό εκμεταλλευόμενοι τις προνομιακές δυνατότητες**:
 
 {{#ref}}
-docker-security/
+container-security/
 {{#endref}}
 
 {{#include ../../banners/hacktricks-training.md}}
