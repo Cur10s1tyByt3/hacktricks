@@ -111,7 +111,7 @@ https://trickest.com/?utm_campaign=hacktrics&utm_medium=banner&utm_source=hacktr
 **Encuentra y reporta vulnerabilidades críticas y explotables con un impacto real en los negocios.** Usa nuestras más de 20 herramientas personalizadas para mapear la superficie de ataque, encontrar problemas de seguridad que te permitan escalar privilegios, y usar exploits automatizados para recopilar evidencia esencial, convirtiendo tu arduo trabajo en informes persuasivos.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Búsqueda de personas, búsqueda de IA, búsqueda de organizaciones, acceso a AP
 **HackTricks sigue siendo una gran plataforma de aprendizaje para todos nosotros y estamos orgullosos de patrocinarla!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -189,7 +189,7 @@ https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
 * Diseñado y enseñado por profesionales
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -207,7 +207,7 @@ _“Una defensa de calidad requiere conocer la ofensiva, proporcionamos segurida
 Mantente informado y actualizado con lo último en ciberseguridad visitando nuestro [**blog**](https://www.lasttowersolutions.com/blog).
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
