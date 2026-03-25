@@ -111,7 +111,7 @@ Pridružite se [**HackenProof Discord**](https://discord.com/invite/N3FrSbmwdy) 
 **Pronađite i prijavite kritične, iskoristive ranjivosti sa stvarnim poslovnim uticajem.** Koristite naših 20+ prilagođenih alata za mapiranje napada, pronalaženje sigurnosnih problema koji vam omogućavaju da eskalirate privilegije, i koristite automatizovane eksploite za prikupljanje suštinskih dokaza, pretvarajući vaš trud u uverljive izveštaje.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Pretraga ljudi, pretraga AI, pretraga organizacija, API (OpenAPI) pristup, integ
 **HackTricks nastavlja da bude sjajna platforma za učenje za sve nas i ponosni smo što je sponzorišemo!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -192,7 +192,7 @@ pretnje. Za upite o prilagođenoj obuci, obratite nam se [**ovde**](https://cybe
 * Dizajnirano i predavano od strane praktičara
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -216,7 +216,7 @@ _„Kvalitetna odbrana zahteva poznavanje napada, pružamo sigurnost kroz razume
 Budite informisani i u toku sa najnovijim u sajber bezbednosti posetom našem [**blogu**](https://www.lasttowersolutions.com/blog).
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
