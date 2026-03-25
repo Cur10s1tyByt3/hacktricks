@@ -111,7 +111,7 @@ Junte-se ao servidor [**HackenProof Discord**](https://discord.com/invite/N3FrSb
 **Encontre e relate vulnerabilidades críticas e exploráveis com impacto real nos negócios.** Use nossas mais de 20 ferramentas personalizadas para mapear a superfície de ataque, encontrar problemas de segurança que permitem escalar privilégios e usar exploits automatizados para coletar evidências essenciais, transformando seu trabalho árduo em relatórios persuasivos.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Busca de pessoas, busca de IA, busca de organizações, acesso API (OpenAPI), in
 **HackTricks continua sendo uma ótima plataforma de aprendizado para todos nós e estamos orgulhosos de patrociná-la!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -189,7 +189,7 @@ https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
 * Projetado e ensinado por profissionais
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -207,7 +207,7 @@ _“Uma defesa de qualidade requer conhecer o ataque, fornecemos segurança atra
 Fique informado e atualizado com as últimas novidades em cibersegurança visitando nosso [**blog**](https://www.lasttowersolutions.com/blog).
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
