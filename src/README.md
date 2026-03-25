@@ -111,7 +111,7 @@ Jiunge na [**HackenProof Discord**](https://discord.com/invite/N3FrSbmwdy) serve
 **Pata na ripoti kuhusu udhaifu muhimu, unaoweza kutumiwa kwa biashara.** Tumia zana zetu 20+ za kawaida kubaini uso wa shambulio, pata masuala ya usalama yanayokuruhusu kupandisha hadhi, na tumia mashambulizi ya kiotomatiki kukusanya ushahidi muhimu, ukigeuza kazi yako kuwa ripoti za kushawishi.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Watu wanatafuta, AI inatafuta, utafutaji wa shirika, ufikiaji wa API (OpenAPI), 
 **HackTricks inaendelea kuwa jukwaa kubwa la kujifunza kwa sisi sote na tunajivunia kuwa wadhamini wake!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -189,7 +189,7 @@ https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
 * Imeundwa na kufundishwa na wataalamu
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -209,7 +209,7 @@ _“Ulinzi wa ubora unahitaji kujua mashambulizi, tunatoa usalama kupitia uelewa
 Kuwa na habari na kuwa na habari kuhusu mambo mapya katika usalama wa mtandao kwa kutembelea [**blog**](https://www.lasttowersolutions.com/blog) yetu.
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
