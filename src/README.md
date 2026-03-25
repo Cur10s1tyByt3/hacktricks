@@ -111,7 +111,7 @@ Sluit by die [**HackenProof Discord**](https://discord.com/invite/N3FrSbmwdy) be
 **Vind en rapporteer kritieke, exploiteerbare kwesbaarhede met werklike besigheidsimpak.** Gebruik ons 20+ pasgemaakte gereedskap om die aanvaloppervlak te karteer, vind sekuriteitskwessies wat jou toelaat om bevoegdhede te verhoog, en gebruik geoutomatiseerde eksploit om noodsaaklike bewyse te versamel, wat jou harde werk in oortuigende verslae omskep.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Mense soektog, KI soektog, organisasie soektog, API (OpenAPI) toegang, dieHarves
 **HackTricks bly 'n wonderlike leerplatform vir ons almal en ons is trots om dit te borg!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -192,7 +192,7 @@ bedreigings weerspieël. Vir pasgemaakte opleidingsnavrae, kontak ons [**hier**]
 * Ontwerp en geleer deur praktisyns
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -216,7 +216,7 @@ _“'n Kwaliteit verdediging vereis om die aanval te ken, ons bied sekuriteit de
 Bly ingelig en op hoogte van die nuutste in kuberveiligheid deur ons [**blog**](https://www.lasttowersolutions.com/blog) te besoek.
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
