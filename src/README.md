@@ -111,7 +111,7 @@ https://trickest.com/?utm_campaign=hacktrics&utm_medium=banner&utm_source=hacktr
 **查找并报告具有实际商业影响的关键、可利用的漏洞。** 使用我们 20 多个自定义工具来映射攻击面，查找让您提升权限的安全问题，并使用自动化漏洞利用收集重要证据，将您的辛勤工作转化为有说服力的报告。
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ https://www.youtube.com/watch?v=Zq2JycGDCPM
 **HackTricks 继续成为我们所有人的一个伟大学习平台，我们为赞助它感到自豪！**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -189,7 +189,7 @@ https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
 * 由从业者设计和教授
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -207,7 +207,7 @@ _“高质量的防御需要了解进攻，我们通过理解提供安全。”_
 通过访问我们的 [**博客**](https://www.lasttowersolutions.com/blog) 了解网络安全的最新动态。
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
