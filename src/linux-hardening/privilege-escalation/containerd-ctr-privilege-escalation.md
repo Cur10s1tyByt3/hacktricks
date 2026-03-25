@@ -7,7 +7,7 @@
 다음 링크를 방문하여 **containerd가 무엇인지** 및 `ctr`에 대해 알아보세요:
 
 {{#ref}}
-../../network-services-pentesting/2375-pentesting-docker.md
+container-security/runtimes-and-engines.md
 {{#endref}}
 
 ## PE 1
@@ -38,7 +38,7 @@ ctr run --privileged --net-host -t registry:5000/modified-ubuntu:latest ubuntu b
 그런 다음 다음 페이지에 언급된 몇 가지 기술을 사용하여 **특권 기능을 악용하여 탈출할 수 있습니다**:
 
 {{#ref}}
-docker-security/
+container-security/
 {{#endref}}
 
 {{#include ../../banners/hacktricks-training.md}}
