@@ -7,7 +7,7 @@
 **containerd** ve `ctr` hakkında bilgi almak için aşağıdaki bağlantıya gidin:
 
 {{#ref}}
-../../network-services-pentesting/2375-pentesting-docker.md
+container-security/runtimes-and-engines.md
 {{#endref}}
 
 ## YÜ 1
@@ -38,7 +38,7 @@ ctr run --privileged --net-host -t registry:5000/modified-ubuntu:latest ubuntu b
 Sonra, **ayrılmış yetenekleri kötüye kullanarak ondan kurtulmak için** aşağıdaki sayfada belirtilen bazı teknikleri kullanabilirsiniz:
 
 {{#ref}}
-docker-security/
+container-security/
 {{#endref}}
 
 {{#include ../../banners/hacktricks-training.md}}

@@ -111,7 +111,7 @@ Deneyimli hackerlar ve bug bounty avcıları ile iletişim kurmak için [**Hacke
 **Gerçek iş etkisi olan kritik, istismar edilebilir güvenlik açıklarını bulun ve raporlayın.** Saldırı yüzeyini haritalamak, yetki yükseltmenize izin veren güvenlik sorunlarını bulmak ve temel kanıtları toplamak için 20'den fazla özel aracımızı kullanarak, sıkı çalışmanızı ikna edici raporlara dönüştürün.
 
 {{#ref}}
-https://pentest-tools.com/?utm_term=jul2024&utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://modernsecurity.io/
 {{#endref}}
 
 ---
@@ -171,7 +171,7 @@ Küçük ve büyük tüm veri ihlalleri üzerinde (sadece büyük olanlar değil
 **HackTricks, hepimiz için harika bir öğrenme platformu olmaya devam ediyor ve onu desteklemekten gurur duyuyoruz!**
 
 {{#ref}}
-https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
+https://cyberhelmets.com/courses/?ref=hacktricks
 {{#endref}}
 
 ---
@@ -189,7 +189,7 @@ https://venacus.com/?utm_medium=link&utm_source=hacktricks&utm_campaign=spons
 * Uygulayıcılar tarafından tasarlanmış ve öğretilmiştir
 
 {{#ref}}
-https://cyberhelmets.com/courses/?ref=hacktricks
+https://www.lasttowersolutions.com/
 {{#endref}}
 
 ---
@@ -207,7 +207,7 @@ _“Kaliteli bir savunma, saldırıyı bilmekle başlar, biz anlayış yoluyla g
 En son siber güvenlik gelişmeleri hakkında bilgi sahibi olmak için [**blogumuzu**](https://www.lasttowersolutions.com/blog) ziyaret edin.
 
 {{#ref}}
-https://www.lasttowersolutions.com/
+https://k8studio.io/
 {{#endref}}
 
 ---
