@@ -17,7 +17,7 @@ handler2.setLevel(logging.ERROR)
 logger.addHandler(handler2)
 
 
-def findtitle(search ,obj, key, path=(),):
+def findtitle(search, obj, key, path=()):
     # logger.debug(f"Looking for {search} in {path}")
     if isinstance(obj, dict) and key in obj and obj[key] == search: 
         return obj, path
@@ -54,28 +54,45 @@ def ref(matchobj):
             if href.endswith("/"):
                 href = href+"README.md" # Fix if ref points to a folder
             if "#" in  href:
-                chapter, _path = findtitle(href.split("#")[0], book, "source_path")
-                title = " ".join(href.split("#")[1].split("-")).title()
-                logger.debug(f'Ref has # using title: {title}')
-            else:
-                chapter, _path = findtitle(href, book, "source_path")
-                logger.debug(f'Recursive title search result: {chapter["name"]}')
-                title = chapter['name']
-        except Exception as e:
-            try:
-                dir = path.dirname(current_chapter['source_path'])
-                logger.debug(f'Error getting chapter title: {href} trying with relative path {path.normpath(path.join(dir,href))}')
-                if "#" in  href:
-                    chapter, _path = findtitle(path.normpath(path.join(dir,href.split('#')[0])), book, "source_path")
+                result = findtitle(href.split("#")[0], book, "source_path")
+                if result is not None:
+                    chapter, _path = result
                     title = " ".join(href.split("#")[1].split("-")).title()
                     logger.debug(f'Ref has # using title: {title}')
                 else:
-                    chapter, _path = findtitle(path.normpath(path.join(dir,href.split('#')[0])), book, "source_path")
-                    title = chapter["name"]
+                    raise Exception(f"Chapter not found for path: {href.split('#')[0]}")
+            else:
+                result = findtitle(href, book, "source_path")
+                if result is not None:
+                    chapter, _path = result
                     logger.debug(f'Recursive title search result: {chapter["name"]}')
+                    title = chapter['name']
+                else:
+                    raise Exception(f"Chapter not found for path: {href}")
+        except Exception as e:
+            dir = path.dirname(current_chapter['source_path'])
+            rel_path = path.normpath(path.join(dir,href))
+            try:
+                logger.debug(f'Not found chapter title from: {href} -- trying with relative path {rel_path}')
+                if "#" in  href:
+                    result = findtitle(path.normpath(path.join(dir,href.split('#')[0])), book, "source_path")
+                    if result is not None:
+                        chapter, _path = result
+                        title = " ".join(href.split("#")[1].split("-")).title()
+                        logger.debug(f'Ref has # using title: {title}')
+                    else:
+                        raise Exception(f"Chapter not found for relative path: {path.normpath(path.join(dir,href.split('#')[0]))}")
+                else:
+                    result = findtitle(path.normpath(path.join(dir,href)), book, "source_path")
+                    if result is not None:
+                        chapter, _path = result
+                        title = chapter["name"]
+                        logger.debug(f'Recursive title search result: {chapter["name"]}')
+                    else:
+                        raise Exception(f"Chapter not found for relative path: {path.normpath(path.join(dir,href))}")
             except Exception as e:
                 logger.debug(e)
-                logger.error(f'Error getting chapter title: {path.normpath(path.join(dir,Error getting chapter title))}')
+                logger.error(f'Error getting chapter title: {rel_path}')
                 sys.exit(1)
 
 
@@ -149,8 +166,13 @@ if __name__ == '__main__':
     context, book = json.load(sys.stdin)
 
     logger.debug(f"Context: {context}")
+    logger.debug(f"Book keys: {book.keys()}")
+    logger.debug(f"Book structure: {json.dumps(book, indent=2)[:500]}")
 
-    for chapter in iterate_chapters(book['sections']):
+    # Handle both old (sections) and new (items) mdbook API
+    book_items = book.get('sections') or book.get('items', [])
+    
+    for chapter in iterate_chapters(book_items):
         logger.debug(f"Chapter: {chapter['path']}")
         current_chapter = chapter
         # regex = r'{{[\s]*#ref[\s]*}}(?:\n)?([^\\\n]*)(?:\n)?{{[\s]*#endref[\s]*}}'
